@@ -3,5 +3,3 @@
 
 # Astropolitain
 skyfield >= 0.9.1
-# Skyfield dependency
-numpy
