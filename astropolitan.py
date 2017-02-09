@@ -1,27 +1,28 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-"""Module principal"""
+"""Module principal pour l'étude Astropolitain"""
 
-print "Script de calcul pour la distance Alsace-Mercure"
-print "Initialisation..."
 from csv import writer
+from array import array
 from skyfield.api import load
 import matplotlib.pyplot as plotter
+from pseudosci.units import *
+
+print "Script de calcul pour la distance Alsace-Mercure"
 
 ts = load.timescale()
 data = load('de421.bsp')
-earth, mercure = data['earth'], data['mercury']
+earth, mercury = data['earth'], data['mercury']
 days = range(300, 800)
 dist, speed, time = [], [], []
+metroV = Velocity(kph=80)
+travelTime = Time(s=46)
 
 print "Calcul..."
-for day in days:
-    date = ts.utc(2017, 1, day)
-    dist.append(earth.at(date).observe(mercure).distance().km)
-
-for d in dist:
-    speed.append((1500*d)/23)
-    time.append(d/80)
+dist = [Distance(au=earth.at(ts.utc(2017, 1, day)).observe(mercury).distance().au)
+        for day in days]
+speed = [d / travelTime for d in dist]
+time = [d / metroV for d in dist]
 
 print "Exportation des données..."
 csvarray = [dist, speed, time]
@@ -30,6 +31,9 @@ with open("metro.csv", "wb") as f:
     writer = writer(f)
     writer.writerows(csvdata)
 
+dist = [d.km for d in dist]
+speed = [v.kph for v in speed]
+time = [t.h for t in time]
 print "Production du graphe..."
 plotter.figure(figsize=[10, 20])
 plotter.subplot(3, 1, 1)

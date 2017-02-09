@@ -88,6 +88,12 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# Skyfield data
+*.bsp
+deltat.data
+deltat.preds
+Leap_Second.dat
+
 # Custom
 .vscode
 tags
