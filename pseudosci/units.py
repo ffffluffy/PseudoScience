@@ -52,6 +52,12 @@ class Distance(object):
     def __repr__(self):
         return '<{0} {1}>'.format(type(self).__name__, self)
 
+    def __int__(self):
+        return int(self.m)
+
+    def __float__(self):
+        return float(self.m)
+
     def __add__(self, other):
         if other is Distance:
             return Distance(m=self.m + other.m)
@@ -130,6 +136,12 @@ class Time(object):
     def __repr__(self):
         return '<{0} {1}>'.format(type(self).__name__, self)
 
+    def __int__(self):
+        return int(self.s)
+
+    def __float__(self):
+        return float(self.s)
+
     def __add__(self, other):
         if other is Time:
             return Time(s=self.s + other.s)
@@ -179,6 +191,12 @@ class Velocity(object):
 
     def __repr__(self):
         return '<{0} {1}>'.format(type(self).__name__, self)
+
+    def __int__(self):
+        return int(self.mps)
+
+    def __float__(self):
+        return float(self.mps)
 
     def __add__(self, other):
         if other is Velocity:
@@ -235,6 +253,12 @@ class Acceleration(object):
 
     def __repr__(self):
         return '<{0} {1}>'.format(type(self).__name__, self)
+
+    def __int__(self):
+        return int(self.mpss)
+
+    def __float__(self):
+        return float(self.mpss)
 
     def __add__(self, other):
         if other is Acceleration:
