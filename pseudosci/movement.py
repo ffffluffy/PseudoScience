@@ -16,18 +16,21 @@ class Movement(object):
                             "Movement doit être initialisé avec au moins deux "
                             "des paramètres suivants : ``distance=``, "
                             "``velocity=``, ``time=``")
-        if type(distance) is not Distance:
+        if distance and type(distance) is not Distance:
             raise TypeError("Le paramètre ``distance`` doit être une instance "
                             "de pseudosci.units.Distance.")
-        if type(velocity) is not Velocity:
+        if velocity and type(velocity) is not Velocity:
             raise TypeError("Le paramètre ``velocity`` doit être une instance "
                             "de pseudosci.units.Velocity.")
-        if type(time) is not Time:
+        if time and type(time) is not Time:
             raise TypeError("Le paramètre ``time`` doit être une instance "
                             "de pseudosci.units.Time.")
-        self.distance = distance
-        self.velocity = velocity
-        self.time = time
+        if distance:
+            self.distance = distance
+        if velocity:
+            self.velocity = velocity
+        if time:
+            self.time = time
 
     def __getattr__(self, name):
         if name == 'velocity':
@@ -41,3 +44,47 @@ class Movement(object):
             return self.time
         else:
             raise AttributeError("Aucun attribut nommé {0}".format(name))
+
+    def __repr__(self):
+        return '<Movement {0},{1},{2}>'.format(
+            self.distance, self.time, self.velocity)
+
+    def __add__(self, other):
+        if type(other) is Movement:
+            return Movement(distance=self.distance + other.distance,
+                            time=self.time + other.time)
+        else:
+            raise TypeError("Un Movement ne peut être ajouté qu'à un Movement")
+
+    def __sub__(self, other):
+        if type(other) is Movement:
+            return Movement(distance=self.distance - other.distance,
+                            time=self.time - other.time)
+        else:
+            raise TypeError("Un Movement ne peut être soustrait qu'à un "
+                            "Movement")
+
+    def __mul__(self, other):
+        if type(other) is int or type(other) is float:
+            return Movement(distance=self.distance * other,
+                            time=self.time * other)
+        else:
+            raise TypeError("Un Movement ne peut être multiplié que par un "
+                            "nombre.")
+    __rmul__ = __mul__
+
+    def __div__(self, other):
+        if type(other) is int or type(other) is float:
+            return Movement(distance=self.distance / other,
+                            time=self.time / other)
+        else:
+            raise TypeError("Un Movement ne peut être divisé que par un "
+                            "nombre.")
+
+    def __floordiv__(self, other):
+        if type(other) is int or type(other) is float:
+            return Movement(distance=self.distance // other,
+                            time=self.time // other)
+        else:
+            raise TypeError("Un Movement ne peut être divisé que par un "
+                            "nombre.")
