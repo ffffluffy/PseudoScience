@@ -1,8 +1,6 @@
 langage: python
 python:
-  - "3.4"
   - "3.5"
-  - "3.6"
 before_install:
   - pip install --user pytest pytest-cov
   - pip install --user coveralls
@@ -11,6 +9,4 @@ install:
 script:
   - py.test
 after_success:
-  - if [[ $ENV == python=3.6* ]]; then
-        coveralls;
-    fi
+  - coveralls
