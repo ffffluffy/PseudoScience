@@ -13,9 +13,8 @@ class Movement(object):
     def __init__(self, distance=None, velocity=None, time=None):
         if not (distance and (velocity or time)) and not (time and velocity):
             raise TypeError("Des arguments obligatoires sont manquants.\n"
-                            "Movement doit être initialisé avec au moins deux "
-                            "des paramètres suivants : ``distance=``, "
-                            "``velocity=``, ``time=``")
+                            "Utiliser au moins deux des paramètres suivants : "
+                            "``distance=``, ``velocity=``, ``time=``")
         if distance and type(distance) is not Distance:
             raise TypeError("Le paramètre ``distance`` doit être une instance "
                             "de pseudosci.units.Distance.")
@@ -88,3 +87,67 @@ class Movement(object):
         else:
             raise TypeError("Un Movement ne peut être divisé que par un "
                             "nombre.")
+
+
+class ComplexMovement(Movement):
+    """Décrit un mouvement rectiligne débutant par une accélération et se
+    terminant par un freinage. Au moins deux des paramètres suivants sont
+    obligatoires : ``distance=``, ``velocity=``, ``time=``.
+    Paramètres optionnels : ``accel=``, ``brake=``
+    ``velocity=`` est la vitesse de pointe.
+    Si ``brake=`` est omis, la décélération sera égale à l'accélération.
+    Si ``accel=`` est omis, l'accélération sera ignorée et l'instance se
+    comportera comme pseudosci.movement.Movement."""
+
+    def __init__(self, distance=None, velocity=None, time=None, accel=None,
+                 brake=None):
+        Movement.__init__(distance=distance, velocity=velocity, time=time)
+        if accel and type(accel) is not Acceleration:
+            raise TypeError("Le paramètre ``accel`` doit être une instance "
+                            "de pseudosci.units.Acceleration.")
+        if brake and type(brake) is not Acceleration:
+            raise TypeError("Le paramètre ``brake`` doit être une instance "
+                            "de pseudosci.units.Acceleration.")
+        if accel:
+            self.accel = abs(accel)  # Toujours positif
+        if brake:
+            self.brake = -abs(brake)  # Toujours négatif
+        self.compute()
+
+    def compute(self):
+        """Exécute les calculs basés sur les attributs de la classe. La méthode
+        est appelée automatiquement après l'exécution du constructeur."""
+
+        if (not self.accel and not self.brake) or (accel == 0 and brake == 0):
+            self.distance = Movement.distance
+            self.velocity = Movement.velocity
+            self.time = Movement.time
+            self.acceldist, self.brakedist = Distance(m=0), Distance(m=0)
+            self.acceltime, self.braketime = Time(s=0), Time(s=0)
+            self.maxdist, self.maxtime = self.distance, self.time
+            self.meanvelocity = self.velocity
+            return
+        elif not self.accel or accel == 0:
+            self.accel = -self.brake
+        elif not self.brake or brake == 0:
+            self.brake = -self.accel
+
+        if self.velocity:  # Vitesse de pointe connue
+            self.acceltime = self.velocity / self.accel
+            self.braketime = abs(self.velocity / self.brake)
+        else:  # Distance totale et temps total connus
+            self.acceltime = \
+                (-self.brake * self.time) / (self.accel - self.brake)
+            self.braketime = self.time - self.acceltime
+            self.maxdist, self.maxtime = Distance(m=0), Time(s=0)
+            self.velocity = self.accel * self.acceltime
+        self.acceldist = self.accel * (self.acceltime ** 2)
+        self.brakedist = abs(self.brake * (self.braketime ** 2))
+        if not self.time:  # Distance totale et vitesse de pointe connues
+            self.maxdist = self.distance - self.acceldist - self.brakedist
+            self.maxtime = self.maxdist / self.velocity
+            self.time = self.maxtime + self.acceltime + self.braketime
+        elif not self.distance:  # Temps total et vitesse de pointe connus
+            self.maxtime = self.time - self.acceltime - self.braketime
+            self.maxdist = self.maxtime * self.velocity
+        self.meanvelocity = self.distance / self.time
