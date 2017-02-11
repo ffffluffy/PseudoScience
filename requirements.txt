@@ -1,0 +1,5 @@
+# PseudoScience required packages
+# This installs all required packages for PseudoScience.
+
+# Astropolitain
+skyfield >= 0.9.1
