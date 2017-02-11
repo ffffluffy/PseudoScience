@@ -1,18 +1,21 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..units import *
+from ..units import Distance, Time, Velocity, Acceleration
 
 
 class TestDistance:
+    """Tests de la classe pseudosci.units.Distance"""
 
     def test_init(self):
+        """Tests du constructeur de la classe."""
         assert Distance(m=123.4).m == 123.4
         assert Distance(km=123.4).m == 123.4 * KM_M
         assert Distance(au=123.4).m == 123.4 * AU_M
         assert Distance(ly=123.4).m == 123.4 * LY_M
 
     def test_attributes(self):
+        """Tests des attributs de la classe."""
         d = Distance(m=LY_M)
         assert d.m == LY_M
         assert d.ly == 1.0
@@ -20,6 +23,7 @@ class TestDistance:
         assert d.km == d.m / KM_M
 
     def test_math(self):
+        """Tests des opérations mathématiques avec la classe."""
         assert abs(Distance(m=-4)).m == abs(Distance(m=4)).m == 4.0
         assert -Distance(m=-4).m == 4.0
         assert -Distance(m=4).m == -4.0
@@ -32,7 +36,8 @@ class TestDistance:
         assert (Distance(m=7.5) / Distance(m=2.5)) == 3.0
         assert (Distance(m=7.5) // Distance(m=2)) == 3.0
 
-    def test_math_classes(self):
+    def test_math_class(self):
+        """Tests des opérations mathématiques impliquant d'autres classes."""
         d = Distance(m=9)
         assert (d / Time(s=2)).mps == 4.5
         assert (d / Velocity(mps=2)).s == 4.5
@@ -41,14 +46,17 @@ class TestDistance:
 
 
 class TestTime:
+    """Tests de la classe pseudosci.units.Time"""
 
     def test_init(self):
+        """Tests du constructeur de la classe."""
         assert Time(s=123.4).s == 123.4
         assert Time(m=123.4).s == 123.4 * MIN_S
         assert Time(h=123.4).s == 123.4 * H_S
         assert Time(d=123.4).s == 123.4 * D_S
 
     def test_attributes(self):
+        """Tests des attributs de la classe."""
         t = Time(s=D_S)
         assert t.s == D_S
         assert t.d == 1.0
@@ -56,6 +64,7 @@ class TestTime:
         assert t.m == t.s / MIN_S
 
     def test_math(self):
+        """Tests des opérations mathématiques avec la classe."""
         assert abs(Time(s=-5)).s == abs(Time(s=5)).s == 5.0
         assert -Time(s=-5).s == 5.0
         assert -Time(s=5).s == -5.0
@@ -70,17 +79,21 @@ class TestTime:
 
 
 class TestVelocity:
+    """Tests de la classe pseudosci.units.Velocity"""
 
     def test_init(self):
+        """Tests du constructeur de la classe."""
         assert Velocity(mps=123.4).mps == 123.4
         assert Velocity(kph=123.4).mps == 123.4 * KPH_MPS
 
     def test_attributes(self):
+        """Tests des attributs de la classe."""
         v = Velocity(mps=KPH_MPS)
         assert v.mps == KPH_MPS
         assert v.kph == 1.0
 
     def test_math(self):
+        """Tests des opérations mathématiques avec la classe."""
         assert abs(Velocity(mps=-5)).mps == abs(Velocity(mps=5)).mps == 5.0
         assert -Velocity(mps=-5).mps == 5.0
         assert -Velocity(mps=5).mps == -5.0
@@ -94,22 +107,27 @@ class TestVelocity:
         assert Velocity(mps=5) // Velocity(mps=2) == 2.0
 
     def test_math_class(self):
+        """Tests des opérations mathématiques impliquant d'autres classes."""
         assert (Velocity(mps=5) * Time(s=4)).m == 20.0
         assert (Velocity(mps=5) / Time(s=2)).mpss == 2.5
 
 
 class TestAcceleration:
+    """Tests de la classe pseudosci.units.Acceleration"""
 
     def test_init(self):
+        """Tests du constructeur de la classe."""
         assert Acceleration(mpss=123.4).mpss == 123.4
         assert Acceleration(kphs=123.4).mpss == 123.4 * KPHS_MPSS
 
     def test_attributes(self):
+        """Tests des attributs de la classe."""
         a = Acceleration(mpss=KPHS_MPSS)
         assert a.mpss == KPHS_MPSS
         assert a.kphs == 1.0
 
     def test_math(self):
+        """Tests des opérations mathématiques avec la classe."""
         assert abs(Acceleration(mpss=-5)).mpss == 5.0
         assert abs(Acceleration(mpss=5)).mpss == 5.0
         assert -Acceleration(mpss=-5).mpss == 5.0
@@ -124,4 +142,5 @@ class TestAcceleration:
         assert Acceleration(mpss=5) // Acceleration(mpss=2) == 2.0
 
     def test_math_class(self):
+        """Tests des opérations mathématiques impliquant d'autres classes."""
         assert (Acceleration(mpss=5) * Time(s=2)).mps == 10.0
