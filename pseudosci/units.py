@@ -49,7 +49,7 @@ class Distance(object):
             self.ly = ly = self.m / LY_M
             return ly
         else:
-            raise AttributeError("No attribute named %r" % (name.lower(),))
+            raise AttributeError("No attribute named {0!r}".format(name.lower()))
 
     def __str__(self):
         return str(self.m)
@@ -155,7 +155,7 @@ class Time(object):
             self.d = d = self.s / D_S
             return d
         else:
-            raise AttributeError("No attribute named %r" % (name.lower(),))
+            raise AttributeError("No attribute named {0!r}".format(name.lower()))
 
     def __str__(self):
         return str(self.s)
@@ -242,7 +242,7 @@ class Velocity(object):
             self.kph = kph = self.mps / KPH_MPS
             return kph
         else:
-            raise AttributeError("No attribute named %r" % (name.lower(),))
+            raise AttributeError("No attribute named {0!r}".format(name.lower()))
 
     def __str__(self):
         return str(self.mps)
@@ -338,7 +338,7 @@ class Acceleration(object):
             self.kphs = kphs = self.mpss / KPHS_MPSS
             return kphs
         else:
-            raise AttributeError("No attribute named %r" % (name.lower(),))
+            raise AttributeError("No attribute named {0!r}".format(name.lower()))
 
     def __str__(self):
         return str(self.mpss)
