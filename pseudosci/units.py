@@ -25,13 +25,13 @@ class Distance(object):
     ``ly=`` pour des années-lumière."""
 
     def __init__(self, m=None, km=None, au=None, ly=None):
-        if m:
+        if m is not None:
             self.m = float(m)
-        elif km:
+        elif km is not None:
             self.m = float(km) * KM_M
-        elif au:
+        elif au is not None:
             self.m = float(au) * AU_M
-        elif ly:
+        elif ly is not None:
             self.m = float(ly) * LY_M
         else:
             raise ValueError(
@@ -62,6 +62,12 @@ class Distance(object):
 
     def __float__(self):
         return float(self.m)
+
+    def __abs__(self):
+        return Distance(m=abs(self.m))
+
+    def __neg__(self):
+        return Distance(m=-self.m)
 
     def __add__(self, other):
         if type(other) is Distance:
@@ -125,13 +131,13 @@ class Time(object):
     ``d=`` pour des jours."""
 
     def __init__(self, s=None, m=None, h=None, d=None):
-        if s:
+        if s is not None:
             self.s = float(s)
-        elif m:
+        elif m is not None:
             self.s = float(m) * MIN_S
-        elif h:
+        elif h is not None:
             self.s = float(h) * H_S
-        elif d:
+        elif d is not None:
             self.s = float(d) * D_S
         else:
             raise ValueError(
@@ -163,6 +169,12 @@ class Time(object):
     def __float__(self):
         return float(self.s)
 
+    def __abs__(self):
+        return Time(s=abs(self.s))
+
+    def __neg__(self):
+        return Time(s=-self.s)
+
     def __add__(self, other):
         if type(other) is Time:
             return Time(s=self.s + other.s)
@@ -179,9 +191,14 @@ class Time(object):
     def __mul__(self, other):
         if type(other) is int or type(other) is float:
             return Time(s=self.s * other)
+        elif type(other) is Velocity:
+            return Distance(m=self.s * other.mps)
+        elif type(other) is Acceleration:
+            return Velocity(mps=self.s * other.mpss)
         else:
             raise TypeError(
-                "Une durée ne peut être multipliée que par un nombre.")
+                "Une durée ne peut être multipliée que par une vitesse, une "
+                "accélération ou un nombre.")
 
     __rmul__ = __mul__
 
@@ -212,9 +229,9 @@ class Velocity(object):
     Utilisez soit ``mps=``, soit ``kph=`` pour l'initialiser."""
 
     def __init__(self, mps=None, kph=None):
-        if mps:
+        if mps is not None:
             self.mps = float(mps)
-        elif kph:
+        elif kph is not None:
             self.mps = float(kph) * KPH_MPS
         else:
             raise ValueError(
@@ -238,6 +255,12 @@ class Velocity(object):
 
     def __float__(self):
         return float(self.mps)
+
+    def __abs__(self):
+        return Velocity(mps=abs(self.mps))
+
+    def __neg__(self):
+        return Velocity(mps=-self.mps)
 
     def __add__(self, other):
         if type(other) is Velocity:
@@ -272,10 +295,12 @@ class Velocity(object):
             return self.mps / other.mps
         elif type(other) is Time:
             return Acceleration(mpss=self.mps / other.s)
+        elif type(other) is Acceleration:
+            return Time(s=self.mps / other.mpss)
         else:
             raise TypeError(
                 "Une vitesse ne peut être divisée que par une durée, une "
-                "vitesse ou un nombre.")
+                "vitesse, une accélération ou un nombre.")
 
     def __floordiv__(self, other):
         if type(other) is int or type(other) is float:
@@ -284,10 +309,12 @@ class Velocity(object):
             return self.mps // other.mps
         elif type(other) is Time:
             return Acceleration(mpss=self.mps // other.s)
+        elif type(other) is Acceleration:
+            return Time(s=self.mps // other.mpss)
         else:
             raise TypeError(
                 "Une vitesse ne peut être divisée que par une durée, une "
-                "vitesse ou un nombre.")
+                "vitesse, une accélération ou un nombre.")
 
 
 class Acceleration(object):
@@ -297,9 +324,9 @@ class Acceleration(object):
     l'intialiser."""
 
     def __init__(self, mpss=None, kphs=None):
-        if mpss:
+        if mpss is not None:
             self.mpss = float(mpss)
-        elif kphs:
+        elif kphs is not None:
             self.mpss = float(kphs) * KPHS_MPSS
         else:
             raise ValueError(
@@ -324,6 +351,12 @@ class Acceleration(object):
 
     def __float__(self):
         return float(self.mpss)
+
+    def __abs__(self):
+        return Acceleration(mpss=abs(self.mpss))
+
+    def __neg__(self):
+        return Acceleration(mpss=-self.mpss)
 
     def __add__(self, other):
         if type(other) is Acceleration:

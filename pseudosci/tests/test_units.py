@@ -20,6 +20,9 @@ class TestDistance:
         assert d.km == d.m / KM_M
 
     def test_math(self):
+        assert abs(Distance(m=-4)).m == abs(Distance(m=4)).m == 4.0
+        assert -Distance(m=-4).m == 4.0
+        assert -Distance(m=4).m == -4.0
         assert (Distance(m=5) + Distance(m=4)).m == 9.0
         assert (Distance(m=5) - Distance(m=4)).m == 1.0
         assert (Distance(m=5) * 2.0).m == 10.0
@@ -53,6 +56,9 @@ class TestTime:
         assert t.m == t.s / MIN_S
 
     def test_math(self):
+        assert abs(Time(s=-5)).s == abs(Time(s=5)).s == 5.0
+        assert -Time(s=-5).s == 5.0
+        assert -Time(s=5).s == -5.0
         assert (Time(s=5) + Time(s=4)).s == 9.0
         assert (Time(s=5) - Time(s=4)).s == 1.0
         assert (Time(s=5) * 2).s == 10.0
@@ -75,6 +81,9 @@ class TestVelocity:
         assert v.kph == 1.0
 
     def test_math(self):
+        assert abs(Velocity(mps=-5)).mps == abs(Velocity(mps=5)).mps == 5.0
+        assert -Velocity(mps=-5).mps == 5.0
+        assert -Velocity(mps=5).mps == -5.0
         assert (Velocity(mps=5) + Velocity(mps=4)).mps == 9.0
         assert (Velocity(mps=5) - Velocity(mps=4)).mps == 1.0
         assert (Velocity(mps=5) * 2).mps == 10.0
@@ -101,6 +110,10 @@ class TestAcceleration:
         assert a.kphs == 1.0
 
     def test_math(self):
+        assert abs(Acceleration(mpss=-5)).mpss == 5.0
+        assert abs(Acceleration(mpss=5)).mpss == 5.0
+        assert -Acceleration(mpss=-5).mpss == 5.0
+        assert -Acceleration(mpss=5).mpss == -5.0
         assert (Acceleration(mpss=5) + Acceleration(mpss=4)).mpss == 9.0
         assert (Acceleration(mpss=5) - Acceleration(mpss=4)).mpss == 1.0
         assert (Acceleration(mpss=5) * 2).mpss == 10.0

@@ -32,12 +32,12 @@ class TestMovement:
 
     def test_math(self):
         msum = Movement(distance=Distance(m=4), time=Time(s=2)) + \
-               Movement(distance=Distance(m=6), velocity=Velocity(mps=3))
+            Movement(distance=Distance(m=6), velocity=Velocity(mps=3))
         assert msum.distance.m == 10
         assert msum.time.s == 4
         assert msum.velocity.mps == 2.5
         msub = Movement(distance=Distance(m=6), velocity=Velocity(mps=2)) - \
-               Movement(distance=Distance(m=4), time=Time(s=2))
+            Movement(distance=Distance(m=4), time=Time(s=2))
         assert msub.distance.m == 2
         assert msub.time.s == 1
         assert msub.velocity.mps == 2
@@ -57,3 +57,41 @@ class TestMovement:
         assert mfdiv.distance.m == 2
         assert mdiv.time.s == 1
         assert mdiv.velocity.mps == 2.5
+
+
+class TestComplexMovement:
+    def test_init(self):
+        c = ComplexMovement(distance=Distance(km=1),
+                            velocity=Velocity(mps=10),
+                            accel=Acceleration(mpss=-2),
+                            brake=Acceleration(mpss=4))
+        assert c.distance.km == 1
+        assert c.velocity.mps == 10
+        assert c.accel.mpss == 2
+        assert c.brake.mpss == -4
+
+    def test_compute(self):
+        ct = ComplexMovement(distance=Distance(km=1),
+                             velocity=Velocity(mps=10),
+                             accel=Acceleration(mpss=2),
+                             brake=Acceleration(mpss=4))
+        cd = ComplexMovement(time=Time(s=103.75),
+                             velocity=Velocity(mps=10),
+                             accel=Acceleration(mpss=2),
+                             brake=Acceleration(mpss=4))
+        # cv = ComplexMovement(distance=Distance(km=1),
+        #                      time=Time(s=103.75),
+        #                      accel=Acceleration(mpss=2),
+        #                      brake=Acceleration(mpss=4))
+        assert ct.time.s == 103.75
+        assert cd.distance.km == 1.0
+        # assert cv.velocity.mps == 138.33333333333334
+        assert ct.acceltime.s == cd.acceltime.s == 5.0
+        assert ct.braketime.s == cd.braketime.s == 2.5
+        assert ct.maxtime.s == cd.maxtime.s == 96.25
+        assert ct.acceldist.m == cd.acceldist.m == 25.0
+        assert ct.brakedist.m == cd.brakedist.m == 12.5
+        assert ct.maxdist.m == cd.maxdist.m == 962.5
+        # assert cv.maxdist.m == cv.maxtime.m == 0.0
+        assert ct.meanvelocity.mps == cd.meanvelocity.mps
+        # == cv.meanvelocity.mps

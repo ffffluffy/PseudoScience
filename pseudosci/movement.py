@@ -89,7 +89,7 @@ class Movement(object):
                             "nombre.")
 
 
-class ComplexMovement(Movement):
+class ComplexMovement(object):
     """Décrit un mouvement rectiligne débutant par une accélération et se
     terminant par un freinage. Au moins deux des paramètres suivants sont
     obligatoires : ``distance=``, ``velocity=``, ``time=``.
@@ -101,13 +101,29 @@ class ComplexMovement(Movement):
 
     def __init__(self, distance=None, velocity=None, time=None, accel=None,
                  brake=None):
-        Movement.__init__(distance=distance, velocity=velocity, time=time)
+        if not (velocity and (distance or time)):
+            raise TypeError("Des arguments obligatoires sont manquants.\n"
+                            "Le paramètre ``velocity=`` est obligatoire ainsi "
+                            "qu'au moins un des deux paramètres suivants : "
+                            "``distance=``, ``time=``")
+        if distance and type(distance) is not Distance:
+            raise TypeError("Le paramètre ``distance`` doit être une instance "
+                            "de pseudosci.units.Distance.")
+        if velocity and type(velocity) is not Velocity:
+            raise TypeError("Le paramètre ``velocity`` doit être une instance "
+                            "de pseudosci.units.Velocity.")
+        if time and type(time) is not Time:
+            raise TypeError("Le paramètre ``time`` doit être une instance "
+                            "de pseudosci.units.Time.")
         if accel and type(accel) is not Acceleration:
             raise TypeError("Le paramètre ``accel`` doit être une instance "
                             "de pseudosci.units.Acceleration.")
         if brake and type(brake) is not Acceleration:
             raise TypeError("Le paramètre ``brake`` doit être une instance "
                             "de pseudosci.units.Acceleration.")
+        self.distance = distance
+        self.velocity = velocity
+        self.time = time
         if accel:
             self.accel = abs(accel)  # Toujours positif
         if brake:
@@ -118,7 +134,8 @@ class ComplexMovement(Movement):
         """Exécute les calculs basés sur les attributs de la classe. La méthode
         est appelée automatiquement après l'exécution du constructeur."""
 
-        if (not self.accel and not self.brake) or (accel == 0 and brake == 0):
+        if (not self.accel and not self.brake) or \
+                (self.accel == 0 and self.brake == 0):
             self.distance = Movement.distance
             self.velocity = Movement.velocity
             self.time = Movement.time
@@ -127,22 +144,21 @@ class ComplexMovement(Movement):
             self.maxdist, self.maxtime = self.distance, self.time
             self.meanvelocity = self.velocity
             return
-        elif not self.accel or accel == 0:
+        elif not self.accel or self.accel == 0:
             self.accel = -self.brake
-        elif not self.brake or brake == 0:
+        elif not self.brake or self.brake == 0:
             self.brake = -self.accel
 
         if self.velocity:  # Vitesse de pointe connue
             self.acceltime = self.velocity / self.accel
             self.braketime = abs(self.velocity / self.brake)
-        else:  # Distance totale et temps total connus
-            self.acceltime = \
-                (-self.brake * self.time) / (self.accel - self.brake)
-            self.braketime = self.time - self.acceltime
-            self.maxdist, self.maxtime = Distance(m=0), Time(s=0)
-            self.velocity = self.accel * self.acceltime
-        self.acceldist = self.accel * (self.acceltime ** 2)
-        self.brakedist = abs(self.brake * (self.braketime ** 2))
+        # else:  # Distance totale et temps total connus
+        #    self.acceltime = \
+        #        (-self.brake * self.time) / (self.accel - self.brake)
+        #    self.braketime = self.time - self.acceltime
+        self.acceldist = ((self.accel / 2) * self.acceltime) * self.acceltime
+        self.brakedist = abs(((self.brake / 2) * self.braketime) *
+                             self.braketime)
         if not self.time:  # Distance totale et vitesse de pointe connues
             self.maxdist = self.distance - self.acceldist - self.brakedist
             self.maxtime = self.maxdist / self.velocity
@@ -150,4 +166,9 @@ class ComplexMovement(Movement):
         elif not self.distance:  # Temps total et vitesse de pointe connus
             self.maxtime = self.time - self.acceltime - self.braketime
             self.maxdist = self.maxtime * self.velocity
+            self.distance = self.maxdist + self.acceldist + self.brakedist
+        # else:  # Distance totale et temps total connus
+        #     self.maxdist = Distance(m=0)
+        #     self.maxtime = Time(s=0)
+        #     self.velocity = self.accel * self.acceltime
         self.meanvelocity = self.distance / self.time
