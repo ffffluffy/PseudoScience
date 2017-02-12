@@ -10,4 +10,4 @@ from ..units import Velocity, Acceleration
 # Métro lillois (VAL 206) - https://fr.wikipedia.org/wiki/VAL_206
 lille_metro = Vehicle(velocity=Velocity(kph=80),
                       accel=Acceleration(mpss=1.4),
-                      brake=Acceleration(mpss=-1.3))
+                      brake=Acceleration(mpss=1.3))

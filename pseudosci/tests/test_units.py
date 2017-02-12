@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..units import Distance, Time, Velocity, Acceleration
+from ..units import Distance, Time, Velocity, Acceleration, \
+    KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS
 
 
 class TestDistance:
