@@ -1,6 +1,6 @@
 language: python
 cache: pip
-python: "3.5"
+python: "3.6"
 sudo: required
 before_install:
   - sudo pip install pytest pytest-cov
