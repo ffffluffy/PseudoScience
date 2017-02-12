@@ -1,8 +1,27 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..units import Distance, Time, Velocity, Acceleration, \
+from ..units import Distance, Time, Velocity, Acceleration, Unit, \
     KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS
+
+
+class TestUnit:
+    """Tests de la classe pseudosci.units.Unit"""
+    def test_init(self):
+        """Test du constructeur de la classe."""
+        assert Unit(123.4).value == 123.4
+
+    def test_math(self):
+        assert abs(Unit(-4)).value == abs(Unit(4)).value == 4.0
+        assert -Unit(-4).value == +Unit(4).value == 4.0
+        assert -Unit(4).value == -4.0
+        assert (Unit(5) + Unit(4)).value == 9.0
+        assert (Unit(5) - Unit(4)).value == 1.0
+        assert (Unit(5) * 2).value == (2 * Unit(5)).value == 10.0
+        assert (Unit(5) / 2).value == 2.5
+        assert (Unit(5) // 2).value == 2.0
+        assert (Unit(7.5) / Unit(2.5)) == 3.0
+        assert (Unit(7.5) // Unit(2)) == 3.0
 
 
 class TestDistance:
@@ -10,7 +29,7 @@ class TestDistance:
 
     def test_init(self):
         """Tests du constructeur de la classe."""
-        assert Distance(m=123.4).m == 123.4
+        assert issubclass(Distance, Unit)
         assert Distance(km=123.4).m == 123.4 * KM_M
         assert Distance(au=123.4).m == 123.4 * AU_M
         assert Distance(ly=123.4).m == 123.4 * LY_M
@@ -22,20 +41,6 @@ class TestDistance:
         assert d.ly == 1.0
         assert d.au == d.m / AU_M
         assert d.km == d.m / KM_M
-
-    def test_math(self):
-        """Tests des opérations mathématiques avec la classe."""
-        assert abs(Distance(m=-4)).m == abs(Distance(m=4)).m == 4.0
-        assert -Distance(m=-4).m == 4.0
-        assert -Distance(m=4).m == -4.0
-        assert (Distance(m=5) + Distance(m=4)).m == 9.0
-        assert (Distance(m=5) - Distance(m=4)).m == 1.0
-        assert (Distance(m=5) * 2.0).m == 10.0
-        assert (2.0 * Distance(m=5)).m == 10.0
-        assert (Distance(m=5) / 2).m == 2.5
-        assert (Distance(m=5) // 2).m == 2.0
-        assert (Distance(m=7.5) / Distance(m=2.5)) == 3.0
-        assert (Distance(m=7.5) // Distance(m=2)) == 3.0
 
     def test_math_class(self):
         """Tests des opérations mathématiques impliquant d'autres classes."""
@@ -51,7 +56,7 @@ class TestTime:
 
     def test_init(self):
         """Tests du constructeur de la classe."""
-        assert Time(s=123.4).s == 123.4
+        assert issubclass(Distance, Unit)
         assert Time(m=123.4).s == 123.4 * MIN_S
         assert Time(h=123.4).s == 123.4 * H_S
         assert Time(d=123.4).s == 123.4 * D_S
@@ -64,27 +69,13 @@ class TestTime:
         assert t.h == t.s / H_S
         assert t.m == t.s / MIN_S
 
-    def test_math(self):
-        """Tests des opérations mathématiques avec la classe."""
-        assert abs(Time(s=-5)).s == abs(Time(s=5)).s == 5.0
-        assert -Time(s=-5).s == 5.0
-        assert -Time(s=5).s == -5.0
-        assert (Time(s=5) + Time(s=4)).s == 9.0
-        assert (Time(s=5) - Time(s=4)).s == 1.0
-        assert (Time(s=5) * 2).s == 10.0
-        assert (2 * Time(s=5)).s == 10.0
-        assert (Time(s=5) / 2).s == 2.5
-        assert (Time(s=5) // 2).s == 2.0
-        assert Time(s=5) / Time(s=2) == 2.5
-        assert Time(s=5) // Time(s=2) == 2.0
-
 
 class TestVelocity:
     """Tests de la classe pseudosci.units.Velocity"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
-        assert Velocity(mps=123.4).mps == 123.4
+        assert issubclass(Distance, Unit)
         assert Velocity(kph=123.4).mps == 123.4 * KPH_MPS
 
     def test_attributes(self):
@@ -92,20 +83,6 @@ class TestVelocity:
         v = Velocity(mps=KPH_MPS)
         assert v.mps == KPH_MPS
         assert v.kph == 1.0
-
-    def test_math(self):
-        """Tests des opérations mathématiques avec la classe."""
-        assert abs(Velocity(mps=-5)).mps == abs(Velocity(mps=5)).mps == 5.0
-        assert -Velocity(mps=-5).mps == 5.0
-        assert -Velocity(mps=5).mps == -5.0
-        assert (Velocity(mps=5) + Velocity(mps=4)).mps == 9.0
-        assert (Velocity(mps=5) - Velocity(mps=4)).mps == 1.0
-        assert (Velocity(mps=5) * 2).mps == 10.0
-        assert (2 * Velocity(mps=5)).mps == 10.0
-        assert (Velocity(mps=5) / 2).mps == 2.5
-        assert (Velocity(mps=5) // 2).mps == 2.0
-        assert Velocity(mps=5) / Velocity(mps=2) == 2.5
-        assert Velocity(mps=5) // Velocity(mps=2) == 2.0
 
     def test_math_class(self):
         """Tests des opérations mathématiques impliquant d'autres classes."""
@@ -118,7 +95,7 @@ class TestAcceleration:
 
     def test_init(self):
         """Tests du constructeur de la classe."""
-        assert Acceleration(mpss=123.4).mpss == 123.4
+        assert issubclass(Distance, Unit)
         assert Acceleration(kphs=123.4).mpss == 123.4 * KPHS_MPSS
 
     def test_attributes(self):
@@ -126,21 +103,6 @@ class TestAcceleration:
         a = Acceleration(mpss=KPHS_MPSS)
         assert a.mpss == KPHS_MPSS
         assert a.kphs == 1.0
-
-    def test_math(self):
-        """Tests des opérations mathématiques avec la classe."""
-        assert abs(Acceleration(mpss=-5)).mpss == 5.0
-        assert abs(Acceleration(mpss=5)).mpss == 5.0
-        assert -Acceleration(mpss=-5).mpss == 5.0
-        assert -Acceleration(mpss=5).mpss == -5.0
-        assert (Acceleration(mpss=5) + Acceleration(mpss=4)).mpss == 9.0
-        assert (Acceleration(mpss=5) - Acceleration(mpss=4)).mpss == 1.0
-        assert (Acceleration(mpss=5) * 2).mpss == 10.0
-        assert (2 * Acceleration(mpss=5)).mpss == 10.0
-        assert (Acceleration(mpss=5) / 2).mpss == 2.5
-        assert (Acceleration(mpss=5) // 2).mpss == 2.0
-        assert Acceleration(mpss=5) / Acceleration(mpss=2) == 2.5
-        assert Acceleration(mpss=5) // Acceleration(mpss=2) == 2.0
 
     def test_math_class(self):
         """Tests des opérations mathématiques impliquant d'autres classes."""
