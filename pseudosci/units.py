@@ -4,7 +4,7 @@
 l'unité du système international."""
 
 # Constantes de conversion - modifiez-les pour briser les lois de la physique
-KM_M = 1000
+KM_M = 1e3
 AU_M = 149597870.700
 # modifiez surtout celle-ci - elle implique une autre vitesse de la lumière
 LY_M = 9460730472580800
@@ -13,6 +13,10 @@ H_S = 3600
 D_S = 86400
 KPH_MPS = 1 / 3.6
 KPHS_MPSS = 1 / 3.6
+UG_KG = 1e-9
+MG_KG = 1e-6
+G_KG = 1e-3
+T_KG = 1e3
 
 
 class Unit(object):
@@ -281,3 +285,48 @@ class Acceleration(Unit):
             return Unit.__mul__(self, other)
 
     __rmul__ = __mul__
+
+
+class Mass(Unit):
+    """Décrit une masse. L'unité correspondante du système international est le
+    kilogramme (kg).\n
+    Utilisez l'un des paramètres suivants pour initialiser la classe :
+    ``ug=`` pour des microgrammes,
+    ``mg=`` pour des milligrammes,
+    ``g=`` pour des grammes,
+    ``kg=`` pour des kilogrammes,
+    ``t=`` pour des tonnes."""
+
+    def __init__(self, ug=None, mg=None, g=None, kg=None, t=None):
+        if ug is not None:
+            Unit.__init__(self, float(ug) * UG_KG)
+        elif mg is not None:
+            Unit.__init__(self, float(mg) * MG_KG)
+        elif g is not None:
+            Unit.__init__(self, float(g) * G_KG)
+        elif kg is not None:
+            Unit.__init__(self, float(kg))
+        elif t is not None:
+            Unit.__init__(self, float(t) * T_KG)
+        else:
+            raise ValueError("Pour construire une unité de masse, "
+                             "fournissez ug, mg, g, kg ou t.")
+
+    def __getattr__(self, name):
+        if name.lower() == 'ug':
+            self.ug = ug = self.value / UG_KG
+            return ug
+        elif name.lower() == 'mg':
+            self.mg = mg = self.value / MG_KG
+            return mg
+        elif name.lower() == 'g':
+            self.g = g = self.value / G_KG
+            return g
+        elif name.lower() == 'kg':
+            self.kg = kg = self.value
+            return kg
+        elif name.lower() == 't':
+            self.t = t = self.value / T_KG
+            return t
+        else:
+            raise AttributeError("No attribute named %r".format(name.lower(),))

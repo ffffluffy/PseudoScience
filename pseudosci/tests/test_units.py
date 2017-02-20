@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..units import Distance, Time, Velocity, Acceleration, Unit, \
-    KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS
+from ..units import Distance, Time, Velocity, Acceleration, Unit, Mass, \
+    KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, UG_KG, MG_KG, \
+    G_KG, T_KG
 
 
 class TestUnit:
@@ -107,3 +108,24 @@ class TestAcceleration:
     def test_math_class(self):
         """Tests des opérations mathématiques impliquant d'autres classes."""
         assert (Acceleration(mpss=5) * Time(s=2)).mps == 10.0
+
+
+class TestMass:
+    """Tests de la classe pseudosci.units.Mass"""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Mass, Unit)
+        assert Mass(ug=123.4).kg == 123.4 * UG_KG
+        assert Mass(mg=123.4).kg == 123.4 * MG_KG
+        assert Mass(g=123.4).kg == 123.4 * G_KG
+        assert Mass(t=123.4).kg == 123.4 * T_KG
+
+    def test_attributes(self):
+        """Tests des attributs de la classe."""
+        m = Mass(kg=T_KG)
+        assert m.kg == T_KG
+        assert m.t == 1.0
+        assert m.g == m.kg / G_KG
+        assert m.mg == m.kg / MG_KG
+        assert m.ug == m.kg / UG_KG
