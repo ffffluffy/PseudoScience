@@ -70,7 +70,7 @@ class Unit(object):
                             "différentes.")
     __rmul__ = __mul__
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         if type(other) is int or type(other) is float:
             return type(self)(self.value / other)
         elif type(self) is type(other):
@@ -78,6 +78,7 @@ class Unit(object):
         else:
             raise TypeError("Il n'est pas possible de diviser deux unités "
                             "différentes.")
+    __div__ = __truediv__
 
     def __floordiv__(self, other):
         if type(other) is int or type(other) is float:
@@ -128,13 +129,14 @@ class Distance(Unit):
         else:
             raise AttributeError("No attribute named %r" % (name.lower(),))
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         if type(other) is Time:
             return Velocity(mps=self.m / other.s)
         elif type(other) is Velocity:
             return Time(s=self.m / other.mps)
         else:
             return Unit.__div__(self, other)
+    __div__ = __truediv__
 
     def __floordiv__(self, other):
         if type(other) is Time:
@@ -228,13 +230,14 @@ class Velocity(Unit):
 
     __rmul__ = __mul__
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         if type(other) is Time:
             return Acceleration(mpss=self.mps / other.s)
         elif type(other) is Acceleration:
             return Time(s=self.mps / other.mpss)
         else:
             return Unit.__div__(self, other)
+    __div__ = __truediv__
 
     def __floordiv__(self, other):
         if type(other) is Time:
