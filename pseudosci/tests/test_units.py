@@ -2,8 +2,8 @@
 # -*- coding:utf-8 -*-
 
 from ..units import Distance, Time, Velocity, Acceleration, Unit, Mass, \
-    KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, UG_KG, MG_KG, \
-    G_KG, T_KG
+    Force, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, UG_KG, \
+    MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N
 import pytest
 
 
@@ -119,6 +119,7 @@ class TestAcceleration:
     def test_math_class(self):
         """Tests des opérations mathématiques impliquant d'autres classes."""
         assert (Acceleration(mpss=5) * Time(s=2)).mps == 10.0
+        assert (Acceleration(mpss=5) * Mass(kg=2)).n == 10.0
 
 
 class TestMass:
@@ -140,3 +141,33 @@ class TestMass:
         assert m.g == m.kg / G_KG
         assert m.mg == m.kg / MG_KG
         assert m.ug == m.kg / UG_KG
+
+    def test_math_class(self):
+        """Tests des opérations mathématiques impliquant d'autres classes."""
+        assert (Mass(kg=5) * Acceleration(mpss=2)).n == 10.0
+
+
+class TestForce:
+    """Tests de la classe pseudosci.units.Force"""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Force, Unit)
+        assert Force(dyn=123.4).n == 123.4 * DYN_N
+        assert Force(kgf=123.4).n == 123.4 * KGF_N
+        assert Force(lbf=123.4).n == 123.4 * LBF_N
+        assert Force(pdl=123.4).n == 123.4 * PDL_N
+
+    def test_attributes(self):
+        """Tests des attributs de la classe."""
+        f = Force(n=KGF_N)
+        assert f.n == KGF_N
+        assert f.kgf == 1.0
+        assert f.dyn == f.n / DYN_N
+        assert f.lbf == f.n / LBF_N
+        assert f.pdl == f.n / PDL_N
+
+    def test_math_class(self):
+        """Tests des opérations mathématiques impliquant d'autres classes."""
+        assert (Force(n=10) / Acceleration(mpss=2)).kg == 5.0
+        assert (Force(n=10) / Mass(kg=5)).mpss == 2.0

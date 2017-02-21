@@ -17,6 +17,10 @@ UG_KG = 1e-9
 MG_KG = 1e-6
 G_KG = 1e-3
 T_KG = 1e3
+DYN_N = 1e-5
+KGF_N = 9.80665
+LBF_N = 4.448222
+PDL_N = 0.138255
 
 
 class Unit(object):
@@ -315,6 +319,8 @@ class Acceleration(Unit):
     def __mul__(self, other):
         if type(other) is Time:
             return Velocity(mps=self.mpss * other.s)
+        elif type(other) is Mass:
+            return Force(n=self.mpss * other.kg)
         else:
             return Unit.__mul__(self, other)
 
@@ -364,3 +370,72 @@ class Mass(Unit):
             return t
         else:
             raise AttributeError("No attribute named %r".format(name.lower(),))
+
+    def __mul__(self, other):
+        if type(other) is Acceleration:
+            return Force(n=self.kg * other.mpss)
+        else:
+            return Unit.__mul__(self, other)
+    __rmul__ = __mul__
+
+
+class Force(Unit):
+    """Décrit une force. L'unité correspondante du système international est le
+    newton (N).\n
+    Utilisez l'un des paramètres suivants pour initialiser la classe :
+    ``n=`` pour des newtons,
+    ``dyn=`` pour des dynes,
+    ``kgf=`` pour des kilogrammes-force,
+    ``lbf=`` pour des livres-force,
+    ``pdl=`` pour des poundals."""
+
+    def __init__(self, n=None, dyn=None, kgf=None, lbf=None, pdl=None):
+        if n is not None:
+            Unit.__init__(self, float(n))
+        elif dyn is not None:
+            Unit.__init__(self, float(dyn) * DYN_N)
+        elif kgf is not None:
+            Unit.__init__(self, float(kgf) * KGF_N)
+        elif lbf is not None:
+            Unit.__init__(self, float(lbf) * LBF_N)
+        elif pdl is not None:
+            Unit.__init__(self, float(pdl) * PDL_N)
+        else:
+            raise ValueError("Pour construire une unité de force, "
+                             "fournissez n, dyn, kgf, lbf ou pdl.")
+
+    def __getattr__(self, name):
+        if name.lower() == 'n':
+            self.n = n = self.value
+            return n
+        elif name.lower() == 'dyn':
+            self.dyn = dyn = self.value / DYN_N
+            return dyn
+        elif name.lower() == 'kgf':
+            self.kgf = kgf = self.value / KGF_N
+            return kgf
+        elif name.lower() == 'lbf':
+            self.lbf = lbf = self.value / LBF_N
+            return lbf
+        elif name.lower() == 'pdl':
+            self.pdl = pdl = self.value / PDL_N
+            return pdl
+        else:
+            raise AttributeError("No attribute named %r".format(name.lower(),))
+
+    def __truediv__(self, other):
+        if type(other) is Acceleration:
+            return Mass(kg=self.n / other.mpss)
+        elif type(other) is Mass:
+            return Acceleration(mpss=self.n / other.kg)
+        else:
+            return Unit.__truediv__(self, other)
+    __div__ = __truediv__
+
+    def __floordiv__(self, other):
+        if type(other) is Acceleration:
+            return Mass(kg=self.n // other.mpss)
+        elif type(other) is Mass:
+            return Acceleration(mpss=self.n // other.kg)
+        else:
+            return Unit.__floordiv__(self, other)
