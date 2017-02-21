@@ -2,8 +2,9 @@
 # -*- coding:utf-8 -*-
 
 from ..units import Distance, Time, Velocity, Acceleration, Unit, Mass, \
-    Force, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, UG_KG, \
-    MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N
+    Force, Area, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, \
+    UG_KG, MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, ARPENT_M2, \
+    HA_M2
 import pytest
 
 
@@ -61,6 +62,7 @@ class TestDistance:
         assert (d / Velocity(mps=2)).s == 4.5
         assert (d // Time(s=2)).mps == 4
         assert (d // Velocity(mps=2)).s == 4
+        assert (d * d).m2 == 81
 
 
 class TestTime:
@@ -171,3 +173,28 @@ class TestForce:
         """Tests des opérations mathématiques impliquant d'autres classes."""
         assert (Force(n=10) / Acceleration(mpss=2)).kg == 5.0
         assert (Force(n=10) / Mass(kg=5)).mpss == 2.0
+
+
+class TestArea:
+    """Tests de la classe pseudosci.units.Area"""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Area, Unit)
+        assert Area(km2=123.4).m2 == 123.4 * (KM_M ** 2)
+        assert Area(acre=123.4).m2 == 123.4 * ACRE_M2
+        assert Area(arpent=123.4).m2 == 123.4 * ARPENT_M2
+        assert Area(ha=123.4).m2 == 123.4 * HA_M2
+
+    def test_attributes(self):
+        """Tests des attributs de la classe."""
+        a = Area(m2=KM_M ** 2)
+        assert a.m2 == KM_M ** 2
+        assert a.km2 == 1.0
+        assert a.acre == a.m2 / ACRE_M2
+        assert a.arpent == a.m2 / ARPENT_M2
+        assert a.ha == a.m2 / HA_M2
+
+    def test_math_class(self):
+        """Tests des opérations mathématiques impliquant d'autres classes."""
+        assert (Area(m2=12) / Distance(m=3)).m == 4.0

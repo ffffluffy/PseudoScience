@@ -21,6 +21,9 @@ DYN_N = 1e-5
 KGF_N = 9.80665
 LBF_N = 4.448222
 PDL_N = 0.138255
+ACRE_M2 = 4046.86
+ARPENT_M2 = 3418.89
+HA_M2 = 1e4
 
 
 class Unit(object):
@@ -169,7 +172,15 @@ class Distance(Unit):
             self.ly = ly = self.m / LY_M
             return ly
         else:
-            raise AttributeError("No attribute named {0!r}".format(name.lower()))
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
+
+    def __mul__(self, other):
+        if type(other) is Distance:
+            return Area(m2=self.m * other.m)
+        else:
+            return Unit.__mul__(self, other)
+    __rmul__ = __mul__
 
     def __truediv__(self, other):
         if type(other) is Time:
@@ -225,7 +236,8 @@ class Time(Unit):
             self.d = d = self.s / D_S
             return d
         else:
-            raise AttributeError("No attribute named {0!r}".format(name.lower()))
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
 
     def __mul__(self, other):
         if type(other) is Velocity:
@@ -260,7 +272,8 @@ class Velocity(Unit):
             self.kph = kph = self.mps / KPH_MPS
             return kph
         else:
-            raise AttributeError("No attribute named {0!r}".format(name.lower()))
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
 
     def __mul__(self, other):
         if type(other) is int or type(other) is float:
@@ -314,7 +327,8 @@ class Acceleration(Unit):
             self.kphs = kphs = self.mpss / KPHS_MPSS
             return kphs
         else:
-            raise AttributeError("No attribute named {0!r}".format(name.lower()))
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
 
     def __mul__(self, other):
         if type(other) is Time:
@@ -369,7 +383,8 @@ class Mass(Unit):
             self.t = t = self.value / T_KG
             return t
         else:
-            raise AttributeError("No attribute named %r".format(name.lower(),))
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
 
     def __mul__(self, other):
         if type(other) is Acceleration:
@@ -421,7 +436,8 @@ class Force(Unit):
             self.pdl = pdl = self.value / PDL_N
             return pdl
         else:
-            raise AttributeError("No attribute named %r".format(name.lower(),))
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
 
     def __truediv__(self, other):
         if type(other) is Acceleration:
@@ -437,5 +453,64 @@ class Force(Unit):
             return Mass(kg=self.n // other.mpss)
         elif type(other) is Mass:
             return Acceleration(mpss=self.n // other.kg)
+        else:
+            return Unit.__floordiv__(self, other)
+
+
+class Area(Unit):
+    """Décrit une surface. L'unité correspondante du système international est
+    le mètre carré (m^2).\n
+    Utilisez un des paramètres suivants pour initialiser la classe :
+    ``m2=`` pour des mètres carrés,
+    ``km2=`` pour des kilomètres carrés,
+    ``acre=`` pour des acres,
+    ``arpent=`` pour des arpents,
+    ``ha=`` pour des hectares."""
+
+    def __init__(self, m2=None, km2=None, acre=None, arpent=None, ha=None):
+        if m2 is not None:
+            Unit.__init__(self, float(m2))
+        elif km2 is not None:
+            Unit.__init__(self, float(km2) * (KM_M ** 2))
+        elif acre is not None:
+            Unit.__init__(self, float(acre) * ACRE_M2)
+        elif arpent is not None:
+            Unit.__init__(self, float(arpent) * ARPENT_M2)
+        elif ha is not None:
+            Unit.__init__(self, float(ha) * HA_M2)
+        else:
+            raise ValueError("Pour construire une unité de surface, "
+                             "fournissez m2, km2, acre, arpent ou ha.")
+
+    def __getattr__(self, name):
+        if name.lower() == 'm2':
+            self.m2 = m2 = self.value
+            return m2
+        elif name.lower() == 'km2':
+            self.km2 = km2 = self.value / (KM_M ** 2)
+            return km2
+        elif name.lower() == 'acre':
+            self.acre = acre = self.value / ACRE_M2
+            return acre
+        elif name.lower() == 'arpent':
+            self.arpent = arpent = self.value / ARPENT_M2
+            return arpent
+        elif name.lower() == 'ha':
+            self.ha = ha = self.value / HA_M2
+            return ha
+        else:
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
+
+    def __truediv__(self, other):
+        if type(other) is Distance:
+            return Distance(m=self.m2 / other.m)
+        else:
+            return Unit.__truediv__(self, other)
+    __div__ = __truediv__
+
+    def __floordiv__(self, other):
+        if type(other) is Distance:
+            return Distance(m=self.m2 // other.m)
         else:
             return Unit.__floordiv__(self, other)
