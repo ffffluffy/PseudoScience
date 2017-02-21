@@ -1,13 +1,15 @@
-langage: python
+language: python
 cache: pip
 python:
+  - "2.7"
   - "3.5"
+sudo: required
 before_install:
-  - pip install --user pytest pytest-cov
-  - pip install --user coveralls
+  - sudo pip install pytest pytest-cov
+  - sudo pip install coveralls
 install:
-  - pip install --user -r requirements.txt
+  - sudo pip install -r requirements.txt
 script:
-  - py.test
+  - pytest
 after_success:
   - coveralls

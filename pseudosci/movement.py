@@ -3,7 +3,7 @@
 """Simulation de mouvements rectilignes prenant en charge les accélérations
 et freinages."""
 
-from units import *
+from .units import Unit, Distance, Time, Velocity, Acceleration
 
 
 class Movement(object):
@@ -72,13 +72,14 @@ class Movement(object):
                             "nombre.")
     __rmul__ = __mul__
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         if type(other) is int or type(other) is float:
             return Movement(distance=self.distance / other,
                             time=self.time / other)
         else:
             raise TypeError("Un Movement ne peut être divisé que par un "
                             "nombre.")
+    __div__ = __truediv__
 
     def __floordiv__(self, other):
         if type(other) is int or type(other) is float:

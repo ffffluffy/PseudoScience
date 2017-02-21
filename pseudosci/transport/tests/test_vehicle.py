@@ -2,12 +2,16 @@
 # -*- coding:utf-8 -*-
 
 from ...units import Distance, Velocity, Acceleration
-from ..vehicle import *
+from ...movement import Movement, ComplexMovement
+from ..vehicle import Vehicle
 import pytest
 
 
 class TestVehicle:
+    """Tests unitaires de pseudosci.transport.Vehicle"""
+
     def test_init(self):
+        """Tests du constructeur et des attributs simples de la classe."""
         v = Vehicle(velocity=Velocity(kph=50),
                     accel=Acceleration(kphs=20),
                     brake=Acceleration(kphs=30))
@@ -35,6 +39,7 @@ class TestVehicle:
                     brake=Acceleration(mpss=-1))
 
     def test_move(self):
+        """Test de la méthode `move(distance)`"""
         cm = Vehicle(velocity=Velocity(kph=50),
                      accel=Acceleration(kphs=20),
                      brake=Acceleration(kphs=30)).move(Distance(km=5))

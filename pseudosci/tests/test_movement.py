@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..movement import *
+from ..movement import Movement, ComplexMovement
+from ..units import Unit, Distance, Time, Velocity, Acceleration
 import pytest
 
 
 class TestMovement:
+    """Tests de la classe pseudosci.movement.Movement"""
     def test_init(self):
+        """Tests du constructeur de la classe."""
         m = Movement(distance=Distance(m=10),
                      time=Time(s=2),
                      velocity=Velocity(mps=5))
@@ -23,6 +26,7 @@ class TestMovement:
             Movement(velocity=5, time=2)
 
     def test_attributes(self):
+        """Tests des attributs de la classe."""
         mv = Movement(distance=Distance(m=10), time=Time(s=2))
         md = Movement(velocity=Velocity(mps=5), time=Time(s=2))
         mt = Movement(distance=Distance(m=10), velocity=Velocity(mps=5))
@@ -31,6 +35,7 @@ class TestMovement:
         assert mt.time.s == 2
 
     def test_math(self):
+        """Tests des calculs effectués par la classe."""
         msum = Movement(distance=Distance(m=4), time=Time(s=2)) + \
             Movement(distance=Distance(m=6), velocity=Velocity(mps=3))
         assert msum.distance.m == 10
@@ -60,7 +65,9 @@ class TestMovement:
 
 
 class TestComplexMovement:
+    """Tests de la classe pseudosci.movement.ComplexMovement"""
     def test_init(self):
+        """Tests du constructeur de la classe."""
         c = ComplexMovement(distance=Distance(km=1),
                             velocity=Velocity(mps=10),
                             accel=Acceleration(mpss=-2),
@@ -71,6 +78,7 @@ class TestComplexMovement:
         assert c.brake.mpss == -4
 
     def test_compute(self):
+        """Tests des calculs effectués par la classe."""
         ct = ComplexMovement(distance=Distance(km=1),
                              velocity=Velocity(mps=10),
                              accel=Acceleration(mpss=2),

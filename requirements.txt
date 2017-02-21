@@ -3,3 +3,4 @@
 
 # Astropolitain
 skyfield >= 0.9.1
+matplotlib
