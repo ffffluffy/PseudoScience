@@ -4,6 +4,7 @@
 from ..units import Distance, Time, Velocity, Acceleration, Unit, Mass, \
     KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, UG_KG, MG_KG, \
     G_KG, T_KG
+import pytest
 
 
 class TestUnit:
@@ -23,6 +24,16 @@ class TestUnit:
         assert (Unit(5) // 2).value == 2.0
         assert (Unit(7.5) / Unit(2.5)) == 3.0
         assert (Unit(7.5) // Unit(2)) == 3.0
+
+    def test_compare(self):
+        assert Unit(1) == Unit(1)
+        assert Unit(1) != Unit(2)
+        assert Unit(2) > Unit(1)
+        assert Unit(2) >= Unit(1)
+        assert Unit(1) >= Unit(1)
+        assert Unit(1) < Unit(2)
+        assert Unit(1) <= Unit(2)
+        assert Unit(1) <= Unit(1)
 
 
 class TestDistance:

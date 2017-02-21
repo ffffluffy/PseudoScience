@@ -93,6 +93,40 @@ class Unit(object):
             raise TypeError("Il n'est pas possible de diviser deux unités "
                             "différentes.")
 
+    def __eq__(self, other):
+        return type(self) is type(other) and self.value == other.value
+
+    def __ne__(self, other):
+        return type(self) is type(other) and self.value != other.value
+
+    def __gt__(self, other):
+        if (type(self) is not type(other)):
+            raise TypeError("Une unité doit être comparée à une unité de même "
+                            "type.")
+        else:
+            return self.value > other.value
+
+    def __ge__(self, other):
+        if (type(self) is not type(other)):
+            raise TypeError("Une unité doit être comparée à une unité de même "
+                            "type.")
+        else:
+            return self.value >= other.value
+
+    def __lt__(self, other):
+        if (type(self) is not type(other)):
+            raise TypeError("Une unité doit être comparée à une unité de même "
+                            "type.")
+        else:
+            return self.value < other.value
+
+    def __le__(self, other):
+        if (type(self) is not type(other)):
+            raise TypeError("Une unité doit être comparée à une unité de même "
+                            "type.")
+        else:
+            return self.value <= other.value
+
 
 class Distance(Unit):
     """Décrit une mesure de distance. L'unité correspondante du système
