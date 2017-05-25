@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..movement import Movement, ComplexMovement
+from ..movement import Movement, AcceleratedMovement, ComplexMovement
 from ..units import Unit, Distance, Time, Velocity, Acceleration
 import pytest
 
@@ -62,6 +62,32 @@ class TestMovement:
         assert mfdiv.distance.m == 2
         assert mdiv.time.s == 1
         assert mdiv.velocity.mps == 2.5
+
+
+class TestAcceleratedMovement:
+    """Tests de la classe pseudosci.movement.AcceleratedMovement"""
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        a = AcceleratedMovement(distance=Distance(m=50),
+                                time=Time(s=10),
+                                velocity=Velocity(mps=10),
+                                accel=Acceleration(mpss=1))
+        assert a.distance.m == 50
+        assert a.time.s == 10
+        assert a.velocity.mps == 10
+        assert a.accel.mpss == 1
+        with pytest.raises(TypeError):
+            AcceleratedMovement(accel=0)
+
+    def test_attributes(self):
+        mv = AcceleratedMovement(distance=Distance(m=50), time=Time(s=10))
+        mt = AcceleratedMovement(distance=Distance(m=50),
+                                 velocity=Velocity(mps=10))
+        md = AcceleratedMovement(time=Time(s=10), velocity=Velocity(mps=10))
+        assert mv.accel.mpss == md.accel.mpss == mt.accel.mpss == 1
+        assert mv.velocity.mps == 10
+        assert md.distance.m == 50
+        assert mt.time.s == 10
 
 
 class TestComplexMovement:
