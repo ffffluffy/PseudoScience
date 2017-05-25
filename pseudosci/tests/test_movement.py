@@ -80,6 +80,7 @@ class TestAcceleratedMovement:
             AcceleratedMovement(accel=0)
 
     def test_attributes(self):
+        """Tests des attributs de la classe."""
         mv = AcceleratedMovement(distance=Distance(m=50), time=Time(s=10))
         mt = AcceleratedMovement(distance=Distance(m=50),
                                  velocity=Velocity(mps=10))
