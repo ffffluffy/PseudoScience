@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..movement import Movement, ComplexMovement
+from ..movement import Movement, AcceleratedMovement, ComplexMovement
 from ..units import Unit, Distance, Time, Velocity, Acceleration
 import pytest
 
@@ -64,42 +64,63 @@ class TestMovement:
         assert mdiv.velocity.mps == 2.5
 
 
+class TestAcceleratedMovement:
+    """Tests de la classe pseudosci.movement.AcceleratedMovement"""
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        a = AcceleratedMovement(distance=Distance(m=50),
+                                time=Time(s=10),
+                                velocity=Velocity(mps=10),
+                                accel=Acceleration(mpss=1))
+        assert a.distance.m == 50
+        assert a.time.s == 10
+        assert a.velocity.mps == 10
+        assert a.accel.mpss == 1
+        with pytest.raises(TypeError):
+            AcceleratedMovement(accel=0)
+
+    def test_attributes(self):
+        """Tests des attributs de la classe."""
+        mv = AcceleratedMovement(distance=Distance(m=50), time=Time(s=10))
+        mt = AcceleratedMovement(distance=Distance(m=50),
+                                 velocity=Velocity(mps=10))
+        md = AcceleratedMovement(time=Time(s=10), velocity=Velocity(mps=10))
+        assert mv.accel.mpss == md.accel.mpss == mt.accel.mpss == 1
+        assert mv.velocity.mps == 10
+        assert md.distance.m == 50
+        assert mt.time.s == 10
+
+
 class TestComplexMovement:
     """Tests de la classe pseudosci.movement.ComplexMovement"""
     def test_init(self):
         """Tests du constructeur de la classe."""
-        c = ComplexMovement(distance=Distance(km=1),
-                            velocity=Velocity(mps=10),
-                            accel=Acceleration(mpss=-2),
-                            brake=Acceleration(mpss=4))
-        assert c.distance.km == 1
-        assert c.velocity.mps == 10
-        assert c.accel.mpss == 2
-        assert c.brake.mpss == -4
+        c = ComplexMovement(
+            Movement(distance=Distance(m=4), time=Time(s=10)),
+            Movement(distance=Distance(m=2), time=Time(s=5))
+        )
+        assert len(c.movements) == 2
 
-    def test_compute(self):
+    def test_attributes(self):
+        """Tests des attributs de la classe."""
+        c = ComplexMovement(
+            Movement(distance=Distance(m=4), time=Time(s=10)),
+            Movement(distance=Distance(m=2), time=Time(s=5))
+        )
+        assert c.distance.m == 6
+        assert c.time.s == 15
+        assert c.velocity.mps == 0.4
+        assert c.distances == [Distance(m=4), Distance(m=2)]
+        assert c.times == [Time(s=10), Time(s=5)]
+        assert c.velocities == [Velocity(mps=0.4), Velocity(mps=0.4)]
+
+    def test_math(self):
         """Tests des calculs effectués par la classe."""
-        ct = ComplexMovement(distance=Distance(km=1),
-                             velocity=Velocity(mps=10),
-                             accel=Acceleration(mpss=2),
-                             brake=Acceleration(mpss=4))
-        cd = ComplexMovement(time=Time(s=103.75),
-                             velocity=Velocity(mps=10),
-                             accel=Acceleration(mpss=2),
-                             brake=Acceleration(mpss=4))
-        # cv = ComplexMovement(distance=Distance(km=1),
-        #                      time=Time(s=103.75),
-        #                      accel=Acceleration(mpss=2),
-        #                      brake=Acceleration(mpss=4))
-        assert ct.time.s == 103.75
-        assert cd.distance.km == 1.0
-        # assert cv.velocity.mps == 138.33333333333334
-        assert ct.acceltime.s == cd.acceltime.s == 5.0
-        assert ct.braketime.s == cd.braketime.s == 2.5
-        assert ct.maxtime.s == cd.maxtime.s == 96.25
-        assert ct.acceldist.m == cd.acceldist.m == 25.0
-        assert ct.brakedist.m == cd.brakedist.m == 12.5
-        assert ct.maxdist.m == cd.maxdist.m == 962.5
-        # assert cv.maxdist.m == cv.maxtime.m == 0.0
-        assert ct.meanvelocity.mps == cd.meanvelocity.mps
-        # == cv.meanvelocity.mps
+        c = ComplexMovement()
+        assert len(c.movements) == 0
+        c += Movement(distance=Distance(m=4), time=Time(s=10))
+        assert len(c.movements) == 1
+        assert c.distance.m == 4
+        c += c
+        assert len(c.movements) == 2
+        assert c.distance.m == 8

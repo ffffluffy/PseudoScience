@@ -15,6 +15,7 @@ class TestUnit:
         assert Unit(123.4).value == 123.4
 
     def test_math(self):
+        """Tests des opérations mathématiques de la classe."""
         assert abs(Unit(-4)).value == abs(Unit(4)).value == 4.0
         assert -Unit(-4).value == +Unit(4).value == 4.0
         assert -Unit(4).value == -4.0
@@ -27,6 +28,7 @@ class TestUnit:
         assert (Unit(7.5) // Unit(2)) == 3.0
 
     def test_compare(self):
+        """Tests des opérations de comparaison de la classe."""
         assert Unit(1) == Unit(1)
         assert Unit(1) != Unit(2)
         assert Unit(2) > Unit(1)

@@ -1,15 +1,18 @@
 language: python
-cache: pip
+#cache: pip
 python:
   - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
   - "3.5"
+  - "3.6"
 sudo: required
 before_install:
-  - sudo pip install pytest pytest-cov
-  - sudo pip install coveralls
+  - sudo -H pip install pytest pytest-cov coverage urllib3[secure] coveralls
 install:
-  - sudo pip install -r requirements.txt
+  - sudo -H pip install -r requirements.txt
 script:
-  - pytest
+  - coverage run --source pseudosci -m py.test
 after_success:
   - coveralls

@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 from ..units import Distance, Velocity, Acceleration
-from ..movement import Movement, ComplexMovement
+from ..movement import Movement, AcceleratedMovement, ComplexMovement
 
 
 class Vehicle:
@@ -38,8 +38,14 @@ class Vehicle:
                              "strictement positive.")
 
     def move(self, distance):
-        if self.accel.mpss <= 0:
-            return Movement(distance=distance, velocity=self.velocity)
-        else:
-            return ComplexMovement(distance=distance, velocity=self.velocity,
-                                   accel=self.accel, brake=self.brake)
+        c = ComplexMovement()
+        if self.accel.mpss > 0:
+            c += AcceleratedMovement(
+                velocity=self.velocity, accel=self.accel,
+                time=self.velocity / self.accel)
+        if self.brake.mpss > 0:
+            c += AcceleratedMovement(
+                velocity=self.velocity, accel=self.accel,
+                time=self.velocity / self.accel)
+        return c + Movement(
+            distance=distance - c.distance, velocity=self.velocity)
