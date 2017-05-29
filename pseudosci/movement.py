@@ -126,85 +126,41 @@ class AcceleratedMovement(Movement):
 
 
 class ComplexMovement(object):
-    """Décrit un mouvement rectiligne débutant par une accélération et se
-    terminant par un freinage. Au moins deux des paramètres suivants sont
-    obligatoires : ``distance=``, ``velocity=``, ``time=``.
-    Paramètres optionnels : ``accel=``, ``brake=``
-    ``velocity=`` est la vitesse de pointe.
-    Si ``brake=`` est omis, la décélération sera égale à l'accélération.
-    Si ``accel=`` est omis, l'accélération sera ignorée et l'instance se
-    comportera comme pseudosci.movement.Movement."""
+    """Gère un ensemble de mouvements rectilignes comme un unique mouvement."""
 
-    def __init__(self, distance=None, velocity=None, time=None, accel=None,
-                 brake=None):
-        if not (velocity and (distance or time)):
-            raise TypeError("Des arguments obligatoires sont manquants.\n"
-                            "Le paramètre ``velocity=`` est obligatoire ainsi "
-                            "qu'au moins un des deux paramètres suivants : "
-                            "``distance=``, ``time=``")
-        if distance and type(distance) is not Distance:
-            raise TypeError("Le paramètre ``distance`` doit être une instance "
-                            "de pseudosci.units.Distance.")
-        if velocity and type(velocity) is not Velocity:
-            raise TypeError("Le paramètre ``velocity`` doit être une instance "
-                            "de pseudosci.units.Velocity.")
-        if time and type(time) is not Time:
-            raise TypeError("Le paramètre ``time`` doit être une instance "
-                            "de pseudosci.units.Time.")
-        if accel and type(accel) is not Acceleration:
-            raise TypeError("Le paramètre ``accel`` doit être une instance "
-                            "de pseudosci.units.Acceleration.")
-        if brake and type(brake) is not Acceleration:
-            raise TypeError("Le paramètre ``brake`` doit être une instance "
-                            "de pseudosci.units.Acceleration.")
-        self.distance = distance
-        self.velocity = velocity
-        self.time = time
-        if accel:
-            self.accel = abs(accel)  # Toujours positif
-        if brake:
-            self.brake = -abs(brake)  # Toujours négatif
-        self.compute()
+    def __init__(self, *args):
+        self.movements = list(args)
 
-    def compute(self):
-        """Exécute les calculs basés sur les attributs de la classe. La méthode
-        est appelée automatiquement après l'exécution du constructeur."""
+    def __repr__(self):
+        return '<{0} {1},{2},{3}>'.format(
+            type(self).__name__, self.distance, self.time, self.velocity)
 
-        if (not self.accel and not self.brake) or \
-                (self.accel == 0 and self.brake == 0):
-            self.distance = Movement.distance
-            self.velocity = Movement.velocity
-            self.time = Movement.time
-            self.acceldist, self.brakedist = Distance(m=0), Distance(m=0)
-            self.acceltime, self.braketime = Time(s=0), Time(s=0)
-            self.maxdist, self.maxtime = self.distance, self.time
-            self.meanvelocity = self.velocity
-            return
-        elif not self.accel or self.accel == 0:
-            self.accel = -self.brake
-        elif not self.brake or self.brake == 0:
-            self.brake = -self.accel
+    def __add__(self, other):
+        if type(self) is type(other):
+            m = self.movements
+            m.extend(other.movements)
+            return type(self)(*m)
+        elif isinstance(other, Movement):
+            m = self.movements
+            m.append(other)
+            return type(self)(*m)
+        else:
+            raise TypeError("Un ComplexMovement doit s'additionner à un "
+                            "ComplexMovement ou à un Movement")
 
-        if self.velocity:  # Vitesse de pointe connue
-            self.acceltime = self.velocity / self.accel
-            self.braketime = abs(self.velocity / self.brake)
-        # else:  # Distance totale et temps total connus
-        #    self.acceltime = \
-        #        (-self.brake * self.time) / (self.accel - self.brake)
-        #    self.braketime = self.time - self.acceltime
-        self.acceldist = ((self.accel / 2) * self.acceltime) * self.acceltime
-        self.brakedist = abs(((self.brake / 2) * self.braketime) *
-                             self.braketime)
-        if not self.time:  # Distance totale et vitesse de pointe connues
-            self.maxdist = self.distance - self.acceldist - self.brakedist
-            self.maxtime = self.maxdist / self.velocity
-            self.time = self.maxtime + self.acceltime + self.braketime
-        elif not self.distance:  # Temps total et vitesse de pointe connus
-            self.maxtime = self.time - self.acceltime - self.braketime
-            self.maxdist = self.maxtime * self.velocity
-            self.distance = self.maxdist + self.acceldist + self.brakedist
-        # else:  # Distance totale et temps total connus
-        #     self.maxdist = Distance(m=0)
-        #     self.maxtime = Time(s=0)
-        #     self.velocity = self.accel * self.acceltime
-        self.meanvelocity = self.distance / self.time
+    def __getattr__(self, name):
+        if name == 'distance':
+            return Distance(m=sum(self.distances))
+        elif name == 'time':
+            return Time(s=sum(self.times))
+        elif name == 'velocity':
+            if self.time == 0:
+                return 0
+            else:
+                return self.distance / self.time
+        elif name == 'distances':
+            return [m.distance for m in self.movements]
+        elif name == 'times':
+            return [m.time for m in self.movements]
+        elif name == 'velocities':
+            return [m.velocity for m in self.movements]
