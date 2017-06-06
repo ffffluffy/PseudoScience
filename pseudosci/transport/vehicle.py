@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..units import Distance, Velocity, Acceleration
+from ..units import Distance, Velocity, Acceleration, Mass
 from ..movement import Movement, AcceleratedMovement, ComplexMovement
 
 
 class Vehicle:
     """Décrit un moyen de locomotion standard."""
 
-    def __init__(self, velocity=None, accel=None, brake=None):
+    def __init__(self, velocity=None, accel=None, brake=None, mass=None):
         self.velocity = velocity
         self.accel = accel
         self.brake = brake
+        self.mass = mass
         if not velocity or type(velocity) is not Velocity:
             raise TypeError("Le paramètre obligatoire ``velocity`` doit être "
                             "une instance de pseudosci.units.Velocity.")
@@ -36,8 +37,13 @@ class Vehicle:
         elif brake.mpss <= 0:
             raise ValueError("La décélération du véhicule doit être "
                              "strictement positive.")
+        if mass and type(mass) is not Mass:
+            raise TypeError("Le paramètre optionnel ``mass`` doit être une "
+                            "instance de pseudosci.units.Mass.")
 
     def move(self, distance):
+        """Génère un ComplexMovement correspondant au déplacement du véhicule
+        sur une distance donnée."""
         c = ComplexMovement()
         if self.accel.mpss > 0:
             c += AcceleratedMovement(
@@ -49,3 +55,9 @@ class Vehicle:
                 time=self.velocity / self.accel)
         return c + Movement(
             distance=distance - c.distance, velocity=self.velocity)
+
+    def __getattr__(self, name):
+        if name == 'accelforce' or name == 'thrust':
+            return self.mass * self.accel
+        elif name == 'brakeforce':
+            return self.mass * self.brake
