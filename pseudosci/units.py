@@ -24,6 +24,7 @@ PDL_N = 0.138255
 ACRE_M2 = 4046.86
 ARPENT_M2 = 3418.89
 HA_M2 = 1e4
+L_M3 = 1e-3
 
 
 class Unit(object):
@@ -178,6 +179,8 @@ class Distance(Unit):
     def __mul__(self, other):
         if type(other) is Distance:
             return Area(m2=self.m * other.m)
+        elif type(other) is Area:
+            return Volume(m3=self.m * other.m2)
         else:
             return Unit.__mul__(self, other)
     __rmul__ = __mul__
@@ -502,6 +505,13 @@ class Area(Unit):
             raise AttributeError("No attribute named {0!r}"
                                  .format(name.lower()))
 
+    def __mul__(self, other):
+        if type(other) is Distance:
+            return Volume(m3=self.m2 * other.m)
+        else:
+            return Unit.__mul__(self, other)
+    __rmul__ = __mul__
+
     def __truediv__(self, other):
         if type(other) is Distance:
             return Distance(m=self.m2 / other.m)
@@ -512,5 +522,56 @@ class Area(Unit):
     def __floordiv__(self, other):
         if type(other) is Distance:
             return Distance(m=self.m2 // other.m)
+        else:
+            return Unit.__floordiv__(self, other)
+
+
+class Volume(Unit):
+    """Décrit un volume. L'unité correspondante du système international est
+    le mètre cube (m^3).\n
+    Utilisez un des paramètres suivants pour initialiser la classe :
+    ``m3=`` pour des mètres cube,
+    ``km3=`` pour des kilomètres cube,
+    ``l=`` pour des litres."""
+
+    def __init__(self, m3=None, km3=None, l=None):
+        if m3 is not None:
+            Unit.__init__(self, float(m3))
+        elif km3 is not None:
+            Unit.__init__(self, float(km3) * (KM_M ** 3))
+        elif l is not None:
+            Unit.__init__(self, float(l) * L_M3)
+        else:
+            raise ValueError("Pour construire une unité de volume, fournissez "
+                             "m3, km3 ou l.")
+
+    def __getattr__(self, name):
+        if name.lower() == 'm3':
+            self.m3 = m3 = self.value
+            return m3
+        elif name.lower() == 'km3':
+            self.km3 = km3 = self.value / (KM_M ** 3)
+            return km3
+        elif name.lower() == 'l':
+            self.l = l = self.value / L_M3
+            return l
+        else:
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
+
+    def __truediv__(self, other):
+        if type(other) is Distance:
+            return Area(m2=self.m3 / other.m)
+        elif type(other) is Area:
+            return Distance(m=self.m3 / other.m2)
+        else:
+            return Unit.__truediv__(self, other)
+    __div__ = __truediv__
+
+    def __floordiv__(self, other):
+        if type(other) is Distance:
+            return Area(m3=self.m3 // other.m)
+        elif type(other) is Area:
+            return Distance(m=self.m3 // other.m3)
         else:
             return Unit.__floordiv__(self, other)

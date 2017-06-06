@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 
 from ..units import Distance, Time, Velocity, Acceleration, Unit, Mass, \
-    Force, Area, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, \
-    UG_KG, MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, ARPENT_M2, \
-    HA_M2
+    Force, Area, Volume, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, \
+    KPHS_MPSS, UG_KG, MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, \
+    ARPENT_M2, HA_M2, L_M3
 import pytest
 
 
@@ -65,6 +65,7 @@ class TestDistance:
         assert (d // Time(s=2)).mps == 4
         assert (d // Velocity(mps=2)).s == 4
         assert (d * d).m2 == 81
+        assert (d * d * d).m3 == 729
 
 
 class TestTime:
@@ -200,3 +201,26 @@ class TestArea:
     def test_math_class(self):
         """Tests des opérations mathématiques impliquant d'autres classes."""
         assert (Area(m2=12) / Distance(m=3)).m == 4.0
+        assert (Area(m2=12) * Distance(m=3)).m3 == 36.0
+
+
+class TestVolume:
+    """Tests de la classe pseudosci.units.Volume"""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Volume, Unit)
+        assert Volume(km3=123.4).m3 == 123.4 * (KM_M ** 3)
+        assert Volume(l=123.4).m3 == 123.4 * L_M3
+
+    def test_attributes(self):
+        """Tests des attributs de la classe."""
+        a = Volume(m3=KM_M ** 3)
+        assert a.m3 == KM_M ** 3
+        assert a.km3 == 1.0
+        assert a.l == a.m3 / L_M3
+
+    def test_math_class(self):
+        """Tests des opérations mathématiques impliquant d'autres classes."""
+        assert (Volume(m3=12) / Distance(m=3)).m2 == 4.0
+        assert (Volume(m3=12) / Area(m2=3)).m == 4.0
