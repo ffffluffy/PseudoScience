@@ -51,8 +51,8 @@ class Vehicle:
                 time=self.velocity / self.accel)
         if self.brake.mpss > 0:
             c += AcceleratedMovement(
-                velocity=self.velocity, accel=self.accel,
-                time=self.velocity / self.accel)
+                velocity=self.velocity, accel=self.brake,
+                time=self.velocity / self.brake)
         return c + Movement(
             distance=distance - c.distance, velocity=self.velocity)
 
