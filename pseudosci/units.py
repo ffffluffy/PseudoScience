@@ -32,9 +32,12 @@ class Unit(object):
 
     def __init__(self, value):
         self.value = float(value)
+        self.fullname = "unit"
+        self.pluralname = "units"
 
     def __str__(self):
-        return str(self.value)
+        return '{0} {1}'.format(str(self.value), self.fullname
+                                if self.value == 1 else self.pluralname)
 
     def __repr__(self):
         return '<{0} {1}>'.format(type(self).__name__, self)
@@ -158,6 +161,8 @@ class Distance(Unit):
             raise ValueError(
                 "Pour construire une unité de distance, fournissez m, km, au "
                 "ou ly.")
+        self.fullname = "meter"
+        self.pluralname = "meters"
 
     def __getattr__(self, name):
         if name.lower() == 'm':
@@ -224,6 +229,8 @@ class Time(Unit):
         else:
             raise ValueError(
                 "Pour construire une unité de temps, fournissez s, m, h ou d.")
+        self.fullname = "second"
+        self.pluralname = "seconds"
 
     def __getattr__(self, name):
         if name.lower() == 's':
@@ -266,6 +273,8 @@ class Velocity(Unit):
         else:
             raise ValueError(
                 "Pour construire une unité de vitesse, fournissez mps ou kph.")
+        self.fullname = "kilometer per hour"
+        self.pluralname = "kilometers per hour"
 
     def __getattr__(self, name):
         if name.lower() == 'mps':
@@ -321,6 +330,8 @@ class Acceleration(Unit):
             raise ValueError(
                 "Pour construire une unité d'accélération, fournissez mpss ou "
                 "kphs.")
+        self.fullname = "kilometer per hour squared"
+        self.pluralname = "kilometers per hour squared"
 
     def __getattr__(self, name):
         if name.lower() == 'mpss':
@@ -368,6 +379,8 @@ class Mass(Unit):
         else:
             raise ValueError("Pour construire une unité de masse, "
                              "fournissez ug, mg, g, kg ou t.")
+        self.fullname = "kilogram"
+        self.pluralname = "kilograms"
 
     def __getattr__(self, name):
         if name.lower() == 'ug':
@@ -421,6 +434,8 @@ class Force(Unit):
         else:
             raise ValueError("Pour construire une unité de force, "
                              "fournissez n, dyn, kgf, lbf ou pdl.")
+        self.fullname = "newton"
+        self.pluralname = "newtons"
 
     def __getattr__(self, name):
         if name.lower() == 'n':
@@ -484,6 +499,8 @@ class Area(Unit):
         else:
             raise ValueError("Pour construire une unité de surface, "
                              "fournissez m2, km2, acre, arpent ou ha.")
+        self.fullname = "square meter"
+        self.pluralname = "square meters"
 
     def __getattr__(self, name):
         if name.lower() == 'm2':
@@ -544,6 +561,8 @@ class Volume(Unit):
         else:
             raise ValueError("Pour construire une unité de volume, fournissez "
                              "m3, km3 ou l.")
+        self.fullname = "cubic meter"
+        self.pluralname = "cubic meters"
 
     def __getattr__(self, name):
         if name.lower() == 'm3':

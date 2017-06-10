@@ -30,6 +30,8 @@ class Angle(Unit):
         else:
             raise ValueError("Pour construire une unité d'angle, fournissez "
                              "rad, deg ou gon.")
+        self.fullname = "radian"
+        self.pluralname = "radians"
 
     def __getattr__(self, name):
         if name.lower() == 'rad':
