@@ -288,9 +288,7 @@ class Velocity(Unit):
                                  .format(name.lower()))
 
     def __mul__(self, other):
-        if type(other) is int or type(other) is float:
-            return Velocity(mps=self.mps * other)
-        elif type(other) is Time:
+        if type(other) is Time:
             return Distance(m=self.mps * other.s)
         else:
             return Unit.__mul__(self, other)
@@ -589,8 +587,8 @@ class Volume(Unit):
 
     def __floordiv__(self, other):
         if type(other) is Distance:
-            return Area(m3=self.m3 // other.m)
+            return Area(m2=self.m3 // other.m)
         elif type(other) is Area:
-            return Distance(m=self.m3 // other.m3)
+            return Distance(m=self.m3 // other.m2)
         else:
             return Unit.__floordiv__(self, other)

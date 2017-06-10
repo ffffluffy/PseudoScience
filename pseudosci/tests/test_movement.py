@@ -33,6 +33,8 @@ class TestMovement:
         assert mv.velocity.mps == 5
         assert md.distance.m == 10
         assert mt.time.s == 2
+        with pytest.raises(AttributeError):
+            mv.pouet
 
     def test_math(self):
         """Tests des calculs effectués par la classe."""
@@ -62,6 +64,12 @@ class TestMovement:
         assert mfdiv.distance.m == 2
         assert mdiv.time.s == 1
         assert mdiv.velocity.mps == 2.5
+        with pytest.raises(TypeError):
+            msum + 42
+            msub - "test"
+            mmul * mrmul
+            mdiv / mfdiv
+            mfdiv // mdiv
 
 
 class TestAcceleratedMovement:
@@ -89,6 +97,8 @@ class TestAcceleratedMovement:
         assert mv.velocity.mps == 10
         assert md.distance.m == 50
         assert mt.time.s == 10
+        with pytest.raises(AttributeError):
+            mv.pouet
 
 
 class TestComplexMovement:
@@ -124,3 +134,5 @@ class TestComplexMovement:
         c += c
         assert len(c.movements) == 2
         assert c.distance.m == 8
+        with pytest.raises(TypeError):
+            c += "pouet"

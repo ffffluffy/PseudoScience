@@ -98,10 +98,10 @@ class AcceleratedMovement(Movement):
     def __init__(self, distance=None, velocity=None, time=None, accel=None):
         Movement.__init__(self,
                           distance=distance, velocity=velocity, time=time)
-        if accel:
-            if type(accel) is not Acceleration:
+        if accel is not None and type(accel) is not Acceleration:
                 raise TypeError("Le paramètre ``accel`` doit être une instance"
                                 " de pseudosci.units.Acceleration.")
+        if accel:
             self.accel = accel
         elif velocity and time:
             self.accel = velocity / time
@@ -118,9 +118,6 @@ class AcceleratedMovement(Movement):
         elif name == 'distance':
             self.distance = (self.accel * self.time * self.time) / 2
             return self.distance
-        elif name == 'time':
-            self.time = self.velocity / self.accel
-            return self.time
         else:
             return Movement.__getattr__(self, name)
 
@@ -154,10 +151,7 @@ class ComplexMovement(object):
         elif name == 'time':
             return Time(s=sum(self.times))
         elif name == 'velocity':
-            if self.time == 0:
-                return 0
-            else:
-                return self.distance / self.time
+            return 0 if self.time.s == 0 else self.distance / self.time
         elif name == 'distances':
             return [m.distance for m in self.movements]
         elif name == 'times':

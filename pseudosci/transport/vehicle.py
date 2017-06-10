@@ -40,6 +40,9 @@ class Vehicle:
         if mass and type(mass) is not Mass:
             raise TypeError("Le paramètre optionnel ``mass`` doit être une "
                             "instance de pseudosci.units.Mass.")
+        if mass and mass.kg <= 0:
+            raise ValueError("La masse du véhicule doit être strictement"
+                             "positive.")
 
     def move(self, distance):
         """Génère un ComplexMovement correspondant au déplacement du véhicule

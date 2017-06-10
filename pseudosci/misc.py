@@ -29,6 +29,7 @@ def prefix(unit, prefixes=PREFIX_LIST):
                              key=itemgetter(1), reverse=True):
         if unit.value // value >= 1:
             return "{0} {1}{2}".format(unit.value / value, key, unit.fullname
-                                       if unit.value == 1 else unit.pluralname)
+                                       if unit.value / value == 1
+                                       else unit.pluralname)
     # Oups, aucun préfixe trouvé
     return str(unit)

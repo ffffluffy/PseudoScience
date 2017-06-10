@@ -15,6 +15,8 @@ class TestAngle:
         assert issubclass(Angle, Unit)
         assert Angle(deg=180).rad == 180 * DEG_RAD
         assert Angle(gon=200).rad == 200 * GON_RAD
+        with pytest.raises(ValueError):
+            Angle()
 
     def test_attributes(self):
         """Tests des attributs de la classe."""
@@ -22,3 +24,5 @@ class TestAngle:
         assert a.rad == pi
         assert a.deg == pi / DEG_RAD
         assert a.gon == pi / GON_RAD
+        with pytest.raises(AttributeError):
+            Angle.pouet
