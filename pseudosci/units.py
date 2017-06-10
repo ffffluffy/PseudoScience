@@ -273,8 +273,8 @@ class Velocity(Unit):
         else:
             raise ValueError(
                 "Pour construire une unité de vitesse, fournissez mps ou kph.")
-        self.fullname = "kilometer per hour"
-        self.pluralname = "kilometers per hour"
+        self.fullname = "meter per second"
+        self.pluralname = "meters per second"
 
     def __getattr__(self, name):
         if name.lower() == 'mps':
@@ -330,8 +330,8 @@ class Acceleration(Unit):
             raise ValueError(
                 "Pour construire une unité d'accélération, fournissez mpss ou "
                 "kphs.")
-        self.fullname = "kilometer per hour squared"
-        self.pluralname = "kilometers per hour squared"
+        self.fullname = "meter per second squared"
+        self.pluralname = "meters per second squared"
 
     def __getattr__(self, name):
         if name.lower() == 'mpss':
