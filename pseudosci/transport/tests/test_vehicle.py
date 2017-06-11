@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ...units import Distance, Velocity, Acceleration
+from ...units import Distance, Velocity, Acceleration, Mass
 from ...movement import Movement, ComplexMovement
 from ..vehicle import Vehicle
 import pytest
@@ -14,10 +14,12 @@ class TestVehicle:
         """Tests du constructeur et des attributs simples de la classe."""
         v = Vehicle(velocity=Velocity(kph=50),
                     accel=Acceleration(kphs=20),
-                    brake=Acceleration(kphs=30))
+                    brake=Acceleration(kphs=30),
+                    mass=Mass(kg=50))
         assert v.velocity.kph == 50
         assert v.accel.kphs == 20
         assert v.brake.kphs == 30
+        assert v.mass.kg == 50
         v = Vehicle(velocity=Velocity(kph=50), accel=Acceleration(kphs=20))
         assert v.accel.mpss == v.brake.mpss
         v = Vehicle(velocity=Velocity(kph=50))
@@ -30,6 +32,8 @@ class TestVehicle:
             Vehicle(velocity=Velocity(kph=50),
                     accel=Acceleration(kphs=20),
                     brake=1)
+            Vehicle(velocity=Velocity(kph=50),
+                    mass=1)
         with pytest.raises(ValueError):
             Vehicle(velocity=Velocity(mps=0))
             Vehicle(velocity=Velocity(mps=-1))
@@ -37,6 +41,8 @@ class TestVehicle:
             Vehicle(velocity=Velocity(mps=1),
                     accel=Acceleration(mpss=0),
                     brake=Acceleration(mpss=-1))
+            Vehicle(velocity=Velocity(mps=1),
+                    mass=Mass(kg=-1))
 
     def test_move(self):
         """Test de la méthode `move(distance)`"""
@@ -49,3 +55,12 @@ class TestVehicle:
         assert m.velocity.kph == 50
         assert cm.distance.km == 5
         assert cm.velocity.kph < 50
+
+    def test_attributes(self):
+        """Test des attributs de la classe."""
+        v = Vehicle(velocity=Velocity(mps=50),
+                    accel=Acceleration(mpss=20),
+                    brake=Acceleration(mpss=30),
+                    mass=Mass(kg=50))
+        assert v.accelforce.n == v.thrust.n == 1000
+        assert v.brakeforce.n == 1500

@@ -24,6 +24,7 @@ PDL_N = 0.138255
 ACRE_M2 = 4046.86
 ARPENT_M2 = 3418.89
 HA_M2 = 1e4
+L_M3 = 1e-3
 
 
 class Unit(object):
@@ -31,9 +32,12 @@ class Unit(object):
 
     def __init__(self, value):
         self.value = float(value)
+        self.fullname = "unit"
+        self.pluralname = "units"
 
     def __str__(self):
-        return str(self.value)
+        return '{0} {1}'.format(str(self.value), self.fullname
+                                if self.value == 1 else self.pluralname)
 
     def __repr__(self):
         return '<{0} {1}>'.format(type(self).__name__, self)
@@ -157,6 +161,8 @@ class Distance(Unit):
             raise ValueError(
                 "Pour construire une unité de distance, fournissez m, km, au "
                 "ou ly.")
+        self.fullname = "meter"
+        self.pluralname = "meters"
 
     def __getattr__(self, name):
         if name.lower() == 'm':
@@ -178,6 +184,8 @@ class Distance(Unit):
     def __mul__(self, other):
         if type(other) is Distance:
             return Area(m2=self.m * other.m)
+        elif type(other) is Area:
+            return Volume(m3=self.m * other.m2)
         else:
             return Unit.__mul__(self, other)
     __rmul__ = __mul__
@@ -221,6 +229,8 @@ class Time(Unit):
         else:
             raise ValueError(
                 "Pour construire une unité de temps, fournissez s, m, h ou d.")
+        self.fullname = "second"
+        self.pluralname = "seconds"
 
     def __getattr__(self, name):
         if name.lower() == 's':
@@ -263,6 +273,8 @@ class Velocity(Unit):
         else:
             raise ValueError(
                 "Pour construire une unité de vitesse, fournissez mps ou kph.")
+        self.fullname = "meter per second"
+        self.pluralname = "meters per second"
 
     def __getattr__(self, name):
         if name.lower() == 'mps':
@@ -276,9 +288,7 @@ class Velocity(Unit):
                                  .format(name.lower()))
 
     def __mul__(self, other):
-        if type(other) is int or type(other) is float:
-            return Velocity(mps=self.mps * other)
-        elif type(other) is Time:
+        if type(other) is Time:
             return Distance(m=self.mps * other.s)
         else:
             return Unit.__mul__(self, other)
@@ -318,6 +328,8 @@ class Acceleration(Unit):
             raise ValueError(
                 "Pour construire une unité d'accélération, fournissez mpss ou "
                 "kphs.")
+        self.fullname = "meter per second squared"
+        self.pluralname = "meters per second squared"
 
     def __getattr__(self, name):
         if name.lower() == 'mpss':
@@ -365,6 +377,8 @@ class Mass(Unit):
         else:
             raise ValueError("Pour construire une unité de masse, "
                              "fournissez ug, mg, g, kg ou t.")
+        self.fullname = "kilogram"
+        self.pluralname = "kilograms"
 
     def __getattr__(self, name):
         if name.lower() == 'ug':
@@ -418,6 +432,8 @@ class Force(Unit):
         else:
             raise ValueError("Pour construire une unité de force, "
                              "fournissez n, dyn, kgf, lbf ou pdl.")
+        self.fullname = "newton"
+        self.pluralname = "newtons"
 
     def __getattr__(self, name):
         if name.lower() == 'n':
@@ -481,6 +497,8 @@ class Area(Unit):
         else:
             raise ValueError("Pour construire une unité de surface, "
                              "fournissez m2, km2, acre, arpent ou ha.")
+        self.fullname = "square meter"
+        self.pluralname = "square meters"
 
     def __getattr__(self, name):
         if name.lower() == 'm2':
@@ -502,6 +520,13 @@ class Area(Unit):
             raise AttributeError("No attribute named {0!r}"
                                  .format(name.lower()))
 
+    def __mul__(self, other):
+        if type(other) is Distance:
+            return Volume(m3=self.m2 * other.m)
+        else:
+            return Unit.__mul__(self, other)
+    __rmul__ = __mul__
+
     def __truediv__(self, other):
         if type(other) is Distance:
             return Distance(m=self.m2 / other.m)
@@ -512,5 +537,58 @@ class Area(Unit):
     def __floordiv__(self, other):
         if type(other) is Distance:
             return Distance(m=self.m2 // other.m)
+        else:
+            return Unit.__floordiv__(self, other)
+
+
+class Volume(Unit):
+    """Décrit un volume. L'unité correspondante du système international est
+    le mètre cube (m^3).\n
+    Utilisez un des paramètres suivants pour initialiser la classe :
+    ``m3=`` pour des mètres cube,
+    ``km3=`` pour des kilomètres cube,
+    ``l=`` pour des litres."""
+
+    def __init__(self, m3=None, km3=None, l=None):
+        if m3 is not None:
+            Unit.__init__(self, float(m3))
+        elif km3 is not None:
+            Unit.__init__(self, float(km3) * (KM_M ** 3))
+        elif l is not None:
+            Unit.__init__(self, float(l) * L_M3)
+        else:
+            raise ValueError("Pour construire une unité de volume, fournissez "
+                             "m3, km3 ou l.")
+        self.fullname = "cubic meter"
+        self.pluralname = "cubic meters"
+
+    def __getattr__(self, name):
+        if name.lower() == 'm3':
+            self.m3 = m3 = self.value
+            return m3
+        elif name.lower() == 'km3':
+            self.km3 = km3 = self.value / (KM_M ** 3)
+            return km3
+        elif name.lower() == 'l':
+            self.l = l = self.value / L_M3
+            return l
+        else:
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
+
+    def __truediv__(self, other):
+        if type(other) is Distance:
+            return Area(m2=self.m3 / other.m)
+        elif type(other) is Area:
+            return Distance(m=self.m3 / other.m2)
+        else:
+            return Unit.__truediv__(self, other)
+    __div__ = __truediv__
+
+    def __floordiv__(self, other):
+        if type(other) is Distance:
+            return Area(m2=self.m3 // other.m)
+        elif type(other) is Area:
+            return Distance(m=self.m3 // other.m2)
         else:
             return Unit.__floordiv__(self, other)
