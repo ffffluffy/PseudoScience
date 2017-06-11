@@ -60,7 +60,7 @@ class Vehicle:
             distance=distance - c.distance, velocity=self.velocity)
 
     def __getattr__(self, name):
-        if name == 'accelforce' or name == 'thrust':
+        if name in ['accelforce', 'thrust']:
             return self.mass * self.accel
         elif name == 'brakeforce':
             return self.mass * self.brake
