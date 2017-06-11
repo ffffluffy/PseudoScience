@@ -46,6 +46,7 @@ class TestLine:
     """Tests de la classe psedosci.geometry.basic.Line"""
 
     def test_init(self):
+        """Test du constructeur de la classe."""
         p1 = Point(x=1, y=-1)
         p2 = Point(x=-1, y=1)
         l = Line(p1=p1, p2=p2)
@@ -59,6 +60,7 @@ class TestLine:
             Line(1, p2)
 
     def test_attributes(self):
+        """Test des attributs de la classe."""
         p1 = Point(x=1, y=-1)
         p2 = Point(x=-1, y=1)
         l = Line(p1=p1, p2=p2)
@@ -66,6 +68,7 @@ class TestLine:
         assert l.middle == l.midpoint == Point(0, 0)
 
     def test_math(self):
+        """Test des opérations mathématiques de la classe."""
         p1 = Point(x=1, y=-1)
         p2 = Point(x=-1, y=1)
         p3 = Point(x=2, y=4)
@@ -81,6 +84,7 @@ class TestLine:
             Line(p1, p2) / "something"
 
     def test_compare(self):
+        """Test des opérations de comparaison de la classe."""
         p1 = Point(1, -1)
         p2 = Point(-1, 1)
         assert Line(p1, p2) == Line(p1, p2)
