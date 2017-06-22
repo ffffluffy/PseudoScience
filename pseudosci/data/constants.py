@@ -5,7 +5,7 @@ le projet. Toutes les constantes sont définies directement à partir des
 unités du système international.
 Source : https://fr.wikipedia.org/wiki/Constante_physique"""
 
-from ..units import Velocity, Acceleration, Mass
+from ..units import Velocity, Acceleration, Mass, Distance, Force, Time
 
 LIGHT_VELOCITY = Velocity(mps=299792458)
 EARTH_GRAVITY = Acceleration(mpss=9.80665)
