@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 
 from ..units import Distance, Time, Velocity, Acceleration, Unit, Mass, \
-    Force, Area, Volume, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, \
+    Force, Area, Volume, Energy, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, \
     KPHS_MPSS, UG_KG, MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, \
-    ARPENT_M2, HA_M2, L_M3
+    ARPENT_M2, HA_M2, L_M3, KWH_J, KGM_J, CAL_J, KCAL_J, EV_J
 import pytest
 
 
@@ -86,6 +86,7 @@ class TestDistance:
         assert (d // Velocity(mps=2)).s == 4
         assert (d * d).m2 == 81
         assert (d * (d * d)).m3 == 729
+        assert (d * Force(n=9)).j == 81
 
 
 class TestTime:
@@ -234,6 +235,7 @@ class TestForce:
         assert (Force(n=10) // Acceleration(mpss=4)).kg == 2.0
         assert (Force(n=10) / Mass(kg=4)).mpss == 2.5
         assert (Force(n=10) // Mass(kg=4)).mpss == 2.0
+        assert (Force(n=10) * Distance(m=4)).j == 40
         with pytest.raises(TypeError):
             Force(n=10) / Unit(1)
             Force(n=10) // Unit(1)
@@ -303,3 +305,40 @@ class TestVolume:
         with pytest.raises(TypeError):
             Volume(m3=1) / Unit(1)
             Volume(m3=1) // Unit(1)
+
+
+class TestEnergy:
+    """Tests de la classe pseudosci.units.Energy."""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Energy, Unit)
+        assert Energy(kwh=123.4).j == 123.4 * KWH_J
+        assert Energy(kgm=123.4).j == 123.4 * KGM_J
+        assert Energy(cal=123.4).j == 123.4 * CAL_J    
+        assert Energy(kcal=123.4).j == 123.4 * KCAL_J
+        assert Energy(ev=123.4).j == 123.4 * EV_J
+        with pytest.raises(ValueError):
+            Energy()
+    
+    def test_attributes(self):
+        """Tests des attributs de la classe."""
+        e = Energy(j=KCAL_J)
+        assert e.j == KCAL_J
+        assert e.kcal == 1.0
+        assert int(e.cal) == 1000
+        assert e.kwh == e.j / KWH_J
+        assert e.kgm == e.j / KGM_J
+        assert e.ev == e.j / EV_J
+        with pytest.raises(AttributeError):
+            e.pouet
+
+    def test_math_class(self):
+        """Tests des opérations mathématiques impliquant d'autres classes."""
+        assert (Energy(j=10) / Force(n=4)).m == 2.5
+        assert (Energy(j=10) / Distance(m=4)).n == 2.5
+        assert (Energy(j=10) // Force(n=4)).m == 2.0
+        assert (Energy(j=10) // Distance(m=4)).n == 2.0
+        with pytest.raises(TypeError):
+            Energy(j=1) / Unit(1)
+            Energy(j=1) // Unit(1)

@@ -25,6 +25,12 @@ ACRE_M2 = 4046.86
 ARPENT_M2 = 3418.89
 HA_M2 = 1e4
 L_M3 = 1e-3
+KWH_J = 3.6e6
+KGM_J = 9.80665
+# Se base sur la définition du Comité International des Poids et Mesures
+CAL_J = 4.1868
+KCAL_J = 4.1868e3
+EV_J = 1.602176565e-19
 
 
 class Unit(object):
@@ -143,10 +149,10 @@ class Distance(Unit):
     """Décrit une mesure de distance. L'unité correspondante du système
     international est le mètre (m).\n
     Utilisez l'un des paramètres suivants pour initialiser la classe :\n
-    ``m=`` pour des mètres ;\n
-    ``km=`` pour des kilomètres ;\n
-    ``au=`` pour des unités astronomiques ;\n
-    ``ly=`` pour des années-lumière."""
+    `m=` pour des mètres ;\n
+    `km=` pour des kilomètres ;\n
+    `au=` pour des unités astronomiques ;\n
+    `ly=` pour des années-lumière."""
 
     def __init__(self, m=None, km=None, au=None, ly=None):
         if m is not None:
@@ -186,6 +192,8 @@ class Distance(Unit):
             return Area(m2=self.m * other.m)
         elif type(other) is Area:
             return Volume(m3=self.m * other.m2)
+        elif type(other) is Force:
+            return Energy(j=self.m * other.n)
         else:
             return Unit.__mul__(self, other)
     __rmul__ = __mul__
@@ -212,10 +220,10 @@ class Time(Unit):
     """Décrit une mesure temporelle. L'unité correspondante du système
     international est la seconde (s).\n
     Utilisez l'un des paramètres suivants pour initialiser la classe :\n
-    ``s=`` pour des secondes ;\n
-    ``min=`` pour des minutes ;\n
-    ``h=`` pour des heures ;\n
-    ``d=`` pour des jours."""
+    `s=` pour des secondes ;\n
+    `m=` pour des minutes ;\n
+    `h=` pour des heures ;\n
+    `d=` pour des jours."""
 
     def __init__(self, s=None, m=None, h=None, d=None):
         if s is not None:
@@ -236,7 +244,7 @@ class Time(Unit):
         if name.lower() == 's':
             self.s = s = self.value
             return s
-        elif name.lower() == 'm' or name.lower() == 'min':
+        elif name.lower() in ['min', 'm']:
             self.min = self.m = m = self.s / MIN_S
             return m
         elif name.lower() == 'h':
@@ -263,7 +271,7 @@ class Time(Unit):
 class Velocity(Unit):
     """Décrit une vitesse, ou vélocité. L'unité correspondante du système
     international est le mètre par seconde (m.s^-1).\n
-    Utilisez soit ``mps=``, soit ``kph=`` pour l'initialiser."""
+    Utilisez soit `mps=`, soit `kph=` pour l'initialiser."""
 
     def __init__(self, mps=None, kph=None):
         if mps is not None:
@@ -316,7 +324,7 @@ class Velocity(Unit):
 class Acceleration(Unit):
     """Décrit une accélération. L'unité correspondante du système international
     est le mètre par seconde carrée (m.s^-2).\n
-    Utilisez soit un paramètre ``mpss=``, soit un paramètre ``kphs=`` pour
+    Utilisez soit un paramètre `mpss=`, soit un paramètre `kphs=` pour
     l'intialiser."""
 
     def __init__(self, mpss=None, kphs=None):
@@ -357,13 +365,13 @@ class Mass(Unit):
     """Décrit une masse. L'unité correspondante du système international est le
     kilogramme (kg).\n
     Utilisez l'un des paramètres suivants pour initialiser la classe :
-    ``ug=`` pour des microgrammes,
-    ``mg=`` pour des milligrammes,
-    ``g=`` pour des grammes,
-    ``kg=`` pour des kilogrammes,
-    ``t=`` pour des tonnes."""
+    `ug=` pour des microgrammes,
+    `mg=` pour des milligrammes,
+    `g=` pour des grammes,
+    `kg=` pour des kilogrammes,
+    `t=` pour des tonnes."""
 
-    def __init__(self, ug=None, mg=None, g=None, kg=None, t=None):
+    def __init__(self, kg=None, ug=None, mg=None, g=None, t=None):
         if ug is not None:
             Unit.__init__(self, float(ug) * UG_KG)
         elif mg is not None:
@@ -412,11 +420,11 @@ class Force(Unit):
     """Décrit une force. L'unité correspondante du système international est le
     newton (N).\n
     Utilisez l'un des paramètres suivants pour initialiser la classe :
-    ``n=`` pour des newtons,
-    ``dyn=`` pour des dynes,
-    ``kgf=`` pour des kilogrammes-force,
-    ``lbf=`` pour des livres-force,
-    ``pdl=`` pour des poundals."""
+    `n=` pour des newtons,
+    `dyn=` pour des dynes,
+    `kgf=` pour des kilogrammes-force,
+    `lbf=` pour des livres-force,
+    `pdl=` pour des poundals."""
 
     def __init__(self, n=None, dyn=None, kgf=None, lbf=None, pdl=None):
         if n is not None:
@@ -455,6 +463,13 @@ class Force(Unit):
             raise AttributeError("No attribute named {0!r}"
                                  .format(name.lower()))
 
+    def __mul__(self, other):
+        if type(other) is Distance:
+            return Energy(j=self.n * other.m)
+        else:
+            return Unit.__mul__(self, other)
+    __rmul__ = __mul__
+
     def __truediv__(self, other):
         if type(other) is Acceleration:
             return Mass(kg=self.n / other.mpss)
@@ -477,11 +492,11 @@ class Area(Unit):
     """Décrit une surface. L'unité correspondante du système international est
     le mètre carré (m^2).\n
     Utilisez un des paramètres suivants pour initialiser la classe :
-    ``m2=`` pour des mètres carrés,
-    ``km2=`` pour des kilomètres carrés,
-    ``acre=`` pour des acres,
-    ``arpent=`` pour des arpents,
-    ``ha=`` pour des hectares."""
+    `m2=` pour des mètres carrés,
+    `km2=` pour des kilomètres carrés,
+    `acre=` pour des acres,
+    `arpent=` pour des arpents,
+    `ha=` pour des hectares."""
 
     def __init__(self, m2=None, km2=None, acre=None, arpent=None, ha=None):
         if m2 is not None:
@@ -545,9 +560,9 @@ class Volume(Unit):
     """Décrit un volume. L'unité correspondante du système international est
     le mètre cube (m^3).\n
     Utilisez un des paramètres suivants pour initialiser la classe :
-    ``m3=`` pour des mètres cube,
-    ``km3=`` pour des kilomètres cube,
-    ``l=`` pour des litres."""
+    `m3=` pour des mètres cube,
+    `km3=` pour des kilomètres cube,
+    `l=` pour des litres."""
 
     def __init__(self, m3=None, km3=None, l=None):
         if m3 is not None:
@@ -590,5 +605,77 @@ class Volume(Unit):
             return Area(m2=self.m3 // other.m)
         elif type(other) is Area:
             return Distance(m=self.m3 // other.m2)
+        else:
+            return Unit.__floordiv__(self, other)
+
+
+class Energy(Unit):
+    """Décrit une quantité d'énergie. L'unité correpsondante du système
+    international est le joule (J).\n
+    Utilisez l'un des paramètres suivants pour initialiser la classe :
+    `j=` pour des joules ;
+    `kwh=` pour des kilowatts-heure ;
+    `kgm=` pour des kilogrammes-mètre ;
+    `cal=` pour des calories ;
+    `kcal=` pour des kilocalories ;
+    `ev=` pour des électrons-volts."""
+
+    def __init__(self, j=None, kwh=None, kgm=None,
+                 cal=None, kcal=None, ev=None):
+        if j is not None:
+            Unit.__init__(self, float(j))
+        elif kwh is not None:
+            Unit.__init__(self, float(kwh * KWH_J))
+        elif kgm is not None:
+            Unit.__init__(self, float(kgm * KGM_J))
+        elif cal is not None:
+            Unit.__init__(self, float(cal * CAL_J))
+        elif kcal is not None:
+            Unit.__init__(self, float(kcal * KCAL_J))
+        elif ev is not None:
+            Unit.__init__(self, float(ev * EV_J))
+        else:
+            raise ValueError("Pour construire une unité d'énergie, fournissez"
+                             "j, kwh, kgm, cal, kcal ou ev.")
+        self.fullname = "joule"
+        self.pluralname = "joules"
+
+    def __getattr__(self, name):
+        if name == 'j':
+            self.j = j = self.value
+            return j
+        elif name == 'kwh':
+            self.kwh = kwh = self.value / KWH_J
+            return kwh
+        elif name == 'kgm':
+            self.kgm = kgm = self.value / KGM_J
+            return kgm
+        elif name == 'cal':
+            self.cal = cal = self.value / CAL_J
+            return cal
+        elif name == 'kcal':
+            self.kcal = kcal = self.value / KCAL_J
+            return kcal
+        elif name == 'ev':
+            self.ev = ev = self.value / EV_J
+            return ev
+        else:
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
+
+    def __truediv__(self, other):
+        if type(other) is Distance:
+            return Force(n=self.j / other.m)
+        elif type(other) is Force:
+            return Distance(m=self.j / other.n)
+        else:
+            return Unit.__truediv__(self, other)
+    __div__ = __truediv__
+
+    def __floordiv__(self, other):
+        if type(other) is Distance:
+            return Force(n=self.j // other.m)
+        elif type(other) is Force:
+            return Distance(m=self.j // other.n)
         else:
             return Unit.__floordiv__(self, other)
