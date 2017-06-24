@@ -2,8 +2,8 @@
 # -*- coding:utf-8 -*-
 """Être humain et calculs pseudo-scientifiques s'y rattachant."""
 
-from ..units import Mass, Distance
-from .food import NutrientData, NutrientAmount
+from ..units import Mass, Distance, Energy
+from .food import NutrientData, NutrientAmount, Food
 
 
 class Human(object):
@@ -25,6 +25,11 @@ class Human(object):
             raise AttributeError("Pas d'attribut nommé {0}".format(name))
 
     @staticmethod
-    def eat(intake, mass):
+    def eat(stuff, mass):
         """Consommation de nourriture dans une quantité donnée."""
-        return NutrientAmount({k: v * mass for (k, v) in intake.items()})
+        if type(stuff) is Food:
+            return (Energy(j=stuff.energy.j * mass.kg),
+                    NutrientAmount({k: v * mass
+                                    for (k, v) in stuff.nutrients.items()}))
+        else:
+            return NutrientAmount({k: v * mass for (k, v) in stuff.items()})

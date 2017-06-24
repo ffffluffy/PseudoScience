@@ -2,8 +2,8 @@
 # -*- coding:utf-8 -*-
 
 from ..human import Human
-from ..food import NutrientData
-from ...units import Mass, Distance
+from ..food import NutrientData, Food
+from ...units import Mass, Distance, Energy
 import pytest
 
 
@@ -34,3 +34,7 @@ class TestHuman:
         ate = Human.eat(data, Mass(kg=2))
         assert ate.protein.kg == 0.4
         assert ate.fat.kg == 0.2
+        nom = Food("Delicious thing", Energy(j=100), data)
+        energy, ate2 = Human.eat(nom, Mass(kg=2))
+        assert ate == ate2
+        assert energy.j == 200
