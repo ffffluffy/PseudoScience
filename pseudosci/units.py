@@ -110,6 +110,13 @@ class Unit(object):
             raise TypeError("Il n'est pas possible de diviser deux unités "
                             "différentes.")
 
+    def __pow__(self, other):
+        if type(other) is int or type(other) is float:
+            return type(self)(self.value ** other)
+        else:
+            raise TypeError("L'exposant d'une puissance d'une unité ne peut "
+                            "être qu'un nombre.")
+
     def __eq__(self, other):
         return type(self) is type(other) and self.value == other.value
 
