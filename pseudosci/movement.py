@@ -8,21 +8,21 @@ from .units import Unit, Distance, Time, Velocity, Acceleration
 
 class Movement(object):
     """Décrit un mouvement rectiligne uniforme. Au moins deux des paramètres
-    suivants sont obligatoires : ``distance=``, ``velocity=``, ``time=``."""
+    suivants sont obligatoires : `distance=`, `velocity=`, `time=`."""
 
     def __init__(self, distance=None, velocity=None, time=None):
         if not (distance and (velocity or time)) and not (time and velocity):
             raise TypeError("Des arguments obligatoires sont manquants.\n"
                             "Utiliser au moins deux des paramètres suivants : "
-                            "``distance=``, ``velocity=``, ``time=``")
+                            "`distance=`, `velocity=`, `time=`")
         if distance and type(distance) is not Distance:
-            raise TypeError("Le paramètre ``distance`` doit être une instance "
+            raise TypeError("Le paramètre `distance` doit être une instance "
                             "de pseudosci.units.Distance.")
         if velocity and type(velocity) is not Velocity:
-            raise TypeError("Le paramètre ``velocity`` doit être une instance "
+            raise TypeError("Le paramètre `velocity` doit être une instance "
                             "de pseudosci.units.Velocity.")
         if time and type(time) is not Time:
-            raise TypeError("Le paramètre ``time`` doit être une instance "
+            raise TypeError("Le paramètre `time` doit être une instance "
                             "de pseudosci.units.Time.")
         if distance:
             self.distance = distance
@@ -92,14 +92,14 @@ class Movement(object):
 
 class AcceleratedMovement(Movement):
     """Décrit un mouvement rectiligne uniformément accéléré ou ralenti.
-    Au moins trois des paramètres suivants sont obligatoires : ``accel=``,
-    ``velocity=``, ``time=``, ``distance=``."""
+    Au moins trois des paramètres suivants sont obligatoires : `accel=`,
+    `velocity=`, `time=`, `distance=`."""
 
     def __init__(self, distance=None, velocity=None, time=None, accel=None):
         Movement.__init__(self,
                           distance=distance, velocity=velocity, time=time)
         if accel is not None and type(accel) is not Acceleration:
-                raise TypeError("Le paramètre ``accel`` doit être une instance"
+                raise TypeError("Le paramètre `accel` doit être une instance"
                                 " de pseudosci.units.Acceleration.")
         if accel:
             self.accel = accel

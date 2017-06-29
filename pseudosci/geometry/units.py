@@ -16,9 +16,9 @@ class Angle(Unit):
     """Décrit un angle. L'unité correspondante du système international est le
     radian (rad).\n
     Utilisez un des paramètres suivants pour initialiser la classe :
-    ``rad`` pour des radians ;
-    ``deg`` pour des degrés ;
-    ``gon`` pour des grades."""
+    `rad` pour des radians ;
+    `deg` pour des degrés ;
+    `gon` pour des grades."""
 
     def __init__(self, rad=None, deg=None, gon=None):
         if rad is not None:

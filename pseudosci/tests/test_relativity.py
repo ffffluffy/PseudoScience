@@ -3,8 +3,9 @@
 
 from ..units import Velocity, Time, Distance
 from ..data.constants import LIGHT_VELOCITY
+from ..movement import Movement
 from ..relativity import contraction_factor, lorentz_factor, time_dilation, \
-    length_contraction
+    length_contraction, RelativistMovement
 
 
 class TestRelativity:
@@ -35,3 +36,18 @@ class TestRelativity:
         assert length_contraction(d, Velocity(mps=0)).m == 1.0
         assert round(length_contraction(d, LIGHT_VELOCITY / 10).m, 3) == 0.995
         assert round(length_contraction(d, LIGHT_VELOCITY / 2).m, 3) == 0.866
+
+    def test_relativist_movement(self):
+        """Test de la classe RelativistMovement"""
+        assert issubclass(RelativistMovement, Movement)
+        m = Movement(distance=Distance(m=1), velocity=LIGHT_VELOCITY / 2)
+        rm = RelativistMovement(m)
+        assert rm.movement == m
+        assert rm.properdistance == m.distance
+        assert rm.propertime == m.time
+        assert rm.velocity == m.velocity
+        assert round(rm.contraction_factor, 3) == 0.866
+        assert round(rm.lorentz_factor, 3) == 1.155
+        assert round(rm.time, 9) == round(rm.propertime * rm.lorentz, 9)
+        assert round(rm.distance, 9) == \
+            round(rm.properdistance * rm.contraction, 9)
