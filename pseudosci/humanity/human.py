@@ -33,3 +33,19 @@ class Human(object):
                                     for (k, v) in stuff.nutrients.items()}))
         else:
             return NutrientAmount({k: v * mass for (k, v) in stuff.items()})
+
+    @staticmethod
+    def consequences(stuff, rdi, data, lower=0.8, upper=1.3):
+        """Conséquences d'apports nutritionnels donnés.
+        Prend en paramètre un NutrientAmount pour les apports à comparer,
+        un NutrientAmount représentant les apports recommandés et un
+        dictionnaire de texte représentant les conséquences d'un apport
+        insuffisant ou en excès, sous la forme :
+        nutriment: ('si carence', 'si excès')"""
+        # Take nutrients present in both arguments
+        for nutrient in set(stuff).intersection(set(rdi)):
+            pct = stuff[nutrient] / rdi[nutrient]
+            if pct <= lower:
+                print data[nutrient][0], '(', nutrient, stuff[nutrient], ')'
+            elif pct >= upper:
+                print data[nutrient][1], '(', nutrient, stuff[nutrient], ')'
