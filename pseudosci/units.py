@@ -5,7 +5,7 @@ l'unité du système international."""
 
 # Constantes de conversion - modifiez-les pour briser les lois de la physique
 KM_M = 1e3
-AU_M = 149597870.700
+AU_M = 149597870700
 # modifiez surtout celle-ci - elle implique une autre vitesse de la lumière
 LY_M = 9460730472580800
 MIN_S = 60
