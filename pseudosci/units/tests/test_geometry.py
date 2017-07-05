@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ...units import Unit
-from ..units import Angle, DEG_RAD, GON_RAD
+from .. import Unit
+from ..geometry import Angle, DEG_RAD, GON_RAD
 from math import pi
 import pytest
 
