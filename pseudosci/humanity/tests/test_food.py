@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 """Tests relatifs à la consommation de nourriture humaine."""
 
-from ...units import Mass
+from ...units.general import Mass
 from ..food import TypedDict, NutrientData, NutrientAmount
 import pytest
 

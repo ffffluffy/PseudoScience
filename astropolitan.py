@@ -6,7 +6,7 @@ from csv import writer
 from array import array
 from skyfield.api import load
 import matplotlib.pyplot as plt
-from pseudosci.units import Distance, Velocity, Time, Acceleration
+from pseudosci.units.general import Distance, Velocity, Time, Acceleration
 from pseudosci.movement import AcceleratedMovement
 from pseudosci.data.vehicles import lille_metro
 
@@ -29,25 +29,24 @@ accel = [m.accel for m in mv]
 time = [lille_metro.move(d).time for d in dist]
 
 print("Exportation des données...")
-csvarray = [dist, vel, time]
+csvarray = [days, dist, vel, accel, time]
 csvdata = [list(i) for i in zip(*csvarray)]
 with open("metro.csv", "wb") as f:
     writer = writer(f)
     writer.writerows(csvdata)
 
 print("Production du graphe...")
-plt.figure(figsize=[10, 20])
-plt.subplot(3, 1, 1)
+plt.figure(figsize=[10, 7])
 plt.plot(days, [d.km for d in dist])
 plt.title("Distance Alsace-Mercure (km)")
-plt.subplot(3, 1, 2)
-plt.plot(days, [v.kph for v in vel], 'g', label="Vitesse de pointe")
-plt.twinx().plot(days, [a.mpss for a in accel], 'r', label="Acceleration")
-plt.legend()
-plt.title("Vitesse de pointe (km/h) et acceleration (m/s2)")
-plt.subplot(3, 1, 3)
-plt.plot(days, [t.d for t in time])
+plt.savefig('metrodistance.svg')
+plt.figure(figsize=[10, 7])
+plt.plot(days, [v.kph for v in vel], 'g')
+plt.title("Vitesse de pointe (km/h)")
+plt.savefig('metrovelocity.svg')
+plt.figure(figsize=[10, 7])
+plt.plot(days, [t.d for t in time], 'r')
 plt.title("Temps de parcours (jours)")
-plt.savefig('metro.svg')
+plt.savefig('metrotime.svg')
 
 print("Script terminé")

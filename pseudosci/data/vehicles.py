@@ -5,7 +5,7 @@ précédentes. Bien vérifier l'exactitude des informations en fonction du
 contexte du calcul à effectuer."""
 
 from ..transport.vehicle import Vehicle
-from ..units import Velocity, Acceleration, Mass
+from ..units.general import Velocity, Acceleration, Mass
 
 # Métro lillois (VAL 206) - https://fr.wikipedia.org/wiki/VAL_206
 lille_metro = Vehicle(velocity=Velocity(kph=80),

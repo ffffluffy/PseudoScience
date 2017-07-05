@@ -3,7 +3,7 @@
 """Simulation de consommation de nourriture et apports alimentaires aux êtres
 humains."""
 
-from ..units import Energy
+from ..units.general import Energy
 
 
 class TypedDict(dict):

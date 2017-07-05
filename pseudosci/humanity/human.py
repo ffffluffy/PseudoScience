@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 """Être humain et calculs pseudo-scientifiques s'y rattachant."""
 
-from ..units import Mass, Distance, Energy
+from ..units.general import Mass, Distance, Energy
 from .food import NutrientData, NutrientAmount, Food
 
 

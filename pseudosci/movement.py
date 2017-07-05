@@ -3,7 +3,8 @@
 """Simulation de mouvements rectilignes prenant en charge les accélérations
 et freinages."""
 
-from .units import Unit, Distance, Time, Velocity, Acceleration
+from .units import Unit
+from .units.general import Distance, Time, Velocity, Acceleration
 
 
 class Movement(object):

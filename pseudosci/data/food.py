@@ -5,7 +5,7 @@ nutritionnels. Les noms utilisés correspondent à la nomenclature des
 nutriments décrite dans la documentation du projet.
 https://github.com/Lucidiot/PseudoScience/wiki/Nomenclature-des-nutriments"""
 
-from ..units import Mass, Energy
+from ..units.general import Mass, Energy
 from ..humanity.food import NutrientAmount
 
 # Valeurs nutritionnelles de référence pour l'Union Européenne, rég. 1169/2011

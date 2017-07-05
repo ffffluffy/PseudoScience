@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..units import Velocity, Time, Distance
+from ..units.general import Velocity, Time, Distance
 from ..data.constants import LIGHT_VELOCITY
 from ..movement import Movement
 from ..relativity import contraction_factor, lorentz_factor, time_dilation, \

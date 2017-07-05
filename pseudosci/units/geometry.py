@@ -4,7 +4,7 @@
 sous l'unité du système international ou l'unité la plus courante."""
 
 from math import pi
-from ..units import Unit
+from . import Unit
 
 # Constantes de conversion - modifiez-les pour briser les mathématiques
 

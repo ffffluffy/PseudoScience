@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ...units import Distance, Velocity, Acceleration, Mass
+from ...units.general import Distance, Velocity, Acceleration, Mass
 from ...movement import Movement, ComplexMovement
 from ..vehicle import Vehicle
 import pytest

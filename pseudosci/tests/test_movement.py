@@ -2,7 +2,8 @@
 # -*- coding:utf-8 -*-
 
 from ..movement import Movement, AcceleratedMovement, ComplexMovement
-from ..units import Unit, Distance, Time, Velocity, Acceleration
+from ..units import Unit
+from ..units.general import Distance, Time, Velocity, Acceleration
 import pytest
 
 

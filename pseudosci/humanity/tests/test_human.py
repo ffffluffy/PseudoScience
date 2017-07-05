@@ -3,7 +3,7 @@
 
 from ..human import Human
 from ..food import NutrientData, Food
-from ...units import Mass, Distance, Energy
+from ...units.general import Mass, Distance, Energy
 import pytest
 
 

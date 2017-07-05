@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..units import Distance, Time, Velocity, Acceleration, Unit, Mass, \
+from ..general import Distance, Time, Velocity, Acceleration, Unit, Mass, \
     Force, Area, Volume, Energy, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, \
     KPHS_MPSS, UG_KG, MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, \
     ARPENT_M2, HA_M2, L_M3, KWH_J, KGM_J, CAL_J, KCAL_J, EV_J

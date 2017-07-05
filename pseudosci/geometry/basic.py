@@ -2,6 +2,8 @@
 # -*- coding:utf-8 -*-
 """Éléments basiques de géométrie du projet."""
 
+from ..units.geometry import Angle
+
 
 class Point(object):
     """Définit un point dans un plan à 2 dimensions."""
