@@ -4,13 +4,13 @@
 from .. import Unit
 from ..general import Distance, Time, Velocity, Acceleration, Mass, \
     Force, Area, Volume, Energy, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, \
-    KPHS_MPSS, UG_KG, MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, \
-    ARPENT_M2, HA_M2, L_M3, KWH_J, KGM_J, CAL_J, KCAL_J, EV_J
+    KPHS_MPSS, G_MPSS, UG_KG, MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, \
+    ACRE_M2, ARPENT_M2, HA_M2, L_M3, KWH_J, KGM_J, CAL_J, KCAL_J, EV_J
 import pytest
 
 
 class TestDistance:
-    """Tests de la classe pseudosci.units.Distance"""
+    """Tests de la classe pseudosci.units.general.Distance"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -44,7 +44,7 @@ class TestDistance:
 
 
 class TestTime:
-    """Tests de la classe pseudosci.units.Time"""
+    """Tests de la classe pseudosci.units.general.Time"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -73,7 +73,7 @@ class TestTime:
 
 
 class TestVelocity:
-    """Tests de la classe pseudosci.units.Velocity"""
+    """Tests de la classe pseudosci.units.general.Velocity"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -103,12 +103,13 @@ class TestVelocity:
 
 
 class TestAcceleration:
-    """Tests de la classe pseudosci.units.Acceleration"""
+    """Tests de la classe pseudosci.units.general.Acceleration"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
         assert issubclass(Distance, Unit)
         assert Acceleration(kphs=123.4).mpss == 123.4 * KPHS_MPSS
+        assert Acceleration(g=123.4).mpss == 123.4 * G_MPSS
         with pytest.raises(ValueError):
             Acceleration()
 
@@ -117,6 +118,7 @@ class TestAcceleration:
         a = Acceleration(mpss=KPHS_MPSS)
         assert a.mpss == KPHS_MPSS
         assert a.kphs == 1.0
+        assert a.g == KPHS_MPSS / G_MPSS
         with pytest.raises(AttributeError):
             a.pouet
 
@@ -129,7 +131,7 @@ class TestAcceleration:
 
 
 class TestMass:
-    """Tests de la classe pseudosci.units.Mass"""
+    """Tests de la classe pseudosci.units.general.Mass"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -160,7 +162,7 @@ class TestMass:
 
 
 class TestForce:
-    """Tests de la classe pseudosci.units.Force"""
+    """Tests de la classe pseudosci.units.general.Force"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -196,7 +198,7 @@ class TestForce:
 
 
 class TestArea:
-    """Tests de la classe pseudosci.units.Area"""
+    """Tests de la classe pseudosci.units.general.Area"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -231,7 +233,7 @@ class TestArea:
 
 
 class TestVolume:
-    """Tests de la classe pseudosci.units.Volume"""
+    """Tests de la classe pseudosci.units.general.Volume"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -262,7 +264,7 @@ class TestVolume:
 
 
 class TestEnergy:
-    """Tests de la classe pseudosci.units.Energy."""
+    """Tests de la classe pseudosci.units.general.Energy."""
 
     def test_init(self):
         """Tests du constructeur de la classe."""

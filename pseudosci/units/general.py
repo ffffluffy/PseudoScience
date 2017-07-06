@@ -14,6 +14,7 @@ H_S = 3600
 D_S = 86400
 KPH_MPS = 1 / 3.6
 KPHS_MPSS = 1 / 3.6
+G_MPSS = 9.80665
 UG_KG = 1e-9
 MG_KG = 1e-6
 G_KG = 1e-3
@@ -213,14 +214,15 @@ class Velocity(Unit):
 class Acceleration(Unit):
     """Décrit une accélération. L'unité correspondante du système international
     est le mètre par seconde carrée (m.s^-2).\n
-    Utilisez soit un paramètre `mpss=`, soit un paramètre `kphs=` pour
-    l'intialiser."""
+    Utilisez `mpss=`, `kphs=` ou `g=` pour l'intialiser."""
 
-    def __init__(self, mpss=None, kphs=None):
+    def __init__(self, mpss=None, kphs=None, g=None):
         if mpss is not None:
             Unit.__init__(self, float(mpss))
         elif kphs is not None:
             Unit.__init__(self, float(kphs) * KPHS_MPSS)
+        elif g is not None:
+            Unit.__init__(self, float(g) * G_MPSS)
         else:
             raise ValueError(
                 "Pour construire une unité d'accélération, fournissez mpss ou "
@@ -235,6 +237,8 @@ class Acceleration(Unit):
         elif name.lower() == 'kphs':
             self.kphs = kphs = self.mpss / KPHS_MPSS
             return kphs
+        elif name.lower() == 'g':
+            return self.value / G_MPSS
         else:
             raise AttributeError("No attribute named {0!r}"
                                  .format(name.lower()))
