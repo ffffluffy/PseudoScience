@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 from .. import Unit
-from ..heat import Temperature, C_K
+from ..heat import Temperature, Pressure, C_K, HPA_PA, BAR_PA, ATM_PA
 import pytest
 
 
@@ -32,3 +32,24 @@ class TestTemperature:
         assert t.k == 0.0
         assert t.c == -273.15
         assert round(t.f, 5) == -459.67
+
+
+class TestPressure:
+    """Tests de la classe pseudosci.units.heat.Pressure"""
+
+    def test_init(self):
+        """Test du constructeur de la classe."""
+        assert issubclass(Pressure, Unit)
+        assert Pressure(hpa=123.4).pa == 123.4 * HPA_PA
+        assert Pressure(bar=123.4).pa == 123.4 * BAR_PA
+        assert Pressure(atm=123.4).pa == 123.4 * ATM_PA
+        with pytest.raises(ValueError):
+            Pressure()
+
+    def test_attributes(self):
+        """Test des attributs de la classe."""
+        p = Pressure(atm=1)
+        assert p.pa == 101325.0
+        assert p.hpa == 1013.25
+        assert p.bar == 1.01325
+        assert p.atm == 1.0
