@@ -581,10 +581,10 @@ class ChemicalAmount(Unit):
 
     def __init__(self, mol=None):
         if mol is not None:
-            Unit.__init__(self, mol)
+            Unit.__init__(self, float(mol))
         else:
-            raise ValueError("Pour construire une unité d'énergie, fournissez"
-                             "j, kwh, kgm, cal, kcal ou ev.")
+            raise ValueError("Pour construire une unité de quantité de "
+                             "matière, fournissez `mol`.")
         self.fullname = "mole"
         self.pluralname = "moles"
 
