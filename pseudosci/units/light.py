@@ -3,6 +3,11 @@
 """Unités de mesure relatives à la lumière."""
 
 from . import Unit
+from .general import Area
+
+# Constantes de conversion - modifiez-les pour briser votre vision
+PHOT_LX = 1e4
+NOX_LX = 1e-3
 
 
 class LightIntensity(Unit):
@@ -47,3 +52,59 @@ class LightFlow(Unit):
         else:
             raise AttributeError("No attribute named {0!r}"
                                  .format(name.lower()))
+
+    def __truediv__(self, other):
+        if isinstance(other, Illuminance):
+            return Area(m2=self.lm / other.lx)
+        elif isinstance(other, Area):
+            return Illuminance(lx=self.lm / other.m2)
+        else:
+            return Unit.__truediv__(self, other)
+    __div__ = __truediv__
+
+    def __floordiv__(self, other):
+        if isinstance(other, Illuminance):
+            return Area(m2=self.lm // other.lx)
+        elif isinstance(other, Area):
+            return Illuminance(lx=self.lm // other.m2)
+        else:
+            return Unit.__floordiv__(self, other)
+
+
+class Illuminance(Unit):
+    """Décrit une mesure d'éclairement lumineux. L'unité correspondante du
+    système international est le lux (lx).\n
+    Utilisez l'un des paramètres suivants pour instancier la classe :
+    `lx=` pour des lux ;
+    `phot=` pour des phots ;
+    `nox=` pour des nox."""
+
+    def __init__(self, lx=None, phot=None, nox=None):
+        if lx is not None:
+            Unit.__init__(self, float(lx))
+        elif phot is not None:
+            Unit.__init__(self, float(phot) * PHOT_LX)
+        elif nox is not None:
+            Unit.__init__(self, float(nox) * NOX_LX)
+        else:
+            raise ValueError("Pour construire une unité d'éclairement "
+                             "lumineux, fournissez `lx`, `phot` ou `nox`.")
+        self.fullname = self.pluralname = "lux"
+
+    def __getattr__(self, name):
+        if name.lower() in ['lx', 'lux']:
+            return self.value
+        elif name.lower() == 'phot':
+            return self.value / PHOT_LX
+        elif name.lower() == 'nox':
+            return self.value / NOX_LX
+        else:
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))
+
+    def __mul__(self, other):
+        if isinstance(other, Area):
+            return LightFlow(lm=self.lx * other.m2)
+        else:
+            return Unit.__mul__(self, other)
+    __rmul__ = __mul__
