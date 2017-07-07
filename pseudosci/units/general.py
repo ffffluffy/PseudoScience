@@ -572,3 +572,25 @@ class Energy(Unit):
             return Distance(m=self.j // other.n)
         else:
             return Unit.__floordiv__(self, other)
+
+
+class ChemicalAmount(Unit):
+    """Décrit une quantité de matière. L'unité correspondante du système
+    international est la mole (mol).\n
+    Utilisez le paramètre `mol=` pour instancier en moles."""
+
+    def __init__(self, mol=None):
+        if mol is not None:
+            Unit.__init__(self, mol)
+        else:
+            raise ValueError("Pour construire une unité d'énergie, fournissez"
+                             "j, kwh, kgm, cal, kcal ou ev.")
+        self.fullname = "mole"
+        self.pluralname = "moles"
+
+    def __getattr__(self, name):
+        if name.lower() == 'mol':
+            return self.value
+        else:
+            raise AttributeError("No attribute named {0!r}"
+                                 .format(name.lower()))

@@ -3,9 +3,10 @@
 
 from .. import Unit
 from ..general import Distance, Time, Velocity, Acceleration, Mass, \
-    Force, Area, Volume, Energy, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, \
-    KPHS_MPSS, G_MPSS, UG_KG, MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, \
-    ACRE_M2, ARPENT_M2, HA_M2, L_M3, KWH_J, KGM_J, CAL_J, KCAL_J, EV_J
+    Force, Area, Volume, Energy, ChemicalAmount, KM_M, AU_M, LY_M, MIN_S, \
+    H_S, D_S, KPH_MPS, KPHS_MPSS, G_MPSS, UG_KG, MG_KG, G_KG, T_KG, DYN_N, \
+    KGF_N, LBF_N, PDL_N, ACRE_M2, ARPENT_M2, HA_M2, L_M3, KWH_J, KGM_J, \
+    CAL_J, KCAL_J, EV_J
 import pytest
 
 
@@ -298,3 +299,16 @@ class TestEnergy:
         with pytest.raises(TypeError):
             Energy(j=1) / Unit(1)
             Energy(j=1) // Unit(1)
+
+
+class TestChemicalAmount:
+    """Test de la classe pseudosci.units.general.ChemicalAmount."""
+
+    def test_all(self):
+        """Test de la classe pseudosci.units.general.ChemicalAmount."""
+        assert issubclass(ChemicalAmount, Unit)
+        assert ChemicalAmount(mol=123.4).mol == 123.4
+        with pytest.raises(ValueError):
+            ChemicalAmount()
+        with pytest.raises(AttributeError):
+            ChemicalAmount(mol=123.4).pouet
