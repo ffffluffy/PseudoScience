@@ -35,14 +35,10 @@ class Angle(Unit):
 
     def __getattr__(self, name):
         if name.lower() == 'rad':
-            self.rad = rad = self.value
-            return rad
+            return self.value
         elif name.lower() == 'deg':
-            self.deg = deg = self.value / DEG_RAD
-            return deg
+            return self.value / DEG_RAD
         elif name.lower() == 'gon':
-            self.gon = gon = self.value / GON_RAD
-            return gon
+            return self.value / GON_RAD
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)

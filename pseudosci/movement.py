@@ -34,16 +34,14 @@ class Movement(object):
 
     def __getattr__(self, name):
         if name == 'velocity':
-            self.velocity = self.distance / self.time
-            return self.velocity
+            return self.distance / self.time
         elif name == 'distance':
-            self.distance = self.velocity * self.time
-            return self.distance
+            return self.velocity * self.time
         elif name == 'time':
-            self.time = self.distance / self.velocity
-            return self.time
+            return self.distance / self.velocity
         else:
-            raise AttributeError("Aucun attribut nommé {0}".format(name))
+            raise AttributeError("{0} object has no attribute {1}".format(
+                    self.__class__.__name__, name))
 
     def __repr__(self):
         return '<{0} {1},{2},{3}>'.format(
@@ -110,11 +108,9 @@ class AcceleratedMovement(Movement):
 
     def __getattr__(self, name):
         if name == 'velocity':
-            self.velocity = self.accel * self.time
-            return self.velocity
+            return self.accel * self.time
         elif name == 'distance':
-            self.distance = (self.accel * self.time * self.time) / 2
-            return self.distance
+            return (self.accel * self.time * self.time) / 2
         else:
             return Movement.__getattr__(self, name)
 
@@ -154,3 +150,6 @@ class ComplexMovement(object):
             return [m.time for m in self.movements]
         elif name == 'velocities':
             return [m.velocity for m in self.movements]
+        else:
+            raise AttributeError("{0} object has no attribute {1}".format(
+                    self.__class__.__name__, name))

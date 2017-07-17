@@ -28,8 +28,7 @@ class LightIntensity(Unit):
         if name.lower() == 'cd':
             return self.value
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
 
 class LightFlow(Unit):
@@ -50,8 +49,7 @@ class LightFlow(Unit):
         if name.lower() == 'lm':
             return self.value
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __truediv__(self, other):
         if isinstance(other, Illuminance):
@@ -99,8 +97,7 @@ class Illuminance(Unit):
         elif name.lower() == 'nox':
             return self.value / NOX_LX
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __mul__(self, other):
         if isinstance(other, Area):

@@ -146,7 +146,8 @@ class Line(object):
             return Angle(rad=atan2(self.p2.y - self.p1.y,
                                    self.p2.x - self.p1.x))
         else:
-            raise AttributeError("Pas d'attribut nommé {0}".format(name))
+            raise AttributeError("{0} object has no attribute {1}".format(
+                    self.__class__.__name__, name))
 
     def __eq__(self, other):
         return type(self) is type(other) and \

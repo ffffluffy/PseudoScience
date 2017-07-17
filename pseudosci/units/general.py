@@ -62,20 +62,15 @@ class Distance(Unit):
 
     def __getattr__(self, name):
         if name.lower() == 'm':
-            self.m = m = self.value
-            return m
+            return self.value
         if name.lower() == 'km':
-            self.km = km = self.m / KM_M
-            return km
+            return self.m / KM_M
         elif name.lower() == 'au':
-            self.au = au = self.m / AU_M
-            return au
+            return self.m / AU_M
         elif name.lower() == 'ly':
-            self.ly = ly = self.m / LY_M
-            return ly
+            return self.m / LY_M
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __mul__(self, other):
         if type(other) is Distance:
@@ -132,20 +127,15 @@ class Time(Unit):
 
     def __getattr__(self, name):
         if name.lower() == 's':
-            self.s = s = self.value
-            return s
+            return self.value
         elif name.lower() in ['min', 'm']:
-            self.min = self.m = m = self.s / MIN_S
-            return m
+            return self.s / MIN_S
         elif name.lower() == 'h':
-            self.h = h = self.s / H_S
-            return h
+            return self.s / H_S
         elif name.lower() == 'd':
-            self.d = d = self.s / D_S
-            return d
+            return self.s / D_S
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __mul__(self, other):
         if type(other) is Velocity:
@@ -176,14 +166,11 @@ class Velocity(Unit):
 
     def __getattr__(self, name):
         if name.lower() == 'mps':
-            self.mps = mps = self.value
-            return mps
+            return self.value
         elif name.lower() == 'kph':
-            self.kph = kph = self.mps / KPH_MPS
-            return kph
+            return self.value / KPH_MPS
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __mul__(self, other):
         if type(other) is Time:
@@ -232,16 +219,13 @@ class Acceleration(Unit):
 
     def __getattr__(self, name):
         if name.lower() == 'mpss':
-            self.mpss = mpss = self.value
-            return mpss
+            return self.value
         elif name.lower() == 'kphs':
-            self.kphs = kphs = self.mpss / KPHS_MPSS
-            return kphs
+            return self.value / KPHS_MPSS
         elif name.lower() == 'g':
             return self.value / G_MPSS
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __mul__(self, other):
         if type(other) is Time:
@@ -283,23 +267,17 @@ class Mass(Unit):
 
     def __getattr__(self, name):
         if name.lower() == 'ug':
-            self.ug = ug = self.value / UG_KG
-            return ug
+            return self.value / UG_KG
         elif name.lower() == 'mg':
-            self.mg = mg = self.value / MG_KG
-            return mg
+            return self.value / MG_KG
         elif name.lower() == 'g':
-            self.g = g = self.value / G_KG
-            return g
+            return self.value / G_KG
         elif name.lower() == 'kg':
-            self.kg = kg = self.value
-            return kg
+            return self.value
         elif name.lower() == 't':
-            self.t = t = self.value / T_KG
-            return t
+            return self.value / T_KG
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __mul__(self, other):
         if type(other) is Acceleration:
@@ -338,23 +316,17 @@ class Force(Unit):
 
     def __getattr__(self, name):
         if name.lower() == 'n':
-            self.n = n = self.value
-            return n
+            return self.value
         elif name.lower() == 'dyn':
-            self.dyn = dyn = self.value / DYN_N
-            return dyn
+            return self.value / DYN_N
         elif name.lower() == 'kgf':
-            self.kgf = kgf = self.value / KGF_N
-            return kgf
+            return self.value / KGF_N
         elif name.lower() == 'lbf':
-            self.lbf = lbf = self.value / LBF_N
-            return lbf
+            return self.value / LBF_N
         elif name.lower() == 'pdl':
-            self.pdl = pdl = self.value / PDL_N
-            return pdl
+            return self.value / PDL_N
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __mul__(self, other):
         if type(other) is Distance:
@@ -410,23 +382,17 @@ class Area(Unit):
 
     def __getattr__(self, name):
         if name.lower() == 'm2':
-            self.m2 = m2 = self.value
-            return m2
+            return self.value
         elif name.lower() == 'km2':
-            self.km2 = km2 = self.value / (KM_M ** 2)
-            return km2
+            return self.value / (KM_M ** 2)
         elif name.lower() == 'acre':
-            self.acre = acre = self.value / ACRE_M2
-            return acre
+            return self.value / ACRE_M2
         elif name.lower() == 'arpent':
-            self.arpent = arpent = self.value / ARPENT_M2
-            return arpent
+            return self.value / ARPENT_M2
         elif name.lower() == 'ha':
-            self.ha = ha = self.value / HA_M2
-            return ha
+            return self.value / HA_M2
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __mul__(self, other):
         if type(other) is Distance:
@@ -472,17 +438,13 @@ class Volume(Unit):
 
     def __getattr__(self, name):
         if name.lower() == 'm3':
-            self.m3 = m3 = self.value
-            return m3
+            return self.value
         elif name.lower() == 'km3':
-            self.km3 = km3 = self.value / (KM_M ** 3)
-            return km3
+            return self.value / (KM_M ** 3)
         elif name.lower() == 'l':
-            self.l = l = self.value / L_M3
-            return l
+            return self.value / L_M3
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __truediv__(self, other):
         if type(other) is Distance:
@@ -535,26 +497,19 @@ class Energy(Unit):
 
     def __getattr__(self, name):
         if name == 'j':
-            self.j = j = self.value
-            return j
+            return self.value
         elif name == 'kwh':
-            self.kwh = kwh = self.value / KWH_J
-            return kwh
+            return self.value / KWH_J
         elif name == 'kgm':
-            self.kgm = kgm = self.value / KGM_J
-            return kgm
+            return self.value / KGM_J
         elif name == 'cal':
-            self.cal = cal = self.value / CAL_J
-            return cal
+            return self.value / CAL_J
         elif name == 'kcal':
-            self.kcal = kcal = self.value / KCAL_J
-            return kcal
+            return self.value / KCAL_J
         elif name == 'ev':
-            self.ev = ev = self.value / EV_J
-            return ev
+            return self.value / EV_J
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __truediv__(self, other):
         if type(other) is Distance:
@@ -592,5 +547,4 @@ class ChemicalAmount(Unit):
         if name.lower() == 'mol':
             return self.value
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)

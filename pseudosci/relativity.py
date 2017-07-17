@@ -48,3 +48,5 @@ class RelativistMovement(Movement):
             return length_contraction(self.properdistance, self.velocity)
         elif name == 'time':
             return time_dilation(self.propertime, self.velocity)
+        else:
+            return Movement.__getattr__(self, name)

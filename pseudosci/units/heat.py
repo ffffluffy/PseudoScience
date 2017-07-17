@@ -61,8 +61,7 @@ class Temperature(Unit):
         elif name.lower() in ['f', 'fahrenheit']:
             return self.kelvin2fahrenheit(self.value)
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
 
 class Pressure(Unit):
@@ -99,8 +98,7 @@ class Pressure(Unit):
         elif name.lower() == 'atm':
             return self.value / ATM_PA
         else:
-            raise AttributeError("No attribute named {0!r}"
-                                 .format(name.lower()))
+            return Unit.__getattr__(self, name)
 
     def __mul__(self, other):
         if type(other) is Area:

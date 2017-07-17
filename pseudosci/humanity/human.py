@@ -22,7 +22,8 @@ class Human(object):
         if name == 'bmi':
             return self.weight.kg / (self.height.m ** 2)
         else:
-            raise AttributeError("Pas d'attribut nommé {0}".format(name))
+            raise AttributeError("{0} object has no attribute {1}".format(
+                    self.__class__.__name__, name))
 
     @staticmethod
     def eat(stuff, mass):
