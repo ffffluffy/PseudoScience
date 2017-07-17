@@ -35,89 +35,51 @@ class Unit(object):
         return type(self)(-self.value)
 
     def __add__(self, other):
-        if type(other) is int or type(other) is float:
+        if isinstance(other, (int, float)):
             return type(self)(self.value + other)
         elif type(self) is type(other):
             return type(self)(self.value + other.value)
-        else:
-            raise TypeError("Il n'est pas possible d'additionner deux unités "
-                            "différentes.")
+        return NotImplemented
     __radd__ = __add__
 
     def __sub__(self, other):
-        if type(other) is int or type(other) is float:
+        if isinstance(other, (int, float)):
             return type(self)(self.value - other)
         elif type(self) is type(other):
             return type(self)(self.value - other.value)
-        else:
-            raise TypeError("Il n'est pas possible de soustraire deux unités "
-                            "différentes.")
+        return NotImplemented
     __rsub__ = __sub__
 
     def __mul__(self, other):
-        if type(other) is int or type(other) is float:
+        if isinstance(other, (int, float)):
             return type(self)(self.value * other)
-        else:
-            raise TypeError("Il n'est pas possible de multiplier deux unités "
-                            "différentes.")
+        return NotImplemented
     __rmul__ = __mul__
 
     def __truediv__(self, other):
-        if type(other) is int or type(other) is float:
+        if isinstance(other, (int, float)):
             return type(self)(self.value / other)
         elif type(self) is type(other):
             return (self.value / other.value)
-        else:
-            raise TypeError("Il n'est pas possible de diviser deux unités "
-                            "différentes.")
+        return NotImplemented
     __div__ = __truediv__
 
     def __floordiv__(self, other):
-        if type(other) is int or type(other) is float:
+        if isinstance(other, (int, float)):
             return type(self)(self.value // other)
         elif type(self) is type(other):
             return (self.value // other.value)
-        else:
-            raise TypeError("Il n'est pas possible de diviser deux unités "
-                            "différentes.")
+        return NotImplemented
 
     def __pow__(self, other):
-        if type(other) is int or type(other) is float:
+        if isinstance(other, (int, float)):
             return type(self)(self.value ** other)
-        else:
-            raise TypeError("L'exposant d'une puissance d'une unité ne peut "
-                            "être qu'un nombre.")
+        return NotImplemented
 
     def __eq__(self, other):
-        return type(self) is type(other) and self.value == other.value
+        if type(self) is type(other):
+            return self.value == other.value
+        return NotImplemented
 
     def __ne__(self, other):
-        return type(self) is type(other) and self.value != other.value
-
-    def __gt__(self, other):
-        if (type(self) is not type(other)):
-            raise TypeError("Une unité doit être comparée à une unité de même "
-                            "type.")
-        else:
-            return self.value > other.value
-
-    def __ge__(self, other):
-        if (type(self) is not type(other)):
-            raise TypeError("Une unité doit être comparée à une unité de même "
-                            "type.")
-        else:
-            return self.value >= other.value
-
-    def __lt__(self, other):
-        if (type(self) is not type(other)):
-            raise TypeError("Une unité doit être comparée à une unité de même "
-                            "type.")
-        else:
-            return self.value < other.value
-
-    def __le__(self, other):
-        if (type(self) is not type(other)):
-            raise TypeError("Une unité doit être comparée à une unité de même "
-                            "type.")
-        else:
-            return self.value <= other.value
+        return not self == other

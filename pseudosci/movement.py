@@ -54,23 +54,21 @@ class Movement(object):
             return type(self)(distance=self.distance + other.distance,
                               time=self.time + other.time)
         else:
-            raise TypeError("Un Movement ne peut être ajouté qu'à un Movement")
+            return NotImplemented
 
     def __sub__(self, other):
         if type(self) is type(other):
             return type(self)(distance=self.distance - other.distance,
                               time=self.time - other.time)
         else:
-            raise TypeError("Un Movement ne peut être soustrait qu'à un "
-                            "Movement")
+            return NotImplemented
 
     def __mul__(self, other):
         if type(other) is int or type(other) is float:
             return Movement(distance=self.distance * other,
                             time=self.time * other)
         else:
-            raise TypeError("Un Movement ne peut être multiplié que par un "
-                            "nombre.")
+            return NotImplemented
     __rmul__ = __mul__
 
     def __truediv__(self, other):
@@ -78,8 +76,7 @@ class Movement(object):
             return Movement(distance=self.distance / other,
                             time=self.time / other)
         else:
-            raise TypeError("Un Movement ne peut être divisé que par un "
-                            "nombre.")
+            return NotImplemented
     __div__ = __truediv__
 
     def __floordiv__(self, other):
@@ -87,8 +84,7 @@ class Movement(object):
             return Movement(distance=self.distance // other,
                             time=self.time // other)
         else:
-            raise TypeError("Un Movement ne peut être divisé que par un "
-                            "nombre.")
+            return NotImplemented
 
 
 class AcceleratedMovement(Movement):
@@ -143,8 +139,7 @@ class ComplexMovement(object):
             m.append(other)
             return type(self)(*m)
         else:
-            raise TypeError("Un ComplexMovement doit s'additionner à un "
-                            "ComplexMovement ou à un Movement")
+            return NotImplemented
 
     def __getattr__(self, name):
         if name == 'distance':
