@@ -15,20 +15,12 @@ class LightIntensity(Unit):
     international est la candela (cd).
     Utilisez le paramètre `cd=` pour instancier la classe."""
 
-    def __init__(self, cd=None):
-        if cd is not None:
-            Unit.__init__(self, float(cd))
-        else:
-            raise ValueError("Pour construire une unité d'intensité lumineuse,"
-                             " fournissez `cd`.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "candela"
         self.pluralname = "candelas"
-
-    def __getattr__(self, name):
-        if name.lower() == 'cd':
-            return self.value
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'cd': 1}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
 
 class LightFlow(Unit):
@@ -36,20 +28,12 @@ class LightFlow(Unit):
     international est le lumen (lm).
     Utilisez le paramètre `lm=` pour instancier la classe."""
 
-    def __init__(self, lm=None):
-        if lm is not None:
-            Unit.__init__(self, float(lm))
-        else:
-            raise ValueError("Pour construire une unité de flux lumineux,"
-                             " fournissez `lm`.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "lumen"
         self.pluralname = "lumens"
-
-    def __getattr__(self, name):
-        if name.lower() == 'lm':
-            return self.value
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'lm': 1}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __truediv__(self, other):
         if isinstance(other, Illuminance):
@@ -77,27 +61,11 @@ class Illuminance(Unit):
     `phot=` pour des phots ;
     `nox=` pour des nox."""
 
-    def __init__(self, lx=None, phot=None, nox=None):
-        if lx is not None:
-            Unit.__init__(self, float(lx))
-        elif phot is not None:
-            Unit.__init__(self, float(phot) * PHOT_LX)
-        elif nox is not None:
-            Unit.__init__(self, float(nox) * NOX_LX)
-        else:
-            raise ValueError("Pour construire une unité d'éclairement "
-                             "lumineux, fournissez `lx`, `phot` ou `nox`.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = self.pluralname = "lux"
-
-    def __getattr__(self, name):
-        if name.lower() in ['lx', 'lux']:
-            return self.value
-        elif name.lower() == 'phot':
-            return self.value / PHOT_LX
-        elif name.lower() == 'nox':
-            return self.value / NOX_LX
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'lx': 1, 'lux': 1, 'phot': PHOT_LX, 'nox': NOX_LX}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __mul__(self, other):
         if isinstance(other, Area):

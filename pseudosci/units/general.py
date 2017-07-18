@@ -44,33 +44,12 @@ class Distance(Unit):
     `au=` pour des unités astronomiques ;\n
     `ly=` pour des années-lumière."""
 
-    def __init__(self, m=None, km=None, au=None, ly=None):
-        if m is not None:
-            Unit.__init__(self, float(m))
-        elif km is not None:
-            Unit.__init__(self, float(km) * KM_M)
-        elif au is not None:
-            Unit.__init__(self, float(au) * AU_M)
-        elif ly is not None:
-            Unit.__init__(self, float(ly) * LY_M)
-        else:
-            raise ValueError(
-                "Pour construire une unité de distance, fournissez m, km, au "
-                "ou ly.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "meter"
         self.pluralname = "meters"
-
-    def __getattr__(self, name):
-        if name.lower() == 'm':
-            return self.value
-        if name.lower() == 'km':
-            return self.m / KM_M
-        elif name.lower() == 'au':
-            return self.m / AU_M
-        elif name.lower() == 'ly':
-            return self.m / LY_M
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'m': 1, 'km': KM_M, 'au': AU_M, 'ly': LY_M}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __mul__(self, other):
         if type(other) is Distance:
@@ -110,32 +89,13 @@ class Time(Unit):
     `h=` pour des heures ;\n
     `d=` pour des jours."""
 
-    def __init__(self, s=None, m=None, h=None, d=None):
-        if s is not None:
-            Unit.__init__(self, float(s))
-        elif m is not None:
-            Unit.__init__(self, float(m) * MIN_S)
-        elif h is not None:
-            Unit.__init__(self, float(h) * H_S)
-        elif d is not None:
-            Unit.__init__(self, float(d) * D_S)
-        else:
-            raise ValueError(
-                "Pour construire une unité de temps, fournissez s, m, h ou d.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "second"
         self.pluralname = "seconds"
-
-    def __getattr__(self, name):
-        if name.lower() == 's':
-            return self.value
-        elif name.lower() in ['min', 'm']:
-            return self.s / MIN_S
-        elif name.lower() == 'h':
-            return self.s / H_S
-        elif name.lower() == 'd':
-            return self.s / D_S
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'s': 1, 'm': MIN_S, 'min': MIN_S,
+                           'h': H_S, 'd': D_S}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __mul__(self, other):
         if type(other) is Velocity:
@@ -153,24 +113,12 @@ class Velocity(Unit):
     international est le mètre par seconde (m.s^-1).\n
     Utilisez soit `mps=`, soit `kph=` pour l'initialiser."""
 
-    def __init__(self, mps=None, kph=None):
-        if mps is not None:
-            Unit.__init__(self, float(mps))
-        elif kph is not None:
-            Unit.__init__(self, float(kph) * KPH_MPS)
-        else:
-            raise ValueError(
-                "Pour construire une unité de vitesse, fournissez mps ou kph.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "meter per second"
         self.pluralname = "meters per second"
-
-    def __getattr__(self, name):
-        if name.lower() == 'mps':
-            return self.value
-        elif name.lower() == 'kph':
-            return self.value / KPH_MPS
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'mps': 1, 'kph': KPH_MPS}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __mul__(self, other):
         if type(other) is Time:
@@ -203,29 +151,12 @@ class Acceleration(Unit):
     est le mètre par seconde carrée (m.s^-2).\n
     Utilisez `mpss=`, `kphs=` ou `g=` pour l'intialiser."""
 
-    def __init__(self, mpss=None, kphs=None, g=None):
-        if mpss is not None:
-            Unit.__init__(self, float(mpss))
-        elif kphs is not None:
-            Unit.__init__(self, float(kphs) * KPHS_MPSS)
-        elif g is not None:
-            Unit.__init__(self, float(g) * G_MPSS)
-        else:
-            raise ValueError(
-                "Pour construire une unité d'accélération, fournissez mpss ou "
-                "kphs.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "meter per second squared"
         self.pluralname = "meters per second squared"
-
-    def __getattr__(self, name):
-        if name.lower() == 'mpss':
-            return self.value
-        elif name.lower() == 'kphs':
-            return self.value / KPHS_MPSS
-        elif name.lower() == 'g':
-            return self.value / G_MPSS
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'mpss': 1, 'kphs': KPHS_MPSS, 'g': G_MPSS}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __mul__(self, other):
         if type(other) is Time:
@@ -248,36 +179,13 @@ class Mass(Unit):
     `kg=` pour des kilogrammes,
     `t=` pour des tonnes."""
 
-    def __init__(self, kg=None, ug=None, mg=None, g=None, t=None):
-        if ug is not None:
-            Unit.__init__(self, float(ug) * UG_KG)
-        elif mg is not None:
-            Unit.__init__(self, float(mg) * MG_KG)
-        elif g is not None:
-            Unit.__init__(self, float(g) * G_KG)
-        elif kg is not None:
-            Unit.__init__(self, float(kg))
-        elif t is not None:
-            Unit.__init__(self, float(t) * T_KG)
-        else:
-            raise ValueError("Pour construire une unité de masse, "
-                             "fournissez ug, mg, g, kg ou t.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "kilogram"
         self.pluralname = "kilograms"
-
-    def __getattr__(self, name):
-        if name.lower() == 'ug':
-            return self.value / UG_KG
-        elif name.lower() == 'mg':
-            return self.value / MG_KG
-        elif name.lower() == 'g':
-            return self.value / G_KG
-        elif name.lower() == 'kg':
-            return self.value
-        elif name.lower() == 't':
-            return self.value / T_KG
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'t': T_KG, 'kg': 1, 'g': G_KG,
+                           'mg': MG_KG, 'ug': UG_KG}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __mul__(self, other):
         if type(other) is Acceleration:
@@ -297,36 +205,13 @@ class Force(Unit):
     `lbf=` pour des livres-force,
     `pdl=` pour des poundals."""
 
-    def __init__(self, n=None, dyn=None, kgf=None, lbf=None, pdl=None):
-        if n is not None:
-            Unit.__init__(self, float(n))
-        elif dyn is not None:
-            Unit.__init__(self, float(dyn) * DYN_N)
-        elif kgf is not None:
-            Unit.__init__(self, float(kgf) * KGF_N)
-        elif lbf is not None:
-            Unit.__init__(self, float(lbf) * LBF_N)
-        elif pdl is not None:
-            Unit.__init__(self, float(pdl) * PDL_N)
-        else:
-            raise ValueError("Pour construire une unité de force, "
-                             "fournissez n, dyn, kgf, lbf ou pdl.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "newton"
         self.pluralname = "newtons"
-
-    def __getattr__(self, name):
-        if name.lower() == 'n':
-            return self.value
-        elif name.lower() == 'dyn':
-            return self.value / DYN_N
-        elif name.lower() == 'kgf':
-            return self.value / KGF_N
-        elif name.lower() == 'lbf':
-            return self.value / LBF_N
-        elif name.lower() == 'pdl':
-            return self.value / PDL_N
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'n': 1, 'dyn': DYN_N, 'kgf': KGF_N,
+                           'lbf': LBF_N, 'pdl': PDL_N}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __mul__(self, other):
         if type(other) is Distance:
@@ -363,36 +248,13 @@ class Area(Unit):
     `arpent=` pour des arpents,
     `ha=` pour des hectares."""
 
-    def __init__(self, m2=None, km2=None, acre=None, arpent=None, ha=None):
-        if m2 is not None:
-            Unit.__init__(self, float(m2))
-        elif km2 is not None:
-            Unit.__init__(self, float(km2) * (KM_M ** 2))
-        elif acre is not None:
-            Unit.__init__(self, float(acre) * ACRE_M2)
-        elif arpent is not None:
-            Unit.__init__(self, float(arpent) * ARPENT_M2)
-        elif ha is not None:
-            Unit.__init__(self, float(ha) * HA_M2)
-        else:
-            raise ValueError("Pour construire une unité de surface, "
-                             "fournissez m2, km2, acre, arpent ou ha.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "square meter"
         self.pluralname = "square meters"
-
-    def __getattr__(self, name):
-        if name.lower() == 'm2':
-            return self.value
-        elif name.lower() == 'km2':
-            return self.value / (KM_M ** 2)
-        elif name.lower() == 'acre':
-            return self.value / ACRE_M2
-        elif name.lower() == 'arpent':
-            return self.value / ARPENT_M2
-        elif name.lower() == 'ha':
-            return self.value / HA_M2
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'m2': 1, 'km2': KM_M ** 2, 'acre': ACRE_M2,
+                           'arpent': ARPENT_M2, 'ha': HA_M2}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __mul__(self, other):
         if type(other) is Distance:
@@ -423,28 +285,12 @@ class Volume(Unit):
     `km3=` pour des kilomètres cube,
     `l=` pour des litres."""
 
-    def __init__(self, m3=None, km3=None, l=None):
-        if m3 is not None:
-            Unit.__init__(self, float(m3))
-        elif km3 is not None:
-            Unit.__init__(self, float(km3) * (KM_M ** 3))
-        elif l is not None:
-            Unit.__init__(self, float(l) * L_M3)
-        else:
-            raise ValueError("Pour construire une unité de volume, fournissez "
-                             "m3, km3 ou l.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "cubic meter"
         self.pluralname = "cubic meters"
-
-    def __getattr__(self, name):
-        if name.lower() == 'm3':
-            return self.value
-        elif name.lower() == 'km3':
-            return self.value / (KM_M ** 3)
-        elif name.lower() == 'l':
-            return self.value / L_M3
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'m3': 1, 'km3': KM_M ** 3, 'l': L_M3}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __truediv__(self, other):
         if type(other) is Distance:
@@ -475,41 +321,13 @@ class Energy(Unit):
     `kcal=` pour des kilocalories ;
     `ev=` pour des électrons-volts."""
 
-    def __init__(self, j=None, kwh=None, kgm=None,
-                 cal=None, kcal=None, ev=None):
-        if j is not None:
-            Unit.__init__(self, float(j))
-        elif kwh is not None:
-            Unit.__init__(self, float(kwh * KWH_J))
-        elif kgm is not None:
-            Unit.__init__(self, float(kgm * KGM_J))
-        elif cal is not None:
-            Unit.__init__(self, float(cal * CAL_J))
-        elif kcal is not None:
-            Unit.__init__(self, float(kcal * KCAL_J))
-        elif ev is not None:
-            Unit.__init__(self, float(ev * EV_J))
-        else:
-            raise ValueError("Pour construire une unité d'énergie, fournissez"
-                             "j, kwh, kgm, cal, kcal ou ev.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "joule"
         self.pluralname = "joules"
-
-    def __getattr__(self, name):
-        if name == 'j':
-            return self.value
-        elif name == 'kwh':
-            return self.value / KWH_J
-        elif name == 'kgm':
-            return self.value / KGM_J
-        elif name == 'cal':
-            return self.value / CAL_J
-        elif name == 'kcal':
-            return self.value / KCAL_J
-        elif name == 'ev':
-            return self.value / EV_J
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'j': 1, 'kwh': KWH_J, 'kgm': KGM_J, 'cal': CAL_J,
+                           'kcal': KCAL_J, 'ev': EV_J}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __truediv__(self, other):
         if type(other) is Distance:
@@ -534,17 +352,9 @@ class ChemicalAmount(Unit):
     international est la mole (mol).\n
     Utilisez le paramètre `mol=` pour instancier en moles."""
 
-    def __init__(self, mol=None):
-        if mol is not None:
-            Unit.__init__(self, float(mol))
-        else:
-            raise ValueError("Pour construire une unité de quantité de "
-                             "matière, fournissez `mol`.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "mole"
         self.pluralname = "moles"
-
-    def __getattr__(self, name):
-        if name.lower() == 'mol':
-            return self.value
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'mol': 1}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))

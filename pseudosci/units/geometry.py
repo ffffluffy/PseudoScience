@@ -20,25 +20,9 @@ class Angle(Unit):
     `deg` pour des degrés ;
     `gon` pour des grades."""
 
-    def __init__(self, rad=None, deg=None, gon=None):
-        if rad is not None:
-            Unit.__init__(self, float(rad))
-        elif deg is not None:
-            Unit.__init__(self, float(deg * DEG_RAD))
-        elif gon is not None:
-            Unit.__init__(self, float(gon * GON_RAD))
-        else:
-            raise ValueError("Pour construire une unité d'angle, fournissez "
-                             "rad, deg ou gon.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "radian"
         self.pluralname = "radians"
-
-    def __getattr__(self, name):
-        if name.lower() == 'rad':
-            return self.value
-        elif name.lower() == 'deg':
-            return self.value / DEG_RAD
-        elif name.lower() == 'gon':
-            return self.value / GON_RAD
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'rad': 1, 'deg': DEG_RAD, 'gon': GON_RAD}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))

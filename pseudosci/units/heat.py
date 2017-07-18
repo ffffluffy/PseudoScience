@@ -40,18 +40,20 @@ class Temperature(Unit):
         """Convertir de degrés Kelvin en degrés Celsius."""
         return k - C_K
 
-    def __init__(self, k=None, c=None, f=None):
-        if k is not None:
-            Unit.__init__(self, float(k))
-        elif c is not None:
-            Unit.__init__(self, float(c + C_K))
-        elif f is not None:
-            Unit.__init__(self, float(self.fahrenheit2kelvin(f)))
-        else:
-            raise ValueError("Pour construire une unité de température, "
-                             "fournissez `c`, `k` ou `f`.")
+    @staticmethod
+    def celsius2kelvin(c):
+        """Convertir de degrés Celsius en degrés Kelvin."""
+        return c + C_K
+
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "Kelvin degree"
         self.pluralname = "Kelvin degrees"
+        self.attributes = {'k': 1,
+                           'c': (self.celsius2kelvin, self.kelvin2celsius),
+                           'f': (self.fahrenheit2kelvin,
+                                 self.kelvin2fahrenheit)}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __getattr__(self, name):
         if name.lower() in ['k', 'kelvin']:
@@ -73,32 +75,13 @@ class Pressure(Unit):
     `bar` pour des bars ;
     `atm` pour des atmosphères."""
 
-    def __init__(self, pa=None, hpa=None, bar=None, atm=None):
-        if pa is not None:
-            Unit.__init__(self, float(pa))
-        elif hpa is not None:
-            Unit.__init__(self, float(hpa) * HPA_PA)
-        elif bar is not None:
-            Unit.__init__(self, float(bar) * BAR_PA)
-        elif atm is not None:
-            Unit.__init__(self, float(atm) * ATM_PA)
-        else:
-            raise ValueError("Pour construire une unité de pression, "
-                             "fournissez `pa`, `hpa`, `bar` ou `atm`.")
+    def __init__(self, **kwargs):
+        (name, value), = kwargs.items()
         self.fullname = "pascal"
         self.pluralname = "pascals"
-
-    def __getattr__(self, name):
-        if name.lower() == 'pa':
-            return self.value
-        elif name.lower() == 'hpa':
-            return self.value / HPA_PA
-        elif name.lower() == 'bar':
-            return self.value / BAR_PA
-        elif name.lower() == 'atm':
-            return self.value / ATM_PA
-        else:
-            return Unit.__getattr__(self, name)
+        self.attributes = {'pa': 1, 'hpa': HPA_PA,
+                           'bar': BAR_PA, 'atm': ATM_PA}
+        Unit.__init__(self, self.convertfrom(float(value), str(name)))
 
     def __mul__(self, other):
         if type(other) is Area:
