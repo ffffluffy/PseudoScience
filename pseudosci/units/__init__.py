@@ -8,14 +8,15 @@ class Unit(object):
     """Décrit une unité de mesure."""
 
     def __init__(self, value=0, fullname="unit", pluralname="units",
-                 attributes={'unit': 1, 'u': 1, 'units': 1}):
+                 attributes=None):
         self.value = float(value)
         if not hasattr(self, 'fullname'):
             self.fullname = fullname
         if not hasattr(self, 'pluralname'):
             self.pluralname = pluralname
         if not hasattr(self, 'attributes'):
-            self.attributes = attributes
+            self.attributes = attributes if attributes is not None else \
+                {'unit': 1, 'u': 1, 'units': 1}
 
     def __str__(self):
         return '{0} {1}'.format(str(self.value), self.fullname
