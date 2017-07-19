@@ -31,9 +31,13 @@ class TestPoint:
         assert Point(5, 3) // 2 == Point(2, 1)
         with pytest.raises(TypeError):
             Point(1, 1) + 4
+        with pytest.raises(TypeError):
             Point(1, 1) - "some object"
+        with pytest.raises(TypeError):
             Point(1, 1) * "test"
+        with pytest.raises(TypeError):
             Point(1, 1) / "testtest"
+        with pytest.raises(TypeError):
             Point(1, 1) // "pouet"
 
     def test_compare(self):
@@ -57,6 +61,7 @@ class TestLine:
             p1.__repr__(), p2.__repr__())
         with pytest.raises(TypeError):
             Line(p1, 1)
+        with pytest.raises(TypeError):
             Line(1, p2)
 
     def test_attributes(self):
@@ -66,6 +71,9 @@ class TestLine:
         l = Line(p1=p1, p2=p2)
         assert l.distance == l.size == l.length == 2 * sqrt(2)
         assert l.middle == l.midpoint == Point(0, 0)
+        assert int(l.angle.deg) == 135
+        with pytest.raises(AttributeError):
+            l.pouet
 
     def test_math(self):
         """Test des opérations mathématiques de la classe."""
@@ -80,7 +88,9 @@ class TestLine:
             Line(p1, p2) + Line(p3, Point(3, 3))
         with pytest.raises(TypeError):
             Line(p1, p2) * "something"
+        with pytest.raises(TypeError):
             Line(p1, p2) + "something"
+        with pytest.raises(TypeError):
             Line(p1, p2) / "something"
 
     def test_compare(self):

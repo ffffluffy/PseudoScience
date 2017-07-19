@@ -36,9 +36,13 @@ class TestUnit:
         assert int(Unit(value=23.4)) == 23
         with pytest.raises(TypeError):
             SubUnit(4) + Unit(1)
+        with pytest.raises(TypeError):
             SubUnit(4) - Unit(1)
+        with pytest.raises(TypeError):
             SubUnit(4) * Unit(1)
+        with pytest.raises(TypeError):
             SubUnit(4) / Unit(1)
+        with pytest.raises(TypeError):
             SubUnit(4) // Unit(1)
 
     def test_compare(self):

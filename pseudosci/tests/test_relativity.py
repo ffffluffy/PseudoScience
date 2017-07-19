@@ -51,3 +51,5 @@ class TestRelativity:
         assert round(rm.time, 9) == round(rm.propertime * rm.lorentz, 9)
         assert round(rm.distance, 9) == \
             round(rm.properdistance * rm.contraction, 9)
+        with pytest.raises(AttributeError):
+            rm.pouet

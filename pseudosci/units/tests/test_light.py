@@ -40,6 +40,7 @@ class TestLightFlow:
         assert (LightFlow(lm=10) // Illuminance(lx=4)).m2 == 2.0
         with pytest.raises(TypeError):
             LightFlow(lm=1) / Unit(1)
+        with pytest.raises(TypeError):
             LightFlow(lm=1) // Unit(1)
 
 
@@ -68,5 +69,5 @@ class TestIlluminance:
         assert (Illuminance(lx=10) * Area(m2=4)).lm == 40.0
         with pytest.raises(TypeError):
             Illuminance(lx=1) / Unit(1)
+        with pytest.raises(TypeError):
             Illuminance(lx=1) // Unit(1)
-        
