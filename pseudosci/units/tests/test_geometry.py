@@ -8,7 +8,7 @@ import pytest
 
 
 class TestAngle:
-    """Tests de la classe pseudosci.geometry.units.Angle"""
+    """Tests de la classe pseudosci.units.geometry.Angle"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
