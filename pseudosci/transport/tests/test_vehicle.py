@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ...units import Distance, Velocity, Acceleration, Mass
+from ...units.general import Distance, Velocity, Acceleration, Mass
 from ...movement import Movement, ComplexMovement
 from ..vehicle import Vehicle
 import pytest
@@ -27,20 +27,28 @@ class TestVehicle:
         assert v.brake.mpss == 0
         with pytest.raises(TypeError):
             Vehicle()
+        with pytest.raises(TypeError):
             Vehicle(velocity=1)
+        with pytest.raises(TypeError):
             Vehicle(velocity=Velocity(kph=50), accel=1)
+        with pytest.raises(TypeError):
             Vehicle(velocity=Velocity(kph=50),
                     accel=Acceleration(kphs=20),
                     brake=1)
+        with pytest.raises(TypeError):
             Vehicle(velocity=Velocity(kph=50),
                     mass=1)
         with pytest.raises(ValueError):
             Vehicle(velocity=Velocity(mps=0))
+        with pytest.raises(ValueError):
             Vehicle(velocity=Velocity(mps=-1))
+        with pytest.raises(ValueError):
             Vehicle(velocity=Velocity(mps=1), accel=Acceleration(mpss=-1))
+        with pytest.raises(ValueError):
             Vehicle(velocity=Velocity(mps=1),
                     accel=Acceleration(mpss=0),
                     brake=Acceleration(mpss=-1))
+        with pytest.raises(ValueError):
             Vehicle(velocity=Velocity(mps=1),
                     mass=Mass(kg=-1))
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ...units import Unit
-from ..units import Angle, DEG_RAD, GON_RAD
+from .. import Unit
+from ..geometry import Angle, DEG_RAD, GON_RAD
 from math import pi
 import pytest
 
 
 class TestAngle:
-    """Tests de la classe pseudosci.geometry.units.Angle"""
+    """Tests de la classe pseudosci.units.geometry.Angle"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""

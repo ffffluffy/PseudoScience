@@ -2,6 +2,8 @@
 # -*- coding:utf-8 -*-
 """Éléments basiques de géométrie du projet."""
 
+from ..units.geometry import Angle
+
 
 class Point(object):
     """Définit un point dans un plan à 2 dimensions."""
@@ -33,8 +35,7 @@ class Point(object):
         elif type(other) is tuple and len(other) == 2:
             return type(self)(self.x + other[0], self.y + other[1])
         else:
-            raise TypeError("Seuls un tuple ou un point peuvent être "
-                            "additionnés à un point.")
+            return NotImplemented
     __radd__ = __add__
 
     def __sub__(self, other):
@@ -43,8 +44,7 @@ class Point(object):
         elif type(other) is tuple and len(other) == 2:
             return type(self)(self.x - other[0], self.y - other[1])
         else:
-            raise TypeError("Seuls un tuple ou un point peuvent être "
-                            "soustraits à un point.")
+            return NotImplemented
     __rsub__ = __sub__
 
     def __mul__(self, other):
@@ -55,22 +55,21 @@ class Point(object):
         elif type(other) is tuple and len(other) == 2:
             return type(self)(self.x * other[0], self.y * other[1])
         else:
-            raise TypeError("Un point n'est multipliable que par un tuple, un "
-                            "point ou un nombre.")
+            return NotImplemented
     __rmul__ = __mul__
 
     def __truediv__(self, other):
         if type(other) is int or type(other) is float:
             return type(self)(self.x / other, self.y / other)
         else:
-            raise TypeError("Un point n'est divisible que par un nombre.")
+            return NotImplemented
     __div__ = __truediv__
 
     def __floordiv__(self, other):
         if type(other) is int or type(other) is float:
             return type(self)(self.x // other, self.y // other)
         else:
-            raise TypeError("Un point n'est divisible que par un nombre.")
+            return NotImplemented
 
     def __eq__(self, other):
         return type(self) is type(other) and \
@@ -116,7 +115,7 @@ class Line(object):
                 raise ValueError("Deux lignes ne peuvent s'additionner que si "
                                  "elles ont un point en commun.")
         else:
-            raise TypeError("Seules deux lignes peuvent s'additionner.")
+            return NotImplemented
 
     def __mul__(self, other):
         if type(other) is int or type(other) is float:
@@ -124,16 +123,14 @@ class Line(object):
                 x=self.p1.x + (self.p2.x - self.p1.x) * other,
                 y=self.p1.y + (self.p2.y - self.p1.y) * other))
         else:
-            raise TypeError("Une ligne ne peut être multipliée que par "
-                            "un nombre.")
+            return NotImplemented
     __rmul__ = __mul__
 
     def __truediv__(self, other):
         if type(other) is int or type(other) is float:
             return self * (1 / float(other))
         else:
-            raise TypeError("Une ligne ne peut être divisée que par "
-                            "un nombre.")
+            return NotImplemented
     __div__ = __truediv__
 
     def __getattr__(self, name):
@@ -149,7 +146,8 @@ class Line(object):
             return Angle(rad=atan2(self.p2.y - self.p1.y,
                                    self.p2.x - self.p1.x))
         else:
-            raise AttributeError("Pas d'attribut nommé {0}".format(name))
+            raise AttributeError("{0} object has no attribute {1}".format(
+                    self.__class__.__name__, name))
 
     def __eq__(self, other):
         return type(self) is type(other) and \

@@ -3,26 +3,27 @@
 """Simulation de mouvements rectilignes prenant en charge les accélérations
 et freinages."""
 
-from .units import Unit, Distance, Time, Velocity, Acceleration
+from .units import Unit
+from .units.general import Distance, Time, Velocity, Acceleration
 
 
 class Movement(object):
     """Décrit un mouvement rectiligne uniforme. Au moins deux des paramètres
-    suivants sont obligatoires : ``distance=``, ``velocity=``, ``time=``."""
+    suivants sont obligatoires : `distance=`, `velocity=`, `time=`."""
 
     def __init__(self, distance=None, velocity=None, time=None):
         if not (distance and (velocity or time)) and not (time and velocity):
             raise TypeError("Des arguments obligatoires sont manquants.\n"
                             "Utiliser au moins deux des paramètres suivants : "
-                            "``distance=``, ``velocity=``, ``time=``")
+                            "`distance=`, `velocity=`, `time=`")
         if distance and type(distance) is not Distance:
-            raise TypeError("Le paramètre ``distance`` doit être une instance "
+            raise TypeError("Le paramètre `distance` doit être une instance "
                             "de pseudosci.units.Distance.")
         if velocity and type(velocity) is not Velocity:
-            raise TypeError("Le paramètre ``velocity`` doit être une instance "
+            raise TypeError("Le paramètre `velocity` doit être une instance "
                             "de pseudosci.units.Velocity.")
         if time and type(time) is not Time:
-            raise TypeError("Le paramètre ``time`` doit être une instance "
+            raise TypeError("Le paramètre `time` doit être une instance "
                             "de pseudosci.units.Time.")
         if distance:
             self.distance = distance
@@ -33,16 +34,14 @@ class Movement(object):
 
     def __getattr__(self, name):
         if name == 'velocity':
-            self.velocity = self.distance / self.time
-            return self.velocity
+            return self.distance / self.time
         elif name == 'distance':
-            self.distance = self.velocity * self.time
-            return self.distance
+            return self.velocity * self.time
         elif name == 'time':
-            self.time = self.distance / self.velocity
-            return self.time
+            return self.distance / self.velocity
         else:
-            raise AttributeError("Aucun attribut nommé {0}".format(name))
+            raise AttributeError("{0} object has no attribute {1}".format(
+                    self.__class__.__name__, name))
 
     def __repr__(self):
         return '<{0} {1},{2},{3}>'.format(
@@ -53,23 +52,21 @@ class Movement(object):
             return type(self)(distance=self.distance + other.distance,
                               time=self.time + other.time)
         else:
-            raise TypeError("Un Movement ne peut être ajouté qu'à un Movement")
+            return NotImplemented
 
     def __sub__(self, other):
         if type(self) is type(other):
             return type(self)(distance=self.distance - other.distance,
                               time=self.time - other.time)
         else:
-            raise TypeError("Un Movement ne peut être soustrait qu'à un "
-                            "Movement")
+            return NotImplemented
 
     def __mul__(self, other):
         if type(other) is int or type(other) is float:
             return Movement(distance=self.distance * other,
                             time=self.time * other)
         else:
-            raise TypeError("Un Movement ne peut être multiplié que par un "
-                            "nombre.")
+            return NotImplemented
     __rmul__ = __mul__
 
     def __truediv__(self, other):
@@ -77,8 +74,7 @@ class Movement(object):
             return Movement(distance=self.distance / other,
                             time=self.time / other)
         else:
-            raise TypeError("Un Movement ne peut être divisé que par un "
-                            "nombre.")
+            return NotImplemented
     __div__ = __truediv__
 
     def __floordiv__(self, other):
@@ -86,20 +82,19 @@ class Movement(object):
             return Movement(distance=self.distance // other,
                             time=self.time // other)
         else:
-            raise TypeError("Un Movement ne peut être divisé que par un "
-                            "nombre.")
+            return NotImplemented
 
 
 class AcceleratedMovement(Movement):
     """Décrit un mouvement rectiligne uniformément accéléré ou ralenti.
-    Au moins trois des paramètres suivants sont obligatoires : ``accel=``,
-    ``velocity=``, ``time=``, ``distance=``."""
+    Au moins trois des paramètres suivants sont obligatoires : `accel=`,
+    `velocity=`, `time=`, `distance=`."""
 
     def __init__(self, distance=None, velocity=None, time=None, accel=None):
         Movement.__init__(self,
                           distance=distance, velocity=velocity, time=time)
         if accel is not None and type(accel) is not Acceleration:
-                raise TypeError("Le paramètre ``accel`` doit être une instance"
+                raise TypeError("Le paramètre `accel` doit être une instance"
                                 " de pseudosci.units.Acceleration.")
         if accel:
             self.accel = accel
@@ -113,11 +108,9 @@ class AcceleratedMovement(Movement):
 
     def __getattr__(self, name):
         if name == 'velocity':
-            self.velocity = self.accel * self.time
-            return self.velocity
+            return self.accel * self.time
         elif name == 'distance':
-            self.distance = (self.accel * self.time * self.time) / 2
-            return self.distance
+            return (self.accel * self.time * self.time) / 2
         else:
             return Movement.__getattr__(self, name)
 
@@ -142,8 +135,7 @@ class ComplexMovement(object):
             m.append(other)
             return type(self)(*m)
         else:
-            raise TypeError("Un ComplexMovement doit s'additionner à un "
-                            "ComplexMovement ou à un Movement")
+            return NotImplemented
 
     def __getattr__(self, name):
         if name == 'distance':
@@ -158,3 +150,6 @@ class ComplexMovement(object):
             return [m.time for m in self.movements]
         elif name == 'velocities':
             return [m.velocity for m in self.movements]
+        else:
+            raise AttributeError("{0} object has no attribute {1}".format(
+                    self.__class__.__name__, name))

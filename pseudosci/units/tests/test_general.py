@@ -1,62 +1,17 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..units import Distance, Time, Velocity, Acceleration, Unit, Mass, \
-    Force, Area, Volume, KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, \
-    KPHS_MPSS, UG_KG, MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, \
-    ARPENT_M2, HA_M2, L_M3
+from .. import Unit
+from ..general import Distance, Time, Velocity, Acceleration, Mass, \
+    Force, Area, Volume, Energy, ChemicalAmount, KM_M, AU_M, LY_M, MIN_S, \
+    H_S, D_S, KPH_MPS, KPHS_MPSS, G_MPSS, UG_KG, MG_KG, G_KG, T_KG, DYN_N, \
+    KGF_N, LBF_N, PDL_N, ACRE_M2, ARPENT_M2, HA_M2, L_M3, KWH_J, KGM_J, \
+    CAL_J, KCAL_J, EV_J
 import pytest
 
 
-class TestUnit:
-    """Tests de la classe pseudosci.units.Unit"""
-    def test_init(self):
-        """Test du constructeur de la classe."""
-        assert Unit(123.4).value == 123.4
-        assert str(Unit(1)) == "1.0 unit"
-        assert str(Unit(123.4)) == "123.4 units"
-        assert Unit(1).__repr__() == "<Unit 1.0 unit>"
-
-    def test_math(self):
-        """Tests des opérations mathématiques de la classe."""
-        assert abs(Unit(-4)).value == abs(Unit(4)).value == 4.0
-        assert -Unit(-4).value == +Unit(4).value == 4.0
-        assert -Unit(4).value == -4.0
-        assert (Unit(5) + Unit(4)).value == 9.0
-        assert (Unit(5) - Unit(4)).value == 1.0
-        assert (Unit(5) + 4).value == 9.0
-        assert (Unit(5) * 2).value == (2 * Unit(5)).value == 10.0
-        assert (Unit(5) / 2).value == 2.5
-        assert (Unit(5) // 2).value == 2.0
-        assert (Unit(7.5) / Unit(2.5)) == 3.0
-        assert (Unit(7.5) // Unit(2)) == 3.0
-        assert int(Unit(value=23.4)) == 23
-        with pytest.raises(TypeError):
-            Distance(m=4) + Unit(1)
-            Distance(m=4) - Unit(1)
-            Distance(m=4) * Unit(1)
-            Distance(m=4) / Unit(1)
-            Distance(m=4) // Unit(1)
-
-    def test_compare(self):
-        """Tests des opérations de comparaison de la classe."""
-        assert Unit(1) == Unit(1)
-        assert Unit(1) != Unit(2)
-        assert Unit(2) > Unit(1)
-        assert Unit(2) >= Unit(1)
-        assert Unit(1) >= Unit(1)
-        assert Unit(1) < Unit(2)
-        assert Unit(1) <= Unit(2)
-        assert Unit(1) <= Unit(1)
-        with pytest.raises(TypeError):
-            Distance(m=4) > Unit(1)
-            Distance(m=4) >= Unit(1)
-            Distance(m=4) < Unit(1)
-            Distance(m=4) <= Unit(1)
-
-
 class TestDistance:
-    """Tests de la classe pseudosci.units.Distance"""
+    """Tests de la classe pseudosci.units.general.Distance"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -86,10 +41,11 @@ class TestDistance:
         assert (d // Velocity(mps=2)).s == 4
         assert (d * d).m2 == 81
         assert (d * (d * d)).m3 == 729
+        assert (d * Force(n=9)).j == 81
 
 
 class TestTime:
-    """Tests de la classe pseudosci.units.Time"""
+    """Tests de la classe pseudosci.units.general.Time"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -118,7 +74,7 @@ class TestTime:
 
 
 class TestVelocity:
-    """Tests de la classe pseudosci.units.Velocity"""
+    """Tests de la classe pseudosci.units.general.Velocity"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -148,12 +104,13 @@ class TestVelocity:
 
 
 class TestAcceleration:
-    """Tests de la classe pseudosci.units.Acceleration"""
+    """Tests de la classe pseudosci.units.general.Acceleration"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
         assert issubclass(Distance, Unit)
         assert Acceleration(kphs=123.4).mpss == 123.4 * KPHS_MPSS
+        assert Acceleration(g=123.4).mpss == 123.4 * G_MPSS
         with pytest.raises(ValueError):
             Acceleration()
 
@@ -162,6 +119,7 @@ class TestAcceleration:
         a = Acceleration(mpss=KPHS_MPSS)
         assert a.mpss == KPHS_MPSS
         assert a.kphs == 1.0
+        assert a.g == KPHS_MPSS / G_MPSS
         with pytest.raises(AttributeError):
             a.pouet
 
@@ -174,7 +132,7 @@ class TestAcceleration:
 
 
 class TestMass:
-    """Tests de la classe pseudosci.units.Mass"""
+    """Tests de la classe pseudosci.units.general.Mass"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -205,7 +163,7 @@ class TestMass:
 
 
 class TestForce:
-    """Tests de la classe pseudosci.units.Force"""
+    """Tests de la classe pseudosci.units.general.Force"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -234,13 +192,14 @@ class TestForce:
         assert (Force(n=10) // Acceleration(mpss=4)).kg == 2.0
         assert (Force(n=10) / Mass(kg=4)).mpss == 2.5
         assert (Force(n=10) // Mass(kg=4)).mpss == 2.0
+        assert (Force(n=10) * Distance(m=4)).j == 40
         with pytest.raises(TypeError):
             Force(n=10) / Unit(1)
             Force(n=10) // Unit(1)
 
 
 class TestArea:
-    """Tests de la classe pseudosci.units.Area"""
+    """Tests de la classe pseudosci.units.general.Area"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -275,7 +234,7 @@ class TestArea:
 
 
 class TestVolume:
-    """Tests de la classe pseudosci.units.Volume"""
+    """Tests de la classe pseudosci.units.general.Volume"""
 
     def test_init(self):
         """Tests du constructeur de la classe."""
@@ -303,3 +262,53 @@ class TestVolume:
         with pytest.raises(TypeError):
             Volume(m3=1) / Unit(1)
             Volume(m3=1) // Unit(1)
+
+
+class TestEnergy:
+    """Tests de la classe pseudosci.units.general.Energy."""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Energy, Unit)
+        assert Energy(kwh=123.4).j == 123.4 * KWH_J
+        assert Energy(kgm=123.4).j == 123.4 * KGM_J
+        assert Energy(cal=123.4).j == 123.4 * CAL_J
+        assert Energy(kcal=123.4).j == 123.4 * KCAL_J
+        assert Energy(ev=123.4).j == 123.4 * EV_J
+        with pytest.raises(ValueError):
+            Energy()
+
+    def test_attributes(self):
+        """Tests des attributs de la classe."""
+        e = Energy(j=KCAL_J)
+        assert e.j == KCAL_J
+        assert e.kcal == 1.0
+        assert int(e.cal) == 1000
+        assert e.kwh == e.j / KWH_J
+        assert e.kgm == e.j / KGM_J
+        assert e.ev == e.j / EV_J
+        with pytest.raises(AttributeError):
+            e.pouet
+
+    def test_math_class(self):
+        """Tests des opérations mathématiques impliquant d'autres classes."""
+        assert (Energy(j=10) / Force(n=4)).m == 2.5
+        assert (Energy(j=10) / Distance(m=4)).n == 2.5
+        assert (Energy(j=10) // Force(n=4)).m == 2.0
+        assert (Energy(j=10) // Distance(m=4)).n == 2.0
+        with pytest.raises(TypeError):
+            Energy(j=1) / Unit(1)
+            Energy(j=1) // Unit(1)
+
+
+class TestChemicalAmount:
+    """Test de la classe pseudosci.units.general.ChemicalAmount."""
+
+    def test_all(self):
+        """Test de la classe pseudosci.units.general.ChemicalAmount."""
+        assert issubclass(ChemicalAmount, Unit)
+        assert ChemicalAmount(mol=123.4).mol == 123.4
+        with pytest.raises(ValueError):
+            ChemicalAmount()
+        with pytest.raises(AttributeError):
+            ChemicalAmount(mol=123.4).pouet

@@ -5,7 +5,7 @@ le projet. Toutes les constantes sont définies directement à partir des
 unités du système international.
 Source : https://fr.wikipedia.org/wiki/Constante_physique"""
 
-from ..units import Velocity, Acceleration, Mass
+from ..units.general import Velocity, Acceleration, Mass, Distance, Force, Time
 
 LIGHT_VELOCITY = Velocity(mps=299792458)
 EARTH_GRAVITY = Acceleration(mpss=9.80665)
@@ -23,4 +23,4 @@ PLANCK_MASS = Mass(kg=2.176470e-8)
 PLANCK_TIME = Time(s=5.39106e-44)
 PLANCK_LENGTH = Distance(m=1.616229e-35)
 PLANCK_AREA = PLANCK_LENGTH ** 2
-PLANCK_FORCE = Force(N=1.210e44)
+PLANCK_FORCE = Force(n=1.210e44)

@@ -2,7 +2,8 @@
 # -*- coding:utf-8 -*-
 
 from ..movement import Movement, AcceleratedMovement, ComplexMovement
-from ..units import Unit, Distance, Time, Velocity, Acceleration
+from ..units import Unit
+from ..units.general import Distance, Time, Velocity, Acceleration
 import pytest
 
 
@@ -18,11 +19,17 @@ class TestMovement:
         assert m.velocity.mps == 5
         with pytest.raises(TypeError):
             Movement()
+        with pytest.raises(TypeError):
             Movement(distance=Distance(m=10))
+        with pytest.raises(TypeError):
             Movement(time=Time(s=2))
+        with pytest.raises(TypeError):
             Movement(velocity=Velocity(mps=5))
+        with pytest.raises(TypeError):
             Movement(distance=10, time=2)
+        with pytest.raises(TypeError):
             Movement(distance=10, velocity=5)
+        with pytest.raises(TypeError):
             Movement(velocity=5, time=2)
 
     def test_attributes(self):
@@ -66,9 +73,13 @@ class TestMovement:
         assert mdiv.velocity.mps == 2.5
         with pytest.raises(TypeError):
             msum + 42
+        with pytest.raises(TypeError):
             msub - "test"
+        with pytest.raises(TypeError):
             mmul * mrmul
+        with pytest.raises(TypeError):
             mdiv / mfdiv
+        with pytest.raises(TypeError):
             mfdiv // mdiv
 
 
