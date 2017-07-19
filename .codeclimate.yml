@@ -4,7 +4,7 @@ engines:
     enabled: true
     exclude_paths:
       - "**/tests/"
-      - "test_**.py"
+      - "**/test_**.py"
     config:
       languages:
         python:
@@ -17,7 +17,7 @@ engines:
       threshold: "C"
     exclude_paths:
       - "**/tests/"
-      - "test_**.py"
+      - "**/test_**.py"
   pep8:
     enabled: true
   git-legal:

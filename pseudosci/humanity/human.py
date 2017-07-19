@@ -47,6 +47,8 @@ class Human(object):
         for nutrient in set(stuff).intersection(set(rdi)):
             pct = stuff[nutrient] / rdi[nutrient]
             if pct <= lower:
-                print(data[nutrient][0], '(', nutrient, stuff[nutrient], ')')
+                print("{0} ({1} {2})".format(
+                    data[nutrient][0], nutrient, stuff[nutrient]))
             elif pct >= upper:
-                print(data[nutrient][1], '(', nutrient, stuff[nutrient], ')')
+                print("{0} ({1} {2})".format(
+                    data[nutrient][1], nutrient, stuff[nutrient]))

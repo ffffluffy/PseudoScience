@@ -7,6 +7,8 @@ from ..movement import Movement
 from ..relativity import contraction_factor, lorentz_factor, time_dilation, \
     length_contraction, RelativistMovement
 
+import pytest
+
 
 class TestRelativity:
     """Tests du module pseudosci.relativity"""
