@@ -21,12 +21,25 @@ class UnitTwo(Unit):
 
 class TestUnit:
     """Tests de la classe pseudosci.units.Unit"""
+
     def test_init(self):
         """Test du constructeur de la classe."""
         assert UnitOne(value=123.4).value == 123.4
         assert str(UnitOne(value=1)) == "1.0 unit"
         assert str(UnitOne(value=123.4)) == "123.4 units"
         assert UnitOne(value=1).__repr__() == "<UnitOne 1.0 unit>"
+
+    def test_setattr(self):
+        """Test de modification des attributs de la classe."""
+        u = UnitOne(value=123.4)
+        assert u.value == 123.4
+        u.convert["dozens"] = 10.0
+        assert u.dozens == 12.34
+        u.dozens = 133.7
+        assert u.dozens == 133.7
+        assert u.value == 1337.0
+        u.value = 12.0
+        assert u.value == 12.0
 
     def test_math(self):
         """Tests des opérations mathématiques de la classe."""

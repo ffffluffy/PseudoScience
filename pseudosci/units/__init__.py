@@ -62,6 +62,13 @@ class UnitBase(type):
                 raise AttributeError("{0} object has no attribute {1}".format(
                     self.__class__.__name__, name))
 
+        def _setattr(self, name, value):
+            try:
+                object.__setattr__(self, 'value',
+                                   self.convertfrom(value, name))
+            except ValueError as v:
+                object.__setattr__(self, name, value)
+
         def _int(self): return int(self.value)
 
         def _float(self): return float(self.value)
@@ -141,12 +148,13 @@ class UnitBase(type):
             'convertto': _convertto, 'convertfrom': _convertfrom,
             'divide': {}, 'multiply': {},
             '__init__': _init, '__str__': _str, '__repr__': _repr,
-            '__getattr__': _getattr, '__int__': _int, '__float__': _float,
-            '__abs__': _abs, '__pos__': _pos, '__neg__': _neg, '__add__': _add,
-            '__radd__': _add, '__sub__': _sub, '__rsub__': _rsub,
-            '__mul__': _mul, '__rmul__': _mul, '__div__': _div,
-            '__truediv__': _div, '__floordiv__': _floordiv, '__pow__': _pow,
-            '__eq__': _eq, '__ne__': _ne
+            '__getattr__': _getattr, '__setattr__': _setattr, '__int__': _int,
+            '__float__': _float, '__abs__': _abs, '__pos__': _pos,
+            '__neg__': _neg, '__add__': _add, '__radd__': _add,
+            '__sub__': _sub, '__rsub__': _rsub, '__mul__': _mul,
+            '__rmul__': _mul, '__div__': _div, '__truediv__': _div,
+            '__floordiv__': _floordiv, '__pow__': _pow, '__eq__': _eq,
+            '__ne__': _ne
         }
 
         for k, v in defaultattrs.items():
