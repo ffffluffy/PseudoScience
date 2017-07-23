@@ -19,10 +19,16 @@ class TestMisc:
 
     def test_prefix(self):
         """Test du préfixage des unités."""
-        assert prefix(Unit(value=1)) == "1.0 unit"
-        assert prefix(Unit(value=1000)) == "1.0 kilounit"
-        assert prefix(Unit(value=2000),
+
+        class DummyUnit(Unit):
+            """Unité de test."""
+            fullname = "unit"
+            pluralname = "units"
+
+        assert prefix(DummyUnit(value=1)) == "1.0 unit"
+        assert prefix(DummyUnit(value=1000)) == "1.0 kilounit"
+        assert prefix(DummyUnit(value=2000),
                       {"big ": 100, "small ": 10}) == "20.0 big units"
-        assert prefix(Unit(value=1000), {}) == "1000.0 units"
+        assert prefix(DummyUnit(value=1000), {}) == "1000.0 units"
         with pytest.raises(ValueError):
             prefix(200)

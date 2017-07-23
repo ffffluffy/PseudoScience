@@ -15,12 +15,9 @@ class LightIntensity(Unit):
     international est la candela (cd).
     Utilisez le paramètre `cd=` pour instancier la classe."""
 
-    def __init__(self, **kwargs):
-        (name, value), = kwargs.items()
-        self.fullname = "candela"
-        self.pluralname = "candelas"
-        self.attributes = {'cd': 1}
-        Unit.__init__(self, self.convertfrom(float(value), str(name)))
+    fullname = "candela"
+    pluralname = "candelas"
+    convert = {'cd': 1}
 
 
 class LightFlow(Unit):
@@ -28,29 +25,10 @@ class LightFlow(Unit):
     international est le lumen (lm).
     Utilisez le paramètre `lm=` pour instancier la classe."""
 
-    def __init__(self, **kwargs):
-        (name, value), = kwargs.items()
-        self.fullname = "lumen"
-        self.pluralname = "lumens"
-        self.attributes = {'lm': 1}
-        Unit.__init__(self, self.convertfrom(float(value), str(name)))
-
-    def __truediv__(self, other):
-        if isinstance(other, Illuminance):
-            return Area(m2=self.lm / other.lx)
-        elif isinstance(other, Area):
-            return Illuminance(lx=self.lm / other.m2)
-        else:
-            return Unit.__truediv__(self, other)
-    __div__ = __truediv__
-
-    def __floordiv__(self, other):
-        if isinstance(other, Illuminance):
-            return Area(m2=self.lm // other.lx)
-        elif isinstance(other, Area):
-            return Illuminance(lx=self.lm // other.m2)
-        else:
-            return Unit.__floordiv__(self, other)
+    fullname = "lumen"
+    pluralname = "lumens"
+    convert = {'lm': 1}
+    divide = {'Illuminance': 'Area', 'Area': 'Illuminance'}
 
 
 class Illuminance(Unit):
@@ -61,15 +39,6 @@ class Illuminance(Unit):
     `phot=` pour des phots ;
     `nox=` pour des nox."""
 
-    def __init__(self, **kwargs):
-        (name, value), = kwargs.items()
-        self.fullname = self.pluralname = "lux"
-        self.attributes = {'lx': 1, 'lux': 1, 'phot': PHOT_LX, 'nox': NOX_LX}
-        Unit.__init__(self, self.convertfrom(float(value), str(name)))
-
-    def __mul__(self, other):
-        if isinstance(other, Area):
-            return LightFlow(lm=self.lx * other.m2)
-        else:
-            return Unit.__mul__(self, other)
-    __rmul__ = __mul__
+    fullname = pluralname = "lux"
+    convert = {'lx': 1, 'lux': 1, 'phot': PHOT_LX, 'nox': NOX_LX}
+    multiply = {'Area': 'LightFlow'}

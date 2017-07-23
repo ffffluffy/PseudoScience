@@ -17,9 +17,6 @@ class MagneticField(Unit):
     `gamma` pour des gammas ;
     `g` pour des gauss."""
 
-    def __init__(self, **kwargs):
-        (name, value), = kwargs.items()
-        self.fullname = "tesla"
-        self.pluralname = "teslas"
-        self.attributes = {'t': 1, 'gamma': GAMMA_T, 'g': G_T}
-        Unit.__init__(self, self.convertfrom(float(value), str(name)))
+    fullname = "tesla"
+    pluralname = "teslas"
+    convert = {'t': 1, 'gamma': GAMMA_T, 'g': G_T}
