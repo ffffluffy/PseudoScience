@@ -4,128 +4,160 @@
 l'unité du système international."""
 
 
-class Unit(object):
-    """Décrit une unité de mesure."""
+class UnitBase(type):
+    units = {}
 
-    def __init__(self, value=0, fullname="unit", pluralname="units",
-                 attributes=None):
-        self.value = float(value)
-        if not hasattr(self, 'fullname'):
-            self.fullname = fullname
-        if not hasattr(self, 'pluralname'):
-            self.pluralname = pluralname
-        if not hasattr(self, 'attributes'):
-            self.attributes = attributes if attributes is not None else \
-                {'unit': 1, 'u': 1, 'units': 1}
+    def __new__(cls, name, bases, attrs):
+        if name != "Unit" and \
+                not all(k in attrs for k in ("fullname", "pluralname")):
+            raise AttributeError(
+                "Required attributes are missing for this Unit")
 
-    def __str__(self):
-        return '{0} {1}'.format(str(self.value), self.fullname
-                                if self.value == 1 else self.pluralname)
+        def _convertfrom(self, value, source):
+            """Convertir une mesure d'une unité dans une unité source vers
+            l'unité de mesure standard. `value` désigne la valeur à convertir
+            et `source` est une chaîne de caractères représentant l'unité,
+            appartenant à l'attribut `convert` de l'unité."""
+            if source.lower() == 'value':
+                return value
+            for (name, conv) in self.convert.items():
+                if source.lower() == name.lower():
+                    if isinstance(conv, (int, float)):
+                        return value * conv
+                    elif callable(conv[0]):
+                        return conv[0](value)
+            raise ValueError("Cannot convert {0} {1} to {2}".format(
+                    value, source, self.pluralname))
 
-    def __repr__(self):
-        return '<{0} {1}>'.format(type(self).__name__, self)
+        def _convertto(self, dest):
+            """Convertir l'unité de mesure standard en une autre unité.
+            `value` désigne la valeur à convertir et `dest` est une chaîne de
+            caractères représentant l'unité souhaitées, présent parmi les clés
+            du dictionnaire `convert` de l'instance."""
+            if dest.lower() == 'value':
+                return value
+            for (name, conv) in self.convert.items():
+                if dest.lower() == name.lower():
+                    if isinstance(conv, (int, float)):
+                        return self.value / conv
+                    elif type(conv) is tuple and len(conv) == 2 \
+                            and callable(conv[1]):
+                        return conv[1](self.value)
+            raise ValueError("Cannot convert {0} to {1}".format(self, dest))
 
-    def __getattr__(self, name):
-        try:
-            return self.convertto(name)
-        except ValueError as v:
-            raise AttributeError("{0} object has no attribute {1}".format(
+        def _init(self, **kwargs):
+            (name, value), = kwargs.items()
+            self.value = self.convertfrom(float(value), str(name))
+
+        def _str(self): return '{0} {1}'.format(
+            str(self.value), self.fullname
+            if self.value == 1 else self.pluralname)
+
+        def _repr(self): return '<{0} {1}>'.format(type(self).__name__, self)
+
+        def _getattr(self, name):
+            try:
+                return self.convertto(name)
+            except ValueError as v:
+                raise AttributeError("{0} object has no attribute {1}".format(
                     self.__class__.__name__, name))
 
-    def convertfrom(self, value, source):
-        """Convertir une mesure d'une unité dans une unité source vers l'unité
-        de mesure standard. `value` désigne la valeur à convertir et `source`
-        est une chaîne de caractères représentant l'unité, appartenant à
-        l'attribut `attributes` de l'unité."""
-        if source.lower() == 'value':
-            return value
-        for (name, conv) in self.attributes.items():
-            if source.lower() == name.lower():
-                if isinstance(conv, (int, float)):
-                    return value * conv
-                elif type(conv) is tuple and len(conv) == 2 \
-                        and callable(conv[0]):
-                    return conv[0](value)
-        raise ValueError("Cannot convert {0} {1} to {2}".format(
-            value, source, self.pluralname))
+        def _int(self): return int(self.value)
 
-    def convertto(self, dest):
-        """Convertir l'unité de mesure standard en une autre unité.
-        `value` désigne la valeur à convertir et `dest` est une chaîne de
-        caractères représentant l'unité souhaitées, présent parmi les clés du
-        dictionnaire `attributes` de l'instance."""
-        if dest.lower() == 'value':
-            return value
-        for (name, conv) in self.attributes.items():
-            if dest.lower() == name.lower():
-                if isinstance(conv, (int, float)):
-                    return self.value / conv
-                elif type(conv) is tuple and len(conv) == 2 \
-                        and callable(conv[1]):
-                    return conv[1](self.value)
-        raise ValueError("Cannot convert {0} to {1}".format(self, dest))
+        def _float(self): return float(self.value)
 
-    def __int__(self):
-        return int(self.value)
+        def _abs(self): return type(self)(value=abs(self.value))
 
-    def __float__(self):
-        return float(self.value)
+        def _pos(self): return type(self)(value=+self.value)
 
-    def __abs__(self):
-        return type(self)(value=abs(self.value))
+        def _neg(self): return type(self)(value=-self.value)
 
-    def __pos__(self):
-        return type(self)(value=+self.value)
+        def _add(self, other):
+            if isinstance(other, type(self)):
+                return type(self)(value=self.value + other.value)
+            elif isinstance(other, (int, float)):
+                return type(self)(value=self.value + other)
+            return NotImplemented
 
-    def __neg__(self):
-        return type(self)(value=-self.value)
+        def _sub(self, other):
+            if isinstance(other, type(self)):
+                return type(self)(value=self.value - other.value)
+            elif isinstance(other, (int, float)):
+                return type(self)(value=self.value - other)
+            return NotImplemented
 
-    def __add__(self, other):
-        if isinstance(other, (int, float)):
-            return type(self)(value=self.value + other)
-        elif type(self) is type(other):
-            return type(self)(value=self.value + other.value)
-        return NotImplemented
-    __radd__ = __add__
+        def _rsub(self, other):
+            if isinstance(other, type(self)):
+                return type(self)(value=other.value - self.value)
+            elif isinstance(other, (int, float)):
+                return type(self)(value=other - self.value)
+            return NotImplemented
 
-    def __sub__(self, other):
-        if isinstance(other, (int, float)):
-            return type(self)(value=self.value - other)
-        elif type(self) is type(other):
-            return type(self)(value=self.value - other.value)
-        return NotImplemented
-    __rsub__ = __sub__
+        def _mul(self, other):
+            if isinstance(other, (int, float)):
+                return type(self)(value=self.value * other)
+            elif isinstance(other, Unit) and \
+                    other.__class__.__name__ in self.multiply:
+                return UnitBase.units[self.multiply[other.__class__.__name__]](
+                    value=self.value * other.value)
+            return NotImplemented
 
-    def __mul__(self, other):
-        if isinstance(other, (int, float)):
-            return type(self)(value=self.value * other)
-        return NotImplemented
-    __rmul__ = __mul__
+        def _div(self, other):
+            if isinstance(other, type(self)):
+                return self.value / other.value
+            elif isinstance(other, (int, float)):
+                return type(self)(value=self.value / other)
+            elif isinstance(other, Unit) and \
+                    other.__class__.__name__ in self.divide:
+                return UnitBase.units[self.divide[other.__class__.__name__]](
+                    value=self.value / other.value)
+            return NotImplemented
 
-    def __truediv__(self, other):
-        if isinstance(other, (int, float)):
-            return type(self)(value=self.value / other)
-        elif type(self) is type(other):
-            return (self.value / other.value)
-        return NotImplemented
-    __div__ = __truediv__
+        def _floordiv(self, other):
+            if isinstance(other, type(self)):
+                return self.value // other.value
+            elif isinstance(other, (int, float)):
+                return type(self)(value=self.value // other)
+            elif isinstance(other, Unit) and \
+                    other.__class__.__name__ in self.divide:
+                return UnitBase.units[self.divide[other.__class__.__name__]](
+                    value=self.value // other.value)
+            return NotImplemented
 
-    def __floordiv__(self, other):
-        if isinstance(other, (int, float)):
-            return type(self)(value=self.value // other)
-        elif type(self) is type(other):
-            return (self.value // other.value)
-        return NotImplemented
+        def _pow(self, other):
+            if isinstance(other, (int, float)):
+                return type(self)(value=self.value ** other)
+            return NotImplemented
 
-    def __pow__(self, other):
-        if isinstance(other, (int, float)):
-            return type(self)(value=self.value ** other)
-        return NotImplemented
+        def _eq(self, other):
+            if type(self) is type(other):
+                return self.value == other.value
+            return NotImplemented
 
-    def __eq__(self, other):
-        if type(self) is type(other):
-            return self.value == other.value
-        return NotImplemented
+        def _ne(self, other): return not self == other
 
-    def __ne__(self, other):
-        return not self == other
+        defaultattrs = {
+            'convert': {'unit': 1, 'u': 1, 'units': 1}, 'value': 0.0,
+            'convertto': _convertto, 'convertfrom': _convertfrom,
+            'divide': {}, 'multiply': {},
+            '__init__': _init, '__str__': _str, '__repr__': _repr,
+            '__getattr__': _getattr, '__int__': _int, '__float__': _float,
+            '__abs__': _abs, '__pos__': _pos, '__neg__': _neg, '__add__': _add,
+            '__radd__': _add, '__sub__': _sub, '__rsub__': _rsub,
+            '__mul__': _mul, '__rmul__': _mul, '__div__': _div,
+            '__truediv__': _div, '__floordiv__': _floordiv, '__pow__': _pow,
+            '__eq__': _eq, '__ne__': _ne
+        }
+
+        for k, v in defaultattrs.items():
+            if k not in attrs:
+                attrs[k] = v
+        return type.__new__(cls, name, bases, attrs)
+
+    def __init__(cls, name, bases, attrs):
+        if name != "Unit":  # Subclass of Unit
+            UnitBase.units[cls.__name__] = cls
+
+
+class Unit(object):
+    __metaclass__ = UnitBase
