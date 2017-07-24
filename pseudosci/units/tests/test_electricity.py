@@ -4,7 +4,8 @@
 from .. import Unit
 from ..electricity import Voltage, STATV_V, ABV_V, Current, MA_A, ABA_A, \
     STATA_A, Capacity, UF_F, ABF_F, STATF_F, JAR_F, Resistance, KOHM_OHM, \
-    ABOHM_OHM, STATOHM_OHM, Conductance, MagneticField, GAMMA_T, G_T
+    ABOHM_OHM, STATOHM_OHM, Charge, ABC_C, STATC_C, AH_C, MAH_C, Conductance, \
+    MagneticField, GAMMA_T, G_T
 import pytest
 
 
@@ -83,6 +84,21 @@ class TestResistance:
         assert r.kohm == 1e-12
         assert r.abohm == 1.0
         assert r.statohm == 1e-9 / STATOHM_OHM
+
+
+class TestCharge:
+    """Tests de la classe pseudosci.units.electricity.Charge"""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Charge, Unit)
+        assert Charge(c=123.4).c == 123.4
+        assert Charge(abc=12.34).c == 123.4
+        assert Charge(statc=123.4).c == 123.4 * STATC_C
+        assert Charge(ah=1.5).c == 5400.0
+        assert Charge(mah=1.5e3).c == 5400.0
+        with pytest.raises(ValueError):
+            Charge()
 
 
 class TestConductance:

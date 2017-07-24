@@ -17,6 +17,10 @@ UF_F = 1e-6
 ABF_F = 1e9
 STATF_F = 1/898314833955
 JAR_F = 1111e-12
+ABC_C = 10
+STATC_C = 3.335641e-10
+AH_C = 3600
+MAH_C = AH_C * 1e-3
 GAMMA_T = 1e-9
 G_T = 1e-4
 
@@ -84,6 +88,25 @@ class Resistance(Unit):
     convert = {'ohm': 1, 'kohm': KOHM_OHM, 'abohm': ABOHM_OHM,
                'statohm': STATOHM_OHM}
     multiply = {'Capacity': 'Time', 'Current': 'Voltage'}
+
+
+class Charge(Unit):
+    """Décrit une unité de charge électrique. L'unité correspondante du système
+    international est le coulomb (C).
+    Utilisez l'un des attributs suivants pour instancier la classe :
+    `c` pour des coulombs ;
+    `abc` pour des abcoulombs ;
+    `statc` pour des statcoulombs ;
+    `ah` pour des ampères-heure ;
+    `mah` pour des milliampères-heure."""
+
+    fullname = "coulomb"
+    pluralname = "coulombs"
+    convert = {'c': 1, 'abc': ABC_C, 'statc': STATC_C,
+               'ah': AH_C, 'mah': MAH_C}
+    multiply = {'Voltage': 'Energy'}
+    divide = {'Time': 'Current', 'Current': 'Time',
+              'Voltage': 'Capacity', 'Capacity': 'Voltage'}
 
 
 class Conductance(Unit):
