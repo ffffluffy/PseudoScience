@@ -63,7 +63,9 @@ class Time(Unit):
     fullname = "second"
     pluralname = "seconds"
     convert = {'s': 1, 'm': MIN_S, 'min': MIN_S, 'h': H_S, 'd': D_S}
-    multiply = {'Velocity': 'Distance', 'Acceleration': 'Velocity'}
+    multiply = {'Velocity': 'Distance', 'Acceleration': 'Velocity',
+                'Current': 'Charge'}
+    divide = {'Resistance': 'Capacity', 'Capacity': 'Resistance'}
 
 
 class Velocity(Unit):
@@ -119,7 +121,8 @@ class Force(Unit):
     pluralname = "newtons"
     convert = {'n': 1, 'dyn': DYN_N, 'kgf': KGF_N, 'lbf': LBF_N, 'pdl': PDL_N}
     multiply = {'Distance': 'Energy'}
-    divide = {'Acceleration': 'Mass', 'Mass': 'Acceleration'}
+    divide = {'Acceleration': 'Mass', 'Mass': 'Acceleration',
+              'Pressure': 'Area', 'Area': 'Pressure'}
 
 
 class Area(Unit):
@@ -136,7 +139,8 @@ class Area(Unit):
     pluralname = "square meters"
     convert = {'m2': 1, 'km2': KM_M ** 2, 'acre': ACRE_M2, 'arpent': ARPENT_M2,
                'ha': HA_M2}
-    multiply = {'Distance': 'Volume'}
+    multiply = {'Distance': 'Volume', 'Pressure': 'Force',
+                'Illuminance': 'LightFlow'}
     divide = {'Distance': 'Distance'}
 
 
@@ -169,7 +173,8 @@ class Energy(Unit):
     pluralname = "joules"
     convert = {'j': 1, 'kwh': KWH_J, 'kgm': KGM_J, 'cal': CAL_J,
                'kcal': KCAL_J, 'ev': EV_J}
-    divide = {'Distance': 'Force', 'Force': 'Distance'}
+    divide = {'Distance': 'Force', 'Force': 'Distance',
+              'Voltage': 'Charge', 'Charge': 'Voltage'}
 
 
 class ChemicalAmount(Unit):
