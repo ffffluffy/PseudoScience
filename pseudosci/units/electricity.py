@@ -65,6 +65,16 @@ class Resistance(Unit):
     multiply = {'Capacity': 'Time', 'Current': 'Voltage'}
 
 
+class Conductance(Unit):
+    """Décrit une unité de conductance diélectrique. L'unité correspondante du
+    système international est le siemens (S).
+    Utilisez le paramètre `s` pour instancier la classe."""
+
+    fullname = pluralname = "siemens"
+    convert = {'s': 1}
+    multiply = {'Voltage': 'Current'}
+
+
 class MagneticField(Unit):
     """Décrit un champ magnétique. L'unité correspondante du système
     international est le tesla (T).

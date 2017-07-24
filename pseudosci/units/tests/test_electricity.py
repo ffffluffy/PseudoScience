@@ -2,9 +2,8 @@
 # -*- coding:utf-8 -*-
 
 from .. import Unit
-from ..electricity import Voltage, STATV_V, ABV_V, \
-    Current, MA_A, ABA_A, STATA_A, \
-    Resistance, KOHM_OHM, ABOHM_OHM, STATOHM_OHM, \
+from ..electricity import Voltage, STATV_V, ABV_V, Current, MA_A, ABA_A, \
+    STATA_A, Resistance, KOHM_OHM, ABOHM_OHM, STATOHM_OHM, Conductance, \
     MagneticField, GAMMA_T, G_T
 import pytest
 
@@ -69,6 +68,15 @@ class TestResistance:
         assert r.kohm == 1e-12
         assert r.abohm == 1.0
         assert r.statohm == 1e-9 / STATOHM_OHM
+
+
+class TestConductance:
+    """Tests de la classe pseudosci.units.electricity.Conductance"""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Conductance, Unit)
+        assert Conductance(s=123.4).s == 123.4
 
 
 class TestMagneticField:
