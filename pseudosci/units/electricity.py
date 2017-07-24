@@ -10,6 +10,9 @@ ABV_V = 1e-8
 MA_A = 1e-3
 ABA_A = 10
 STATA_A = 3.336e-10
+KOHM_OHM = 1e3
+ABOHM_OHM = 1e-9
+STATOHM_OHM = 8.987551787e11
 GAMMA_T = 1e-9
 G_T = 1e-4
 
@@ -44,6 +47,22 @@ class Current(Unit):
     convert = {'a': 1, 'ma': MA_A, 'aba': ABA_A, 'bi': ABA_A, 'stata': STATA_A}
     multiply = {'Voltage': 'Power', 'Time': 'Charge'}
     divide = {'Voltage': 'Conductance', 'Conductance': 'Voltage'}
+
+
+class Resistance(Unit):
+    """Décrit une unité de résistance diélectrique. L'unité correspondante du
+    système international est l'ohm (Ω).
+    Utilisez l'un des attributs suivants pour initialiser la classe :
+    `ohm` pour des ohms ;
+    `kohm` pour des kiloohms ;
+    `abohm` pour des abohms ;
+    `statohm` pour des statohms."""
+
+    fullname = "ohm"
+    pluralname = "ohms"
+    convert = {'ohm': 1, 'kohm': KOHM_OHM, 'abohm': ABOHM_OHM,
+               'statohm': STATOHM_OHM}
+    multiply = {'Capacity': 'Time', 'Current': 'Voltage'}
 
 
 class MagneticField(Unit):

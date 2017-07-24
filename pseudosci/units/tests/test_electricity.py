@@ -4,6 +4,7 @@
 from .. import Unit
 from ..electricity import Voltage, STATV_V, ABV_V, \
     Current, MA_A, ABA_A, STATA_A, \
+    Resistance, KOHM_OHM, ABOHM_OHM, STATOHM_OHM, \
     MagneticField, GAMMA_T, G_T
 import pytest
 
@@ -46,6 +47,28 @@ class TestCurrent:
         assert i.ma == 3.336e-7
         assert i.stata == 1.0
         assert i.aba == 3.336e-11
+
+
+class TestResistance:
+    """Tests de la classe pseudosci.units.electricity.Resistance"""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Resistance, Unit)
+        assert Resistance(ohm=123.4).ohm == 123.4
+        assert Resistance(kohm=123.4).ohm == 123400.0
+        assert Resistance(abohm=1e9).ohm == 1.0
+        assert Resistance(statohm=123.4).ohm == 123.4 * STATOHM_OHM
+        with pytest.raises(ValueError):
+            Resistance()
+
+    def test_attributes(self):
+        """Test des attributs de la classe."""
+        r = Resistance(ohm=1e-9)
+        assert r.ohm == 1e-9
+        assert r.kohm == 1e-12
+        assert r.abohm == 1.0
+        assert r.statohm == 1e-9 / STATOHM_OHM
 
 
 class TestMagneticField:
