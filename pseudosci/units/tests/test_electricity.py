@@ -3,8 +3,8 @@
 
 from .. import Unit
 from ..electricity import Voltage, STATV_V, ABV_V, Current, MA_A, ABA_A, \
-    STATA_A, Resistance, KOHM_OHM, ABOHM_OHM, STATOHM_OHM, Conductance, \
-    MagneticField, GAMMA_T, G_T
+    STATA_A, Capacity, UF_F, ABF_F, STATF_F, JAR_F, Resistance, KOHM_OHM, \
+    ABOHM_OHM, STATOHM_OHM, Conductance, MagneticField, GAMMA_T, G_T
 import pytest
 
 
@@ -46,6 +46,21 @@ class TestCurrent:
         assert i.ma == 3.336e-7
         assert i.stata == 1.0
         assert i.aba == 3.336e-11
+
+
+class TestCapacity:
+    """Tests de la classe pseudosci.units.electricity.Capacity"""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Capacity, Unit)
+        assert Capacity(f=123.4).f == 123.4
+        assert round(Capacity(mf=123.4e6).f, 1) == 123.4
+        assert Capacity(abf=123.4e-9).f == 123.4
+        assert Capacity(statf=123.4).f == 123.4 * STATF_F
+        assert Capacity(jar=1e11).f == 111.1
+        with pytest.raises(ValueError):
+            Capacity()
 
 
 class TestResistance:

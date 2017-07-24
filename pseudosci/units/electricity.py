@@ -13,6 +13,10 @@ STATA_A = 3.336e-10
 KOHM_OHM = 1e3
 ABOHM_OHM = 1e-9
 STATOHM_OHM = 8.987551787e11
+UF_F = 1e-6
+ABF_F = 1e9
+STATF_F = 1/898314833955
+JAR_F = 1111e-12
 GAMMA_T = 1e-9
 G_T = 1e-4
 
@@ -47,6 +51,23 @@ class Current(Unit):
     convert = {'a': 1, 'ma': MA_A, 'aba': ABA_A, 'bi': ABA_A, 'stata': STATA_A}
     multiply = {'Voltage': 'Power', 'Time': 'Charge'}
     divide = {'Voltage': 'Conductance', 'Conductance': 'Voltage'}
+
+
+class Capacity(Unit):
+    """Décrit une unité de capacité. L'unité correspondante du système
+    international est le farad (F).
+    Utilisez l'un des attributs suivants pour initialiser la classe :
+    `f` pour des farads ;
+    `mf` pour des microfarads ;
+    `abf` pour des abfarads ;
+    `statf` pour des statfarads ;
+    `jar` pour des jars."""
+
+    fullname = "farad"
+    pluralname = "farads"
+    convert = {'f': 1, 'mf': UF_F, 'abf': ABF_F, 'statf': STATF_F,
+               'jar': JAR_F}
+    multiply = {'Voltage': 'Charge', 'Resistance': 'Time'}
 
 
 class Resistance(Unit):
