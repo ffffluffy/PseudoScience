@@ -3,6 +3,7 @@
 
 from .. import Unit
 from ..electricity import Voltage, STATV_V, ABV_V, \
+    Current, MA_A, ABA_A, STATA_A, \
     MagneticField, GAMMA_T, G_T
 import pytest
 
@@ -24,6 +25,27 @@ class TestVoltage:
         assert u.v == 299.792458
         assert u.statv == 1.0
         assert u.abv == 29979245800.0
+
+
+class TestCurrent:
+    """Tests de la classe pseudosci.units.electricity.Current"""
+
+    def test_init(self):
+        """Tests du constructeur de la classe."""
+        assert issubclass(Current, Unit)
+        assert Current(stata=123.4).a == 123.4 * STATA_A
+        assert Current(aba=0.1).a == 1.0
+        assert Current(ma=1000).a == 1.0
+        with pytest.raises(ValueError):
+            Current()
+
+    def test_attributes(self):
+        """Test des attributs de la classe."""
+        i = Current(a=3.336e-10)
+        assert i.a == 3.336e-10
+        assert i.ma == 3.336e-7
+        assert i.stata == 1.0
+        assert i.aba == 3.336e-11
 
 
 class TestMagneticField:
