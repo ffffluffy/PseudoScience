@@ -5,6 +5,7 @@ l'unité du système international."""
 
 
 class UnitBase(type):
+    """Métaclasse servant à la création d'unités."""
     units = {}
 
     def __new__(cls, name, bases, attrs):
@@ -168,4 +169,5 @@ class UnitBase(type):
 
 
 class Unit(object):
+    """Classe abstraite d'unité de base."""
     __metaclass__ = UnitBase
