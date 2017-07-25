@@ -77,7 +77,8 @@ class Velocity(Unit):
     pluralname = "meters per second"
     convert = {'mps': 1, 'kph': KPH_MPS}
     multiply = {'Time': 'Distance'}
-    divide = {'Time': 'Acceleration', 'Acceleration': 'Time'}
+    divide = {'Time': 'Acceleration', 'Acceleration': 'Time',
+              'Frequency': 'Distance'}
 
 
 class Acceleration(Unit):
@@ -89,6 +90,7 @@ class Acceleration(Unit):
     pluralname = "meters per second squared"
     convert = {'mpss': 1, 'kphs': KPHS_MPSS, 'g': G_MPSS}
     multiply = {'Time': 'Velocity', 'Mass': 'Force'}
+    divide = {'Frequency': 'Velocity'}
 
 
 class Mass(Unit):
@@ -185,3 +187,14 @@ class ChemicalAmount(Unit):
     fullname = "mole"
     pluralname = "moles"
     convert = {'mol': 1}
+
+
+class Frequency(Unit):
+    """Décrit une fréquence. L'unité correspondante du système international
+    est le hertz (Hz).
+    Utilisez le paramètres `hz` pour initialiser la classe."""
+
+    fullname = pluralname = "hertz"
+    convert = {'hz': 1}
+    multiply = {'Distance': 'Velocity', 'Velocity': 'Acceleration',
+                'Energy': 'Power'}

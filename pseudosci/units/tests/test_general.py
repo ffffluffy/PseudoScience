@@ -3,10 +3,10 @@
 
 from .. import Unit
 from ..general import Distance, Time, Velocity, Acceleration, Mass, \
-    Force, Area, Volume, Energy, ChemicalAmount, KM_M, AU_M, LY_M, MIN_S, \
-    H_S, D_S, KPH_MPS, KPHS_MPSS, G_MPSS, UG_KG, MG_KG, G_KG, T_KG, DYN_N, \
-    KGF_N, LBF_N, PDL_N, ACRE_M2, ARPENT_M2, HA_M2, L_M3, KWH_J, KGM_J, \
-    CAL_J, KCAL_J, EV_J
+    Force, Area, Volume, Energy, ChemicalAmount, Frequency, KM_M, AU_M, LY_M, \
+    MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, G_MPSS, UG_KG, MG_KG, G_KG, T_KG, \
+    DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, ARPENT_M2, HA_M2, L_M3, KWH_J, \
+    KGM_J, CAL_J, KCAL_J, EV_J
 import pytest
 
 
@@ -101,3 +101,10 @@ class TestUnitsGeneral:
         assert ChemicalAmount(mol=123.4).mol == 123.4
         with pytest.raises(ValueError):
             ChemicalAmount()
+
+    def test_frequency(self):
+        """Tests de Frequency."""
+        assert issubclass(Frequency, Unit)
+        assert Frequency(hz=123.4).hz == 123.4
+        with pytest.raises(ValueError):
+            Frequency()
