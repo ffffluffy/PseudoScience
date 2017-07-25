@@ -3,10 +3,10 @@
 
 from .. import Unit
 from ..general import Distance, Time, Velocity, Acceleration, Mass, \
-    Force, Area, Volume, Energy, ChemicalAmount, Frequency, KM_M, AU_M, LY_M, \
-    MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, G_MPSS, UG_KG, MG_KG, G_KG, T_KG, \
-    DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, ARPENT_M2, HA_M2, L_M3, KWH_J, \
-    KGM_J, CAL_J, KCAL_J, EV_J
+    Force, Area, Volume, Energy, ChemicalAmount, Frequency, Power, \
+    KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, G_MPSS, UG_KG, \
+    MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, ARPENT_M2, HA_M2, \
+    L_M3, KWH_J, KGM_J, CAL_J, KCAL_J, EV_J, CH_W, HP_W
 import pytest
 
 
@@ -108,3 +108,11 @@ class TestUnitsGeneral:
         assert Frequency(hz=123.4).hz == 123.4
         with pytest.raises(ValueError):
             Frequency()
+
+    def test_power(self):
+        """Tests de Power."""
+        assert issubclass(Power, Unit)
+        assert Power(ch=123.4).w == 123.4 * CH_W
+        assert Power(hp=123.4).w == 123.4 * HP_W
+        with pytest.raises(ValueError):
+            Power()

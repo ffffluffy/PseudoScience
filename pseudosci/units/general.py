@@ -33,6 +33,8 @@ KGM_J = 9.80665
 CAL_J = 4.1868
 KCAL_J = 4.1868e3
 EV_J = 1.602176565e-19
+CH_W = 735.49875
+HP_W = 745.699872
 
 
 class Distance(Unit):
@@ -198,3 +200,19 @@ class Frequency(Unit):
     convert = {'hz': 1}
     multiply = {'Distance': 'Velocity', 'Velocity': 'Acceleration',
                 'Energy': 'Power'}
+
+
+class Power(Unit):
+    """Décrit une puissance. L'unité correspondante du système international
+    est le watt (W).
+    Utilisez l'un des paramètres suivants pour instancier la classe :
+    `w=` pour des watts ;
+    `ch=` pour des chevaux-vapeur français ;
+    `hp=` pour des chevaux-vapeur anglais."""
+
+    fullname = "watt"
+    pluralname = "watts"
+    convert = {'w': 1, 'ch': CH_W, 'hp': HP_W}
+    multiply = {'Time': 'Energy'}
+    divide = {'Frequency': 'Energy',
+              'Voltage': 'Current', 'Current': 'Voltage'}
