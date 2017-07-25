@@ -9,30 +9,19 @@ from ..electricity import Voltage, STATV_V, ABV_V, Current, MA_A, ABA_A, \
 import pytest
 
 
-class TestVoltage:
-    """Tests de la classe pseudosci.units.electricity.Voltage"""
+class TestUnitsElectricity:
+    """Tests des unités de pseudosci.units.electricity."""
 
-    def test_init(self):
-        """Tests du constructeur de la classe."""
+    def test_voltage(self):
+        """Tests de Voltage."""
         assert issubclass(Voltage, Unit)
         assert Voltage(statv=123.4).v == 123.4 * STATV_V
         assert Voltage(abv=1e8).v == 1.0
         with pytest.raises(ValueError):
             Voltage()
 
-    def test_attributes(self):
-        """Test des attributs de la classe."""
-        u = Voltage(v=299.792458)
-        assert u.v == 299.792458
-        assert u.statv == 1.0
-        assert u.abv == 29979245800.0
-
-
-class TestCurrent:
-    """Tests de la classe pseudosci.units.electricity.Current"""
-
-    def test_init(self):
-        """Tests du constructeur de la classe."""
+    def test_current(self):
+        """Tests de Current."""
         assert issubclass(Current, Unit)
         assert Current(stata=123.4).a == 123.4 * STATA_A
         assert Current(aba=0.1).a == 1.0
@@ -40,20 +29,8 @@ class TestCurrent:
         with pytest.raises(ValueError):
             Current()
 
-    def test_attributes(self):
-        """Test des attributs de la classe."""
-        i = Current(a=3.336e-10)
-        assert i.a == 3.336e-10
-        assert i.ma == 3.336e-7
-        assert i.stata == 1.0
-        assert i.aba == 3.336e-11
-
-
-class TestCapacity:
-    """Tests de la classe pseudosci.units.electricity.Capacity"""
-
-    def test_init(self):
-        """Tests du constructeur de la classe."""
+    def test_capacity(self):
+        """Tests de Capacity."""
         assert issubclass(Capacity, Unit)
         assert Capacity(f=123.4).f == 123.4
         assert round(Capacity(mf=123.4e6).f, 1) == 123.4
@@ -63,12 +40,8 @@ class TestCapacity:
         with pytest.raises(ValueError):
             Capacity()
 
-
-class TestResistance:
-    """Tests de la classe pseudosci.units.electricity.Resistance"""
-
-    def test_init(self):
-        """Tests du constructeur de la classe."""
+    def test_resistance(self):
+        """Tests de Resistance."""
         assert issubclass(Resistance, Unit)
         assert Resistance(ohm=123.4).ohm == 123.4
         assert Resistance(kohm=123.4).ohm == 123400.0
@@ -77,20 +50,8 @@ class TestResistance:
         with pytest.raises(ValueError):
             Resistance()
 
-    def test_attributes(self):
-        """Test des attributs de la classe."""
-        r = Resistance(ohm=1e-9)
-        assert r.ohm == 1e-9
-        assert r.kohm == 1e-12
-        assert r.abohm == 1.0
-        assert r.statohm == 1e-9 / STATOHM_OHM
-
-
-class TestCharge:
-    """Tests de la classe pseudosci.units.electricity.Charge"""
-
-    def test_init(self):
-        """Tests du constructeur de la classe."""
+    def test_charge(self):
+        """Tests de Charge."""
         assert issubclass(Charge, Unit)
         assert Charge(c=123.4).c == 123.4
         assert Charge(abc=12.34).c == 123.4
@@ -100,32 +61,15 @@ class TestCharge:
         with pytest.raises(ValueError):
             Charge()
 
-
-class TestConductance:
-    """Tests de la classe pseudosci.units.electricity.Conductance"""
-
-    def test_init(self):
-        """Tests du constructeur de la classe."""
+    def test_conductance(self):
+        """Tests de Conductance."""
         assert issubclass(Conductance, Unit)
         assert Conductance(s=123.4).s == 123.4
 
-
-class TestMagneticField:
-    """Tests de la classe pseudosci.units.electricity.MagneticField"""
-
-    def test_init(self):
-        """Tests du constructeur de la classe."""
+    def test_magnetic_field(self):
+        """Tests de MagneticField."""
         assert issubclass(MagneticField, Unit)
         assert MagneticField(g=123.4).t == 123.4 * G_T
         assert MagneticField(gamma=123.4).t == 123.4 * GAMMA_T
         with pytest.raises(ValueError):
             MagneticField()
-
-    def test_attributes(self):
-        """Tests des attributs de la classe."""
-        a = MagneticField(t=1)
-        assert a.t == 1.0
-        assert a.g == 1 / G_T
-        assert a.gamma == 1 / GAMMA_T
-        with pytest.raises(AttributeError):
-            MagneticField.pouet
