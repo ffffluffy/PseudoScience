@@ -3,7 +3,7 @@
 
 from .. import Unit
 from ..general import Distance, Time, Velocity, Acceleration, Mass, \
-    Force, Area, Volume, Energy, ChemicalAmount, Frequency, Power, \
+    Force, Area, Volume, Energy, ChemicalAmount, Frequency, Power, Flow, \
     KM_M, AU_M, LY_M, MIN_S, H_S, D_S, KPH_MPS, KPHS_MPSS, G_MPSS, UG_KG, \
     MG_KG, G_KG, T_KG, DYN_N, KGF_N, LBF_N, PDL_N, ACRE_M2, ARPENT_M2, HA_M2, \
     L_M3, KWH_J, KGM_J, CAL_J, KCAL_J, EV_J, CH_W, HP_W
@@ -116,3 +116,16 @@ class TestUnitsGeneral:
         assert Power(hp=123.4).w == 123.4 * HP_W
         with pytest.raises(ValueError):
             Power()
+
+    def test_flow(self):
+        """Tests de Flow."""
+        assert issubclass(Flow, Unit)
+        assert Flow(m3m=1.5).m3s == 90.0
+        assert Flow(m3min=1.5).m3s == 90.0
+        assert Flow(m3h=1.5).m3s == 5400.0
+        assert Flow(ls=1500).m3s == 1.5
+        assert Flow(lm=1500).m3s == 90.0
+        assert Flow(lmin=1500).m3s == 90.0
+        assert Flow(lh=1500).m3s == 5400.0
+        with pytest.raises(ValueError):
+            Flow()

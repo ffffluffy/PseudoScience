@@ -216,3 +216,24 @@ class Power(Unit):
     multiply = {'Time': 'Energy'}
     divide = {'Frequency': 'Energy',
               'Voltage': 'Current', 'Current': 'Voltage'}
+
+
+class Flow(Unit):
+    """Décrit un débit massique. L'unité correspondante du système
+    international est le mètre cube par seconde (m^3.s^-1).
+    Utilisez l'un des paramètres suivants pour instancier la classe :
+    `m3s` pour des mètres cube par seconde ;
+    `m3m` ou `m3min` pour des mètres cube par minute ;
+    `m3h` pour des mètres cube par heure ;
+    `ls` pour des litres par seconde ;
+    `lm` ou `lmin` pour des litres par minute ;
+    `lh` pour des litres par heure."""
+
+    fullname = "cubic meter per second"
+    pluralname = "cubic meters per second"
+    convert = {'m3s': 1, 'm3m': MIN_S, 'm3min': MIN_S, 'm3h': H_S,
+               'ls': L_M3, 'lm': MIN_S * L_M3, 'lmin': MIN_S * L_M3,
+               'lh': H_S * L_M3}
+    multiply = {'Time': 'Volume'}
+    divide = {'Frequency': 'Volume', 'Volume': 'Frequency',
+              'Area': 'Velocity', 'Velocity': 'Area'}
