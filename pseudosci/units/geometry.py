@@ -20,9 +20,6 @@ class Angle(Unit):
     `deg` pour des degrés ;
     `gon` pour des grades."""
 
-    def __init__(self, **kwargs):
-        (name, value), = kwargs.items()
-        self.fullname = "radian"
-        self.pluralname = "radians"
-        self.attributes = {'rad': 1, 'deg': DEG_RAD, 'gon': GON_RAD}
-        Unit.__init__(self, self.convertfrom(float(value), str(name)))
+    fullname = "radian"
+    pluralname = "radians"
+    convert = {'rad': 1, 'deg': DEG_RAD, 'gon': GON_RAD}

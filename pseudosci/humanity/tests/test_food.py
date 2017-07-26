@@ -10,11 +10,15 @@ import pytest
 class TestTypedDict:
     """Tests de la classe pseudosci.humanity.food.TypedDict"""
 
-    def test_dict(self):
-        """Test du constructeur de la classe."""
+    def test_typed_dict(self):
+        """Tests de TypedDict."""
         d = TypedDict({'test': 'pouet'}, age=3)
         assert d.test == 'pouet'
         assert d.age == 3
+        d.test = 'toot'
+        assert d.test == 'toot'
+        del d.age
+        assert 'age' not in d
 
 
 class TestNutrientData:

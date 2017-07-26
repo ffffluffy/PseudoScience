@@ -20,6 +20,13 @@ class Temperature(Unit):
     `c` pour des degrés Celsius ;
     `f` pour des degrés Fahrenheit."""
 
+    fullname = "Kelvin degree"
+    pluralname = "Kelvin degrees"
+    convert = {'k': 1,
+               'c': (lambda(c): c + C_K, lambda k: k - C_K),
+               'f': (lambda(f): (5.0 / 9.0) * (f - 32.0) + C_K,
+                     lambda(k): (9.0 / 5.0) * (k - C_K) + 32.0)}
+
     @staticmethod
     def fahrenheit2kelvin(f):
         """Convertir de degrés Fahrenheit en degrés Kelvin."""
@@ -45,26 +52,6 @@ class Temperature(Unit):
         """Convertir de degrés Celsius en degrés Kelvin."""
         return c + C_K
 
-    def __init__(self, **kwargs):
-        (name, value), = kwargs.items()
-        self.fullname = "Kelvin degree"
-        self.pluralname = "Kelvin degrees"
-        self.attributes = {'k': 1,
-                           'c': (self.celsius2kelvin, self.kelvin2celsius),
-                           'f': (self.fahrenheit2kelvin,
-                                 self.kelvin2fahrenheit)}
-        Unit.__init__(self, self.convertfrom(float(value), str(name)))
-
-    def __getattr__(self, name):
-        if name.lower() in ['k', 'kelvin']:
-            return self.value
-        elif name.lower() in ['c', 'celsius']:
-            return self.kelvin2celsius(self.value)
-        elif name.lower() in ['f', 'fahrenheit']:
-            return self.kelvin2fahrenheit(self.value)
-        else:
-            return Unit.__getattr__(self, name)
-
 
 class Pressure(Unit):
     """Décrit une mesure de pression d'un gaz. L'unité correspondante du
@@ -75,17 +62,7 @@ class Pressure(Unit):
     `bar` pour des bars ;
     `atm` pour des atmosphères."""
 
-    def __init__(self, **kwargs):
-        (name, value), = kwargs.items()
-        self.fullname = "pascal"
-        self.pluralname = "pascals"
-        self.attributes = {'pa': 1, 'hpa': HPA_PA,
-                           'bar': BAR_PA, 'atm': ATM_PA}
-        Unit.__init__(self, self.convertfrom(float(value), str(name)))
-
-    def __mul__(self, other):
-        if type(other) is Area:
-            return Force(n=self.pa * other.m2)
-        else:
-            return Unit.__mul__(self, other)
-    __rmul__ = __mul__
+    fullname = "pascal"
+    pluralname = "pascals"
+    convert = {'pa': 1, 'hpa': HPA_PA, 'bar': BAR_PA, 'atm': ATM_PA}
+    multiply = {'Area': 'Force'}
