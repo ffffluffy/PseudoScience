@@ -3,8 +3,8 @@
 """Calculs liés à la théorie de la relativité."""
 
 from math import sqrt
-from data.constants import LIGHT_VELOCITY
-from movement import Movement
+from .data.constants import LIGHT_VELOCITY
+from .movement import Movement
 
 
 def contraction_factor(vel):
