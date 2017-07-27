@@ -14,8 +14,8 @@ class TestMisc:
         lx = list(range(10))
         ly = [2, 4, 6, 8, 6, 5, 4, 5, 6, 8]
         resx, resy = movingavg(lx, ly)
-        assert list(map(round, resx)) == [1, 2, 3, 4, 5, 6, 7, 8]
-        assert list(map(round, resy)) == [4, 6, 7, 6, 5, 5, 5, 6]
+        assert list(map(int, resx)) == [1, 2, 3, 4, 5, 6, 7, 8]
+        assert list(map(int, resy)) == [4, 6, 6, 6, 5, 4, 5, 6]
 
     def test_prefix(self):
         """Test du préfixage des unités."""
