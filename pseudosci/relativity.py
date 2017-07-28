@@ -33,20 +33,38 @@ class RelativistMovement(Movement):
     def __init__(self, movement):
         self.movement = movement
 
-    def __getattr__(self, name):
-        if name == 'properdistance':
-            return self.movement.distance
-        elif name == 'propertime':
-            return self.movement.time
-        elif name == 'velocity':
-            return self.movement.velocity
-        elif name in ['lorentz', 'lorentz_factor']:
-            return lorentz_factor(self.velocity)
-        elif name in ['contraction', 'contraction_factor']:
-            return contraction_factor(self.velocity)
-        elif name == 'distance':
-            return length_contraction(self.properdistance, self.velocity)
-        elif name == 'time':
-            return time_dilation(self.propertime, self.velocity)
-        else:
-            return Movement.__getattr__(self, name)
+    @property
+    def properdistance(self):
+        return self.movement.distance
+
+    @property
+    def propertime(self):
+        return self.movement.time
+
+    @property
+    def velocity(self):
+        return self.movement.velocity
+
+    @property
+    def lorentz(self):
+        return self.lorentz_factor
+
+    @property
+    def lorentz_factor(self):
+        return lorentz_factor(self.velocity)
+
+    @property
+    def contraction(self):
+        return self.contraction_factor
+
+    @property
+    def contraction_factor(self):
+        return contraction_factor(self.velocity)
+
+    @property
+    def distance(self):
+        return length_contraction(self.properdistance, self.velocity)
+
+    @property
+    def time(self):
+        return time_dilation(self.propertime, self.velocity)

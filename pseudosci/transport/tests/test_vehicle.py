@@ -25,32 +25,6 @@ class TestVehicle:
         v = Vehicle(velocity=Velocity(kph=50))
         assert v.accel.mpss == 0
         assert v.brake.mpss == 0
-        with pytest.raises(TypeError):
-            Vehicle()
-        with pytest.raises(TypeError):
-            Vehicle(velocity=1)
-        with pytest.raises(TypeError):
-            Vehicle(velocity=Velocity(kph=50), accel=1)
-        with pytest.raises(TypeError):
-            Vehicle(velocity=Velocity(kph=50),
-                    accel=Acceleration(kphs=20),
-                    brake=1)
-        with pytest.raises(TypeError):
-            Vehicle(velocity=Velocity(kph=50),
-                    mass=1)
-        with pytest.raises(ValueError):
-            Vehicle(velocity=Velocity(mps=0))
-        with pytest.raises(ValueError):
-            Vehicle(velocity=Velocity(mps=-1))
-        with pytest.raises(ValueError):
-            Vehicle(velocity=Velocity(mps=1), accel=Acceleration(mpss=-1))
-        with pytest.raises(ValueError):
-            Vehicle(velocity=Velocity(mps=1),
-                    accel=Acceleration(mpss=0),
-                    brake=Acceleration(mpss=-1))
-        with pytest.raises(ValueError):
-            Vehicle(velocity=Velocity(mps=1),
-                    mass=Mass(kg=-1))
 
     def test_move(self):
         """Test de la méthode `move(distance)`"""
@@ -64,7 +38,7 @@ class TestVehicle:
         assert cm.distance.km == 5
         assert cm.velocity.kph < 50
 
-    def test_attributes(self):
+    def test_vehicle_force(self):
         """Test des attributs de la classe."""
         v = Vehicle(velocity=Velocity(mps=50),
                     accel=Acceleration(mpss=20),

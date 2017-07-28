@@ -17,20 +17,14 @@ class TestMovement:
         assert m.distance.m == 10
         assert m.time.s == 2
         assert m.velocity.mps == 5
-        with pytest.raises(TypeError):
+        with pytest.raises(ValueError):
             Movement()
-        with pytest.raises(TypeError):
+        with pytest.raises(ValueError):
             Movement(distance=Distance(m=10))
-        with pytest.raises(TypeError):
+        with pytest.raises(ValueError):
             Movement(time=Time(s=2))
-        with pytest.raises(TypeError):
+        with pytest.raises(ValueError):
             Movement(velocity=Velocity(mps=5))
-        with pytest.raises(TypeError):
-            Movement(distance=10, time=2)
-        with pytest.raises(TypeError):
-            Movement(distance=10, velocity=5)
-        with pytest.raises(TypeError):
-            Movement(velocity=5, time=2)
 
     def test_attributes(self):
         """Tests des attributs de la classe."""
@@ -93,9 +87,9 @@ class TestAcceleratedMovement:
                                 accel=Acceleration(mpss=1))
         assert a.distance.m == 50
         assert a.time.s == 10
-        assert a.velocity.mps == 10
+        assert a.velocity.mps == 5.0
         assert a.accel.mpss == 1
-        with pytest.raises(TypeError):
+        with pytest.raises(ValueError):
             AcceleratedMovement(accel=0)
 
     def test_attributes(self):
