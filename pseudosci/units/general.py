@@ -68,6 +68,7 @@ class Time(Unit):
     multiply = {'Velocity': 'Distance', 'Acceleration': 'Velocity',
                 'Current': 'Charge'}
     divide = {'Resistance': 'Capacity', 'Capacity': 'Resistance'}
+    inverse = 'Frequency'
 
 
 class Velocity(Unit):
@@ -200,6 +201,7 @@ class Frequency(Unit):
     convert = {'hz': 1}
     multiply = {'Distance': 'Velocity', 'Velocity': 'Acceleration',
                 'Energy': 'Power'}
+    inverse = 'Time'
 
 
 class Power(Unit):
