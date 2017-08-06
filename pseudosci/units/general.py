@@ -66,7 +66,7 @@ class Time(Unit):
     pluralname = "seconds"
     convert = {'s': 1, 'm': MIN_S, 'min': MIN_S, 'h': H_S, 'd': D_S}
     multiply = {'Velocity': 'Distance', 'Acceleration': 'Velocity',
-                'Current': 'Charge'}
+                'Current': 'Charge', 'AngularVelocity': 'Angle'}
     divide = {'Resistance': 'Capacity', 'Capacity': 'Resistance'}
     inverse = 'Frequency'
 
