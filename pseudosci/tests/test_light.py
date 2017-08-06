@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-from ..light import Wave
+from ..light import Wave, ElectromagneticWave, wavelength_to_rgb
+from ..data.constants import LIGHT_VELOCITY
 from ..units.general import Time, Frequency, Distance, Velocity
 from ..units.geometry import Angle, AngularVelocity
 from math import pi
@@ -30,3 +31,23 @@ class TestLight:
         assert wl.wavenumber == wl.angular_wavenumber == \
             wl.angular_repetency == 10 * pi
         assert wf.pulsatance.rads == wf.angular_frequency.rads == 20 * pi
+
+    def test_electromagneticwave(self):
+        """Tests de pseudosci.light.ElectromagneticWave"""
+        assert issubclass(ElectromagneticWave, Wave)
+        ew = ElectromagneticWave(amplitude=42, length=Distance(m=450e-9))
+        assert ew.velocity == LIGHT_VELOCITY
+        # I worked it out in my head.
+        assert ew.photonenergy.j == 4.41432398309724e-19
+        c = ew.color
+        assert c == (ew.red, ew.green, ew.blue)
+
+    def test_wavelength_to_rgb(self):
+        """Tests de pseudosci.light.wavelength_to_rgb()"""
+        assert wavelength_to_rgb(379) == wavelength_to_rgb(751) == (0, 0, 0)
+        assert wavelength_to_rgb(400) == (111, 0, 154)
+        assert wavelength_to_rgb(450) == (0, 70, 255)
+        assert wavelength_to_rgb(500) == (0, 255, 146)
+        assert wavelength_to_rgb(550) == (162, 255, 0)
+        assert wavelength_to_rgb(600) == (0, 190, 0)
+        assert wavelength_to_rgb(700) == (176, 0, 0)
