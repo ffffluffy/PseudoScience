@@ -19,6 +19,7 @@ class TestUnitsGeometry:
             Angle()
 
     def test_angularvelocity(self):
+        """Tests de AngularVelocity."""
         assert issubclass(AngularVelocity, Unit)
         assert AngularVelocity(radmin=1.0).rads == 60.0
         assert AngularVelocity(radh=1.0).rads == 3600.0
