@@ -41,6 +41,7 @@ class Distance(Unit):
     """Décrit une mesure de distance. L'unité correspondante du système
     international est le mètre (m).\n
     Utilisez l'un des paramètres suivants pour initialiser la classe :\n
+    `nm=` pour des nanomètres ;\n
     `m=` pour des mètres ;\n
     `km=` pour des kilomètres ;\n
     `au=` pour des unités astronomiques ;\n
@@ -48,7 +49,7 @@ class Distance(Unit):
 
     fullname = "meter"
     pluralname = "meters"
-    convert = {'m': 1, 'km': KM_M, 'au': AU_M, 'ly': LY_M}
+    convert = {'nm': 1e-9, 'm': 1, 'km': KM_M, 'au': AU_M, 'ly': LY_M}
     multiply = {'Distance': 'Area', 'Area': 'Volume', 'Force': 'Energy'}
     divide = {'Time': 'Velocity', 'Velocity': 'Time'}
 
