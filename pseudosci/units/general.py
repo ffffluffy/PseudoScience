@@ -5,20 +5,14 @@
 from . import Unit
 
 # Constantes de conversion - modifiez-les pour briser les lois de la physique
-KM_M = 1e3
 AU_M = 149597870700
 # modifiez surtout celle-ci - elle implique une autre vitesse de la lumière
 LY_M = 9460730472580800
 MIN_S = 60
-H_S = 3600
-D_S = 86400
+H_S = MIN_S * 60
+D_S = H_S * 24
 KPH_MPS = 1 / 3.6
-KPHS_MPSS = 1 / 3.6
 G_MPSS = 9.80665
-UG_KG = 1e-9
-MG_KG = 1e-6
-G_KG = 1e-3
-T_KG = 1e3
 DYN_N = 1e-5
 KGF_N = 9.80665
 LBF_N = 4.448222
@@ -31,7 +25,6 @@ KWH_J = 3.6e6
 KGM_J = 9.80665
 # Se base sur la définition du Comité International des Poids et Mesures
 CAL_J = 4.1868
-KCAL_J = 4.1868e3
 EV_J = 1.602176565e-19
 CH_W = 735.49875
 HP_W = 745.699872
@@ -41,6 +34,7 @@ class Distance(Unit):
     """Décrit une mesure de distance. L'unité correspondante du système
     international est le mètre (m).\n
     Utilisez l'un des paramètres suivants pour initialiser la classe :\n
+    `nm=` pour des nanomètres ;\n
     `m=` pour des mètres ;\n
     `km=` pour des kilomètres ;\n
     `au=` pour des unités astronomiques ;\n
@@ -48,7 +42,7 @@ class Distance(Unit):
 
     fullname = "meter"
     pluralname = "meters"
-    convert = {'m': 1, 'km': KM_M, 'au': AU_M, 'ly': LY_M}
+    convert = {'nm': 1e-9, 'm': 1, 'km': 1e3, 'au': AU_M, 'ly': LY_M}
     multiply = {'Distance': 'Area', 'Area': 'Volume', 'Force': 'Energy'}
     divide = {'Time': 'Velocity', 'Velocity': 'Time'}
 
@@ -66,8 +60,10 @@ class Time(Unit):
     pluralname = "seconds"
     convert = {'s': 1, 'm': MIN_S, 'min': MIN_S, 'h': H_S, 'd': D_S}
     multiply = {'Velocity': 'Distance', 'Acceleration': 'Velocity',
-                'Current': 'Charge'}
+                'Current': 'Charge', 'AngularVelocity': 'Angle',
+                'Force': 'Momentum'}
     divide = {'Resistance': 'Capacity', 'Capacity': 'Resistance'}
+    inverse = 'Frequency'
 
 
 class Velocity(Unit):
@@ -78,7 +74,7 @@ class Velocity(Unit):
     fullname = "meter per second"
     pluralname = "meters per second"
     convert = {'mps': 1, 'kph': KPH_MPS}
-    multiply = {'Time': 'Distance'}
+    multiply = {'Time': 'Distance', 'Mass': 'Momentum'}
     divide = {'Time': 'Acceleration', 'Acceleration': 'Time',
               'Frequency': 'Distance'}
 
@@ -90,7 +86,7 @@ class Acceleration(Unit):
 
     fullname = "meter per second squared"
     pluralname = "meters per second squared"
-    convert = {'mpss': 1, 'kphs': KPHS_MPSS, 'g': G_MPSS}
+    convert = {'mpss': 1, 'kphs': KPH_MPS, 'g': G_MPSS}
     multiply = {'Time': 'Velocity', 'Mass': 'Force'}
     divide = {'Frequency': 'Velocity'}
 
@@ -107,8 +103,8 @@ class Mass(Unit):
 
     fullname = "kilogram"
     pluralname = "kilograms"
-    convert = {'t': T_KG, 'kg': 1, 'g': G_KG, 'mg': MG_KG, 'ug': UG_KG}
-    multiply = {'Acceleration': 'Force'}
+    convert = {'t': 1e3, 'kg': 1, 'g': 1e-3, 'mg': 1e-6, 'ug': 1e-9}
+    multiply = {'Acceleration': 'Force', 'Velocity': 'Momentum'}
 
 
 class Force(Unit):
@@ -124,9 +120,10 @@ class Force(Unit):
     fullname = "newton"
     pluralname = "newtons"
     convert = {'n': 1, 'dyn': DYN_N, 'kgf': KGF_N, 'lbf': LBF_N, 'pdl': PDL_N}
-    multiply = {'Distance': 'Energy'}
+    multiply = {'Distance': 'Energy', 'Time': 'Momentum'}
     divide = {'Acceleration': 'Mass', 'Mass': 'Acceleration',
-              'Pressure': 'Area', 'Area': 'Pressure'}
+              'Pressure': 'Area', 'Area': 'Pressure',
+              'Frequency': 'Momentum', 'Momentum': 'Frequency'}
 
 
 class Area(Unit):
@@ -141,7 +138,7 @@ class Area(Unit):
 
     fullname = "square meter"
     pluralname = "square meters"
-    convert = {'m2': 1, 'km2': KM_M ** 2, 'acre': ACRE_M2, 'arpent': ARPENT_M2,
+    convert = {'m2': 1, 'km2': 1e-6, 'acre': ACRE_M2, 'arpent': ARPENT_M2,
                'ha': HA_M2}
     multiply = {'Distance': 'Volume', 'Pressure': 'Force',
                 'Illuminance': 'LightFlow'}
@@ -158,7 +155,7 @@ class Volume(Unit):
 
     fullname = "cubic meter"
     pluralname = "cubic meters"
-    convert = {'m3': 1, 'km3': KM_M ** 3, 'l': L_M3}
+    convert = {'m3': 1, 'km3': 1e-9, 'l': L_M3}
     divide = {'Distance': 'Area', 'Area': 'Distance'}
 
 
@@ -176,7 +173,7 @@ class Energy(Unit):
     fullname = "joule"
     pluralname = "joules"
     convert = {'j': 1, 'kwh': KWH_J, 'kgm': KGM_J, 'cal': CAL_J,
-               'kcal': KCAL_J, 'ev': EV_J}
+               'kcal': CAL_J * 1e3, 'ev': EV_J}
     divide = {'Distance': 'Force', 'Force': 'Distance',
               'Voltage': 'Charge', 'Charge': 'Voltage'}
 
@@ -199,7 +196,8 @@ class Frequency(Unit):
     fullname = pluralname = "hertz"
     convert = {'hz': 1}
     multiply = {'Distance': 'Velocity', 'Velocity': 'Acceleration',
-                'Energy': 'Power'}
+                'Energy': 'Power', 'Momentum': 'Force'}
+    inverse = 'Time'
 
 
 class Power(Unit):
@@ -219,7 +217,7 @@ class Power(Unit):
 
 
 class Flow(Unit):
-    """Décrit un débit massique. L'unité correspondante du système
+    """Décrit un débit volumique. L'unité correspondante du système
     international est le mètre cube par seconde (m^3.s^-1).
     Utilisez l'un des paramètres suivants pour instancier la classe :
     `m3s` pour des mètres cube par seconde ;
@@ -237,3 +235,16 @@ class Flow(Unit):
     multiply = {'Time': 'Volume'}
     divide = {'Frequency': 'Volume', 'Volume': 'Frequency',
               'Area': 'Velocity', 'Velocity': 'Area'}
+
+
+class Momentum(Unit):
+    """Décrit une quantité de mouvement. L'unité correspondante du système
+    international est le kilogramme-mètre par seconde (kg.m.s^-1).\n
+    Utilisez `kgmps` pour initialiser la classe."""
+
+    fullname = "kilogram meter per second"
+    pluralname = "kilogram meters per second"
+    convert = {'kgmps': 1}
+    multiply = {'Frequency': 'Force'}
+    divide = {'Mass': 'Velocity', 'Velocity': 'Mass', 'Force': 'Time',
+              'Time': 'Force'}

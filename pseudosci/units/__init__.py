@@ -4,6 +4,9 @@
 l'unité du système international."""
 
 
+from six import with_metaclass
+
+
 class UnitBase(type):
     """Métaclasse servant à la création d'unités."""
     units = {}
@@ -132,6 +135,16 @@ class UnitBase(type):
                     value=self.value // other.value)
             return NotImplemented
 
+        def _rdiv(self, other):
+            if hasattr(self, 'inverse'):
+                return UnitBase.units[self.inverse](value=other / self.value)
+            return NotImplemented
+
+        def _rfloordiv(self, other):
+            if hasattr(self, 'inverse'):
+                return UnitBase.units[self.inverse](value=other // self.value)
+            return NotImplemented
+
         def _pow(self, other):
             if isinstance(other, (int, float)):
                 return type(self)(value=self.value ** other)
@@ -154,8 +167,9 @@ class UnitBase(type):
             '__neg__': _neg, '__add__': _add, '__radd__': _add,
             '__sub__': _sub, '__rsub__': _rsub, '__mul__': _mul,
             '__rmul__': _mul, '__div__': _div, '__truediv__': _div,
-            '__floordiv__': _floordiv, '__pow__': _pow, '__eq__': _eq,
-            '__ne__': _ne
+            '__floordiv__': _floordiv, '__rdiv__': _rdiv,
+            '__rtruediv__': _rdiv, '__rfloordiv__': _rfloordiv,
+            '__pow__': _pow, '__eq__': _eq, '__ne__': _ne
         }
 
         for k, v in defaultattrs.items():
@@ -168,6 +182,6 @@ class UnitBase(type):
             UnitBase.units[cls.__name__] = cls
 
 
-class Unit(object):
+class Unit(with_metaclass(UnitBase)):
     """Classe abstraite d'unité de base."""
     __metaclass__ = UnitBase

@@ -133,21 +133,34 @@ class Line(object):
             return NotImplemented
     __div__ = __truediv__
 
-    def __getattr__(self, name):
-        if name in ['length', 'distance', 'size']:
-            from math import sqrt
-            return sqrt((self.p2.x - self.p1.x) ** 2 +
-                        (self.p2.y - self.p1.y) ** 2)
-        elif name in ['middle', 'midpoint']:
-            return Point(x=(self.p1.x + self.p2.x) / 2,
-                         y=(self.p1.y + self.p2.y) / 2)
-        elif name == 'angle':
-            from math import atan2
-            return Angle(rad=atan2(self.p2.y - self.p1.y,
-                                   self.p2.x - self.p1.x))
-        else:
-            raise AttributeError("{0} object has no attribute {1}".format(
-                    self.__class__.__name__, name))
+    @property
+    def length(self):
+        from math import sqrt
+        return sqrt((self.p2.x - self.p1.x) ** 2 +
+                    (self.p2.y - self.p1.y) ** 2)
+
+    @property
+    def distance(self):
+        return self.length
+
+    @property
+    def size(self):
+        return self.length
+
+    @property
+    def middle(self):
+        return Point(x=(self.p1.x + self.p2.x) / 2,
+                     y=(self.p1.y + self.p2.y) / 2)
+
+    @property
+    def midpoint(self):
+        return self.middle
+
+    @property
+    def angle(self):
+        from math import atan2
+        return Angle(rad=atan2(self.p2.y - self.p1.y,
+                               self.p2.x - self.p1.x))
 
     def __eq__(self, other):
         return type(self) is type(other) and \

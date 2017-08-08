@@ -7,20 +7,16 @@ from . import Unit
 # Constantes de conversion - modifiez-les pour casser EDF
 STATV_V = 299.792458
 ABV_V = 1e-8
-MA_A = 1e-3
 ABA_A = 10
 STATA_A = 3.336e-10
-KOHM_OHM = 1e3
 ABOHM_OHM = 1e-9
 STATOHM_OHM = 8.987551787e11
-UF_F = 1e-6
 ABF_F = 1e9
 STATF_F = 1/898314833955
 JAR_F = 1111e-12
 ABC_C = 10
 STATC_C = 3.335641e-10
 AH_C = 3600
-MAH_C = AH_C * 1e-3
 GAMMA_T = 1e-9
 G_T = 1e-4
 
@@ -52,7 +48,7 @@ class Current(Unit):
 
     fullname = "ampere"
     pluralname = "amperes"
-    convert = {'a': 1, 'ma': MA_A, 'aba': ABA_A, 'bi': ABA_A, 'stata': STATA_A}
+    convert = {'a': 1, 'ma': 1e-3, 'aba': ABA_A, 'bi': ABA_A, 'stata': STATA_A}
     multiply = {'Voltage': 'Power', 'Time': 'Charge'}
     divide = {'Voltage': 'Conductance', 'Conductance': 'Voltage'}
 
@@ -69,7 +65,7 @@ class Capacity(Unit):
 
     fullname = "farad"
     pluralname = "farads"
-    convert = {'f': 1, 'mf': UF_F, 'abf': ABF_F, 'statf': STATF_F,
+    convert = {'f': 1, 'mf': 1e-6, 'abf': ABF_F, 'statf': STATF_F,
                'jar': JAR_F}
     multiply = {'Voltage': 'Charge', 'Resistance': 'Time'}
 
@@ -85,7 +81,7 @@ class Resistance(Unit):
 
     fullname = "ohm"
     pluralname = "ohms"
-    convert = {'ohm': 1, 'kohm': KOHM_OHM, 'abohm': ABOHM_OHM,
+    convert = {'ohm': 1, 'kohm': 1e3, 'abohm': ABOHM_OHM,
                'statohm': STATOHM_OHM}
     multiply = {'Capacity': 'Time', 'Current': 'Voltage'}
 
@@ -103,7 +99,7 @@ class Charge(Unit):
     fullname = "coulomb"
     pluralname = "coulombs"
     convert = {'c': 1, 'abc': ABC_C, 'statc': STATC_C,
-               'ah': AH_C, 'mah': MAH_C}
+               'ah': AH_C, 'mah': AH_C * 1e-3}
     multiply = {'Voltage': 'Energy'}
     divide = {'Time': 'Current', 'Current': 'Time',
               'Voltage': 'Capacity', 'Capacity': 'Voltage'}

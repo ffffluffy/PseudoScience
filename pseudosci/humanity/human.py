@@ -18,12 +18,9 @@ class Human(object):
         self.weight = weight
         self.height = height
 
-    def __getattr__(self, name):
-        if name == 'bmi':
-            return self.weight.kg / (self.height.m ** 2)
-        else:
-            raise AttributeError("{0} object has no attribute {1}".format(
-                    self.__class__.__name__, name))
+    @property
+    def bmi(self):
+        return self.weight.kg / (self.height.m ** 2)
 
     @staticmethod
     def eat(stuff, mass):

@@ -1,6 +1,9 @@
 # PseudoScience required packages
 # This installs all required packages for PseudoScience.
 
+# pseudosci package
+six
+
 # Astropolitain
 skyfield >= 0.9.1
 matplotlib

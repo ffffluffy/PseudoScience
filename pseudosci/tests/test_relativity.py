@@ -50,8 +50,8 @@ class TestRelativity:
         assert rm.velocity == m.velocity
         assert round(rm.contraction_factor, 3) == 0.866
         assert round(rm.lorentz_factor, 3) == 1.155
-        assert round(rm.time, 9) == round(rm.propertime * rm.lorentz, 9)
-        assert round(rm.distance, 9) == \
-            round(rm.properdistance * rm.contraction, 9)
+        assert round(rm.time.s, 9) == round((rm.propertime * rm.lorentz).s, 9)
+        assert round(rm.distance.m, 9) == \
+            round((rm.properdistance * rm.contraction).m, 9)
         with pytest.raises(AttributeError):
             rm.pouet

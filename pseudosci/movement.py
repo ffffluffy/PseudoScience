@@ -12,36 +12,29 @@ class Movement(object):
     suivants sont obligatoires : `distance=`, `velocity=`, `time=`."""
 
     def __init__(self, distance=None, velocity=None, time=None):
-        if not (distance and (velocity or time)) and not (time and velocity):
-            raise TypeError("Des arguments obligatoires sont manquants.\n"
-                            "Utiliser au moins deux des paramètres suivants : "
-                            "`distance=`, `velocity=`, `time=`")
-        if distance and type(distance) is not Distance:
-            raise TypeError("Le paramètre `distance` doit être une instance "
-                            "de pseudosci.units.Distance.")
-        if velocity and type(velocity) is not Velocity:
-            raise TypeError("Le paramètre `velocity` doit être une instance "
-                            "de pseudosci.units.Velocity.")
-        if time and type(time) is not Time:
-            raise TypeError("Le paramètre `time` doit être une instance "
-                            "de pseudosci.units.Time.")
-        if distance:
-            self.distance = distance
-        if velocity:
-            self.velocity = velocity
-        if time:
-            self.time = time
-
-    def __getattr__(self, name):
-        if name == 'velocity':
-            return self.distance / self.time
-        elif name == 'distance':
-            return self.velocity * self.time
-        elif name == 'time':
-            return self.distance / self.velocity
+        self._distance = distance
+        self._velocity = velocity
+        self._time = time
+        if distance and time:
+            self._velocity = distance / time
+        elif distance and velocity:
+            self._time = distance / velocity
+        elif time and velocity:
+            self._distance = time * velocity
         else:
-            raise AttributeError("{0} object has no attribute {1}".format(
-                    self.__class__.__name__, name))
+            raise ValueError("Not enough arguments")
+
+    @property
+    def distance(self):
+        return self._distance
+
+    @property
+    def time(self):
+        return self._time
+
+    @property
+    def velocity(self):
+        return self._velocity
 
     def __repr__(self):
         return '<{0} {1},{2},{3}>'.format(
@@ -93,26 +86,20 @@ class AcceleratedMovement(Movement):
     def __init__(self, distance=None, velocity=None, time=None, accel=None):
         Movement.__init__(self,
                           distance=distance, velocity=velocity, time=time)
-        if accel is not None and type(accel) is not Acceleration:
-                raise TypeError("Le paramètre `accel` doit être une instance"
-                                " de pseudosci.units.Acceleration.")
-        if accel:
-            self.accel = accel
-        elif velocity and time:
-            self.accel = velocity / time
+        self._accel = accel
+        if velocity and time:
+            self._accel = velocity / time
+            self._distance = (self._accel * time * time) / 2
         elif time and distance:
-            self.accel = 2 * distance / time / time
+            self._accel = 2 * distance / time / time
+            self._velocity = self._accel * time
         elif velocity and distance:
-            self.time = 2 * distance / velocity
-            self.accel = velocity / self.time
+            self._time = 2 * distance / velocity
+            self._accel = velocity / self._time
 
-    def __getattr__(self, name):
-        if name == 'velocity':
-            return self.accel * self.time
-        elif name == 'distance':
-            return (self.accel * self.time * self.time) / 2
-        else:
-            return Movement.__getattr__(self, name)
+    @property
+    def accel(self):
+        return self._accel
 
 
 class ComplexMovement(object):

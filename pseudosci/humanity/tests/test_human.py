@@ -59,7 +59,7 @@ class TestHuman:
         }
         Human.consequences(amount, rdi, conseq, lower=0.2, upper=2.0)
         out, err = capsys.readouterr()
-        lines = filter(None, out.split('\n'))
+        lines = list(filter(None, out.split('\n')))
         assert len(lines) == 2
         assert lines.count('Too much TEST2 (TEST2 20.0 kilograms)') == 1
         assert lines.count('Not enough TEST3 (TEST3 10.0 kilograms)') == 1

@@ -23,9 +23,9 @@ class Temperature(Unit):
     fullname = "Kelvin degree"
     pluralname = "Kelvin degrees"
     convert = {'k': 1,
-               'c': (lambda(c): c + C_K, lambda k: k - C_K),
-               'f': (lambda(f): (5.0 / 9.0) * (f - 32.0) + C_K,
-                     lambda(k): (9.0 / 5.0) * (k - C_K) + 32.0)}
+               'c': (lambda c: c + C_K, lambda k: k - C_K),
+               'f': (lambda f: (5.0 / 9.0) * (f - 32.0) + C_K,
+                     lambda k: (9.0 / 5.0) * (k - C_K) + 32.0)}
 
     @staticmethod
     def fahrenheit2kelvin(f):
