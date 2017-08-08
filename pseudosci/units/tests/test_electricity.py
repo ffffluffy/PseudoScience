@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 
 from .. import Unit
-from ..electricity import Voltage, STATV_V, ABV_V, Current, MA_A, ABA_A, \
-    STATA_A, Capacity, UF_F, ABF_F, STATF_F, JAR_F, Resistance, KOHM_OHM, \
-    ABOHM_OHM, STATOHM_OHM, Charge, ABC_C, STATC_C, AH_C, MAH_C, Conductance, \
+from ..electricity import Voltage, STATV_V, ABV_V, Current, ABA_A, \
+    STATA_A, Capacity, ABF_F, STATF_F, JAR_F, Resistance, \
+    ABOHM_OHM, STATOHM_OHM, Charge, ABC_C, STATC_C, AH_C, Conductance, \
     MagneticField, GAMMA_T, G_T
 import pytest
 
