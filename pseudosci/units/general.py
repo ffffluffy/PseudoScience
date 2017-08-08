@@ -67,7 +67,8 @@ class Time(Unit):
     pluralname = "seconds"
     convert = {'s': 1, 'm': MIN_S, 'min': MIN_S, 'h': H_S, 'd': D_S}
     multiply = {'Velocity': 'Distance', 'Acceleration': 'Velocity',
-                'Current': 'Charge', 'AngularVelocity': 'Angle'}
+                'Current': 'Charge', 'AngularVelocity': 'Angle',
+                'Force': 'Momentum'}
     divide = {'Resistance': 'Capacity', 'Capacity': 'Resistance'}
     inverse = 'Frequency'
 
@@ -80,7 +81,7 @@ class Velocity(Unit):
     fullname = "meter per second"
     pluralname = "meters per second"
     convert = {'mps': 1, 'kph': KPH_MPS}
-    multiply = {'Time': 'Distance'}
+    multiply = {'Time': 'Distance', 'Mass': 'Momentum'}
     divide = {'Time': 'Acceleration', 'Acceleration': 'Time',
               'Frequency': 'Distance'}
 
@@ -110,7 +111,7 @@ class Mass(Unit):
     fullname = "kilogram"
     pluralname = "kilograms"
     convert = {'t': T_KG, 'kg': 1, 'g': G_KG, 'mg': MG_KG, 'ug': UG_KG}
-    multiply = {'Acceleration': 'Force'}
+    multiply = {'Acceleration': 'Force', 'Velocity': 'Momentum'}
 
 
 class Force(Unit):
@@ -126,9 +127,10 @@ class Force(Unit):
     fullname = "newton"
     pluralname = "newtons"
     convert = {'n': 1, 'dyn': DYN_N, 'kgf': KGF_N, 'lbf': LBF_N, 'pdl': PDL_N}
-    multiply = {'Distance': 'Energy'}
+    multiply = {'Distance': 'Energy', 'Time': 'Momentum'}
     divide = {'Acceleration': 'Mass', 'Mass': 'Acceleration',
-              'Pressure': 'Area', 'Area': 'Pressure'}
+              'Pressure': 'Area', 'Area': 'Pressure',
+              'Frequency': 'Momentum', 'Momentum': 'Frequency'}
 
 
 class Area(Unit):
@@ -201,7 +203,7 @@ class Frequency(Unit):
     fullname = pluralname = "hertz"
     convert = {'hz': 1}
     multiply = {'Distance': 'Velocity', 'Velocity': 'Acceleration',
-                'Energy': 'Power'}
+                'Energy': 'Power', 'Momentum': 'Force'}
     inverse = 'Time'
 
 
@@ -222,7 +224,7 @@ class Power(Unit):
 
 
 class Flow(Unit):
-    """Décrit un débit massique. L'unité correspondante du système
+    """Décrit un débit volumique. L'unité correspondante du système
     international est le mètre cube par seconde (m^3.s^-1).
     Utilisez l'un des paramètres suivants pour instancier la classe :
     `m3s` pour des mètres cube par seconde ;
@@ -240,3 +242,16 @@ class Flow(Unit):
     multiply = {'Time': 'Volume'}
     divide = {'Frequency': 'Volume', 'Volume': 'Frequency',
               'Area': 'Velocity', 'Velocity': 'Area'}
+
+
+class Momentum(Unit):
+    """Décrit une quantité de mouvement. L'unité correspondante du système
+    international est le kilogramme-mètre par seconde (kg.m.s^-1).\n
+    Utilisez `kgmps` pour initialiser la classe."""
+
+    fullname = "kilogram meter per second"
+    pluralname = "kilogram meters per second"
+    convert = {'kgmps': 1}
+    multiply = {'Frequency': 'Force'}
+    divide = {'Mass': 'Velocity', 'Velocity': 'Mass', 'Force': 'Time',
+              'Time': 'Force'}
