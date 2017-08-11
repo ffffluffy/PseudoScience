@@ -12,7 +12,7 @@ class UnitBase(type):
     units = {}
 
     def __new__(cls, name, bases, attrs):
-        if name != "Unit" and \
+        if name not in ["Unit", "NewBase"] and \
                 not all(k in attrs for k in ("fullname", "pluralname")):
             raise AttributeError(
                 "Required attributes are missing for this Unit")
