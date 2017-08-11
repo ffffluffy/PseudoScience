@@ -18,14 +18,17 @@ class Temperature(Unit):
     Utilisez l'un des paramètres suivants pour instancier la classe :
     `k` pour des degrés Kelvin ;
     `c` pour des degrés Celsius ;
-    `f` pour des degrés Fahrenheit."""
+    `f` pour des degrés Fahrenheit ;
+    `b` pour des degrés Benamran."""
 
     fullname = "Kelvin degree"
     pluralname = "Kelvin degrees"
     convert = {'k': 1,
                'c': (lambda c: c + C_K, lambda k: k - C_K),
                'f': (lambda f: (5.0 / 9.0) * (f - 32.0) + C_K,
-                     lambda k: (9.0 / 5.0) * (k - C_K) + 32.0)}
+                     lambda k: (9.0 / 5.0) * (k - C_K) + 32.0),
+               'b': (lambda b: 187 / 352.5 * (b - 4.2) + C_K,
+                     lambda k: (356.7 - 4.2) / 187 * (k - C_K) + 4.2)}
 
     @staticmethod
     def fahrenheit2kelvin(f):
