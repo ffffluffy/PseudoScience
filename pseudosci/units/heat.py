@@ -27,8 +27,8 @@ class Temperature(Unit):
                'c': (lambda c: c + C_K, lambda k: k - C_K),
                'f': (lambda f: (5.0 / 9.0) * (f - 32.0) + C_K,
                      lambda k: (9.0 / 5.0) * (k - C_K) + 32.0),
-               'b': (lambda b: 187 / 352.5 * (b - 4.2) + C_K,
-                     lambda k: (356.7 - 4.2) / 187 * (k - C_K) + 4.2)}
+               'b': (lambda b: b * (356.7 - 4.2) / 187 + 4.2 + C_K,
+                     lambda k: (k - C_K - 4.2) * 187 / (356.7 - 4.2))}
 
     @staticmethod
     def fahrenheit2kelvin(f):
