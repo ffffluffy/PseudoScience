@@ -38,7 +38,7 @@ class UnitBase(type):
             caractères représentant l'unité souhaitées, présent parmi les clés
             du dictionnaire `convert` de l'instance."""
             if dest.lower() == 'value':
-                return value
+                return self.value
             for (name, conv) in self.convert.items():
                 if dest.lower() == name.lower():
                     if isinstance(conv, (int, float)):

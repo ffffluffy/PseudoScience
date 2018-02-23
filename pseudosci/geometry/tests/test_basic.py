@@ -82,6 +82,8 @@ class TestLine:
         p3 = Point(x=2, y=4)
         assert Line(p1, p2) + Line(p2, p3) == Line(p1, p3)
         assert Line(p1, p2) + Line(p3, p2) == Line(p1, p3)
+        assert Line(p2, p1) + Line(p3, p2) == Line(p1, p3)
+        assert Line(p2, p1) + Line(p2, p3) == Line(p1, p3)
         assert (Line(p1, p2) * 2).length == 4 * sqrt(2)
         assert (Line(p1, p2) / 2).length == sqrt(2)
         with pytest.raises(ValueError):
