@@ -281,7 +281,7 @@ class SurfaceTension(Unit):
 
     fullname = "newton per meter"
     pluralname = "newtons per meter"
-    convert = {'nm': 1, 'lbfin': LBF_N * IN_M}
+    convert = {'nm': 1, 'lbfin': LBF_N / IN_M}
     multiply = {'Distance': 'Force'}
     divide = {}
 
