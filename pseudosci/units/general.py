@@ -289,10 +289,11 @@ class VolumicMass(Unit):
     """Décrit une masse volumique. L'unité correspondante du système
     international est le kilogramme par mètre cube.\n
     Utilisez l'un des paramètres suivants pour instancier la classe :
-    `km3=` pour des kilogrammes par mètre cube."""
+    `km3=` pour des kilogrammes par mètre cube ;\n
+    `gcm3=` pour des grammes par centimètre cube."""
 
     fullname = "kilogram per cubic meter"
     pluralname = "kilograms per cubic meter"
-    convert = {'km3': 1}
+    convert = {'kgm3': 1, 'gcm3': 0.1}
     multiply = {'Volume': 'Mass'}
     divide = {}
