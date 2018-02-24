@@ -143,8 +143,8 @@ class Force(Unit):
     pluralname = "newtons"
     convert = {'n': 1, 'dyn': DYN_N, 'kgf': KGF_N, 'lbf': LBF_N, 'pdl': PDL_N}
     multiply = {'Distance': 'Energy', 'Time': 'Momentum'}
-    divide = {'Acceleration': 'Mass', 'Mass': 'Acceleration',
-              'Pressure': 'Area', 'Area': 'Pressure',
+    divide = {'Acceleration': 'Mass', 'Distance': 'SurfaceTension',
+              'Mass': 'Acceleration', 'Pressure': 'Area', 'Area': 'Pressure',
               'Frequency': 'Momentum', 'Momentum': 'Frequency'}
 
 
@@ -270,3 +270,16 @@ class Momentum(Unit):
     multiply = {'Frequency': 'Force'}
     divide = {'Mass': 'Velocity', 'Velocity': 'Mass', 'Force': 'Time',
               'Time': 'Force'}
+
+class SurfaceTension(Unit):
+    """Décrit une force par distance (N.m^-1), ou M.T^-2. L'unité
+    correspondante du système international est le newton par mètre.\n
+    Utilisez l'un des paramètres suivants pour instancier la classe :
+    `nm=` pour des newtons par mètre ;\n
+    `lbfin=` pour des livres-force par pouce."""
+
+    fullname = "newton per meter"
+    pluralname = "newtons per meter"
+    convert = {'nm': 1, 'lbfin': LBF_N * IN_M}
+    multiply = {'Distance': 'Force'}
+    divide = {}
