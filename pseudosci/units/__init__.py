@@ -145,9 +145,13 @@ class UnitBase(type):
             return NotImplemented
 
         def _pow(self, other):
-            if isinstance(other, (int, float)):
-                return type(self)(value=self.value ** other)
-            return NotImplemented
+            if not isinstance(other, int):
+                return NotImplemented
+            if other > 1:  # [1, infinity]
+                return self ** (other - 1) * self
+            elif other < 0:  # [-infinity, 0]
+                return (1 / self) ** abs(other)
+            return 1 if other == 0 else self  # [0, 1]
 
         def _eq(self, other):
             if type(self) is type(other):
