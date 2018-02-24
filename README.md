@@ -6,7 +6,7 @@ Les classes du projet sont donc les implémentations répondant aux besoins spé
 
 ## Pré-requis
 
-Le projet nécessite `six` pour la compatibilité avec Python 2 et 3 du système d'unités.
+Le projet nécessite `six` pour la compatibilité avec Python 2 et 3 du système d'unités. Dans le cas où l'utilisation d'unités monétaires est nécessaire, une dépendance supplémentaire est requise : [`forex-python`](https://pypi.python.org/pypi/forex-python).
 
 ### Scripts
 
