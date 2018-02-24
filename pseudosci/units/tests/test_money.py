@@ -11,7 +11,9 @@ class TestUnitsMoney:
 
     def test_get_rates(self):
         """Tests de la méthode get_rates"""
-        assert get_rates().get('USD') == 1
+        rates = get_rates()
+        assert rates.get('USD') == 1
+        assert 'BTC' in rates
 
     def test_currency(self):
         """Tests de Currency."""
