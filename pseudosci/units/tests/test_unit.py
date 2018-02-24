@@ -74,6 +74,7 @@ class TestUnit:
         assert (UnitOne(value=5) // 2).value == 2.0
         assert (UnitOne(value=7.5) / UnitOne(value=2.5)) == 3.0
         assert (UnitOne(value=7.5) // UnitOne(value=2)) == 3.0
+        assert (UnitTwo(value=2) ** -1).value == 0.5
         assert (1 / UnitTwo(value=2)).value == 0.5
         assert (1 // UnitTwo(value=2)).value == 0
         assert int(UnitOne(value=23.4)) == 23

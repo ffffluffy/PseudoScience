@@ -8,7 +8,7 @@ from .movement import Movement
 
 
 def contraction_factor(vel):
-    return sqrt(1 - (vel ** 2) / (LIGHT_VELOCITY ** 2))
+    return sqrt(1 - (vel.value ** 2) / (LIGHT_VELOCITY.value ** 2))
 
 
 def lorentz_factor(vel):

@@ -271,6 +271,7 @@ class Momentum(Unit):
     divide = {'Mass': 'Velocity', 'Velocity': 'Mass', 'Force': 'Time',
               'Time': 'Force'}
 
+
 class SurfaceTension(Unit):
     """Décrit une force par distance (N.m^-1), ou M.T^-2. L'unité
     correspondante du système international est le newton par mètre.\n
