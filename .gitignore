@@ -95,7 +95,9 @@ deltat.preds
 Leap_Second.dat
 
 # Custom
-.vscode
+!/.vscode
+/.vscode/*
+!/.vscode/tasks.json
 tags
 *.todo
 *.swp # vim save files
