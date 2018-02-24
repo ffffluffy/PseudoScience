@@ -283,3 +283,17 @@ class SurfaceTension(Unit):
     convert = {'nm': 1, 'lbfin': LBF_N * IN_M}
     multiply = {'Distance': 'Force'}
     divide = {}
+
+
+class VolumicMass(Unit):
+    """Décrit une masse volumique. L'unité correspondante du système
+    international est le kilogramme par mètre cube.\n
+    Utilisez l'un des paramètres suivants pour instancier la classe :
+    `kgm3=` pour des kilogrammes par mètre cube ;\n
+    `gcm3=` pour des grammes par centimètre cube."""
+
+    fullname = "kilogram per cubic meter"
+    pluralname = "kilograms per cubic meter"
+    convert = {'kgm3': 1, 'gcm3': 0.1}
+    multiply = {'Volume': 'Mass'}
+    divide = {}
