@@ -83,8 +83,10 @@ class Time(Unit):
 class Velocity(Unit):
     """Décrit une vitesse, ou vélocité. L'unité correspondante du système
     international est le mètre par seconde (m.s^-1).\n
-    Utilisez soit `mps=`, soit `kph=`, soit `mph=` (miles per hour) pour
-    l'initialiser."""
+    Utilisez l'un des paramètres suivants pour initialiser la classe :\n
+    `mps=` pour des mètres par seconde ;\n
+    `kph=` pour des kilomètres par heure ;\n
+    `mph=` pour des miles per hour."""
 
     fullname = "meter per second"
     pluralname = "meters per second"
@@ -109,7 +111,7 @@ class Acceleration(Unit):
 class Mass(Unit):
     """Décrit une masse. L'unité correspondante du système international est le
     kilogramme (kg).\n
-    Utilisez l'un des paramètres suivants pour initialiser la classe :
+    Utilisez l'un des paramètres suivants pour initialiser la classe :\n
     `ug=` pour des microgrammes ;\n
     `mg=` pour des milligrammes ;\n
     `g=` pour des grammes ;\n
@@ -130,11 +132,11 @@ class Mass(Unit):
 class Force(Unit):
     """Décrit une force. L'unité correspondante du système international est le
     newton (N).\n
-    Utilisez l'un des paramètres suivants pour initialiser la classe :
-    `n=` pour des newtons,
-    `dyn=` pour des dynes,
-    `kgf=` pour des kilogrammes-force,
-    `lbf=` pour des livres-force,
+    Utilisez l'un des paramètres suivants pour initialiser la classe :\n
+    `n=` pour des newtons ;\n
+    `dyn=` pour des dynes ;\n
+    `kgf=` pour des kilogrammes-force ;\n
+    `lbf=` pour des livres-force ;\n
     `pdl=` pour des poundals."""
 
     fullname = "newton"
@@ -149,11 +151,11 @@ class Force(Unit):
 class Area(Unit):
     """Décrit une surface. L'unité correspondante du système international est
     le mètre carré (m^2).\n
-    Utilisez un des paramètres suivants pour initialiser la classe :
-    `m2=` pour des mètres carrés,
-    `km2=` pour des kilomètres carrés,
-    `acre=` pour des acres,
-    `arpent=` pour des arpents,
+    Utilisez un des paramètres suivants pour initialiser la classe :\n
+    `m2=` pour des mètres carrés ;\n
+    `km2=` pour des kilomètres carrés ;\n
+    `acre=` pour des acres ;\n
+    `arpent=` pour des arpents ;\n
     `ha=` pour des hectares."""
 
     fullname = "square meter"
@@ -168,9 +170,9 @@ class Area(Unit):
 class Volume(Unit):
     """Décrit un volume. L'unité correspondante du système international est
     le mètre cube (m^3).\n
-    Utilisez un des paramètres suivants pour initialiser la classe :
-    `m3=` pour des mètres cube,
-    `km3=` pour des kilomètres cube,
+    Utilisez un des paramètres suivants pour initialiser la classe :\n
+    `m3=` pour des mètres cube ;\n
+    `km3=` pour des kilomètres cube ;\n
     `l=` pour des litres."""
 
     fullname = "cubic meter"
@@ -182,12 +184,12 @@ class Volume(Unit):
 class Energy(Unit):
     """Décrit une quantité d'énergie. L'unité correpsondante du système
     international est le joule (J).\n
-    Utilisez l'un des paramètres suivants pour initialiser la classe :
-    `j=` pour des joules ;
-    `kwh=` pour des kilowatts-heure ;
-    `kgm=` pour des kilogrammes-mètre ;
-    `cal=` pour des calories ;
-    `kcal=` pour des kilocalories ;
+    Utilisez l'un des paramètres suivants pour initialiser la classe :\n
+    `j=` pour des joules ;\n
+    `kwh=` pour des kilowatts-heure ;\n
+    `kgm=` pour des kilogrammes-mètre ;\n
+    `cal=` pour des calories ;\n
+    `kcal=` pour des kilocalories ;\n
     `ev=` pour des électrons-volts."""
 
     fullname = "joule"
@@ -223,9 +225,9 @@ class Frequency(Unit):
 class Power(Unit):
     """Décrit une puissance. L'unité correspondante du système international
     est le watt (W).
-    Utilisez l'un des paramètres suivants pour instancier la classe :
-    `w=` pour des watts ;
-    `ch=` pour des chevaux-vapeur français ;
+    Utilisez l'un des paramètres suivants pour instancier la classe :\n
+    `w=` pour des watts ;\n
+    `ch=` pour des chevaux-vapeur français ;\n
     `hp=` pour des chevaux-vapeur anglais."""
 
     fullname = "watt"
@@ -239,12 +241,12 @@ class Power(Unit):
 class Flow(Unit):
     """Décrit un débit volumique. L'unité correspondante du système
     international est le mètre cube par seconde (m^3.s^-1).
-    Utilisez l'un des paramètres suivants pour instancier la classe :
-    `m3s` pour des mètres cube par seconde ;
-    `m3m` ou `m3min` pour des mètres cube par minute ;
-    `m3h` pour des mètres cube par heure ;
-    `ls` pour des litres par seconde ;
-    `lm` ou `lmin` pour des litres par minute ;
+    Utilisez l'un des paramètres suivants pour instancier la classe :\n
+    `m3s` pour des mètres cube par seconde ;\n
+    `m3m` ou `m3min` pour des mètres cube par minute ;\n
+    `m3h` pour des mètres cube par heure ;\n
+    `ls` pour des litres par seconde ;\n
+    `lm` ou `lmin` pour des litres par minute ;\n
     `lh` pour des litres par heure."""
 
     fullname = "cubic meter per second"
