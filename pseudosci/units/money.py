@@ -7,15 +7,16 @@ l'importation du module."""
 from . import Unit
 from forex_python.converter import CurrencyRates
 from forex_python.bitcoin import BtcConverter
-from collections import ChainMap
 
 
 def get_rates():
     """Obtenir les derniers taux de change à partir des dollars USD."""
-    return dict(ChainMap(CurrencyRates().get_rates('USD'), {
+    rates = CurrencyRates().get_rates('USD')
+    rates.update({
         'BTC': BtcConverter().get_latest_price('USD'),
         'USD': 1
-    }))
+    })
+    return rates
 
 
 class Currency(Unit):
