@@ -83,7 +83,8 @@ class Time(Unit):
 class Velocity(Unit):
     """Décrit une vitesse, ou vélocité. L'unité correspondante du système
     international est le mètre par seconde (m.s^-1).\n
-    Utilisez soit `mps=`, soit `kph=`, soit `mph=` (miles per hour) pour l'initialiser."""
+    Utilisez soit `mps=`, soit `kph=`, soit `mph=` (miles per hour) pour
+    l'initialiser."""
 
     fullname = "meter per second"
     pluralname = "meters per second"
