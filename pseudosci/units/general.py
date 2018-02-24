@@ -43,12 +43,13 @@ class Distance(Unit):
     `au=` pour des unités astronomiques ;\n
     `ly=` pour des années-lumière ;\n
     `inch=` pour des pouces ;\n
-    `ft=` pour les pieds ;
+    `ft=` pour les pieds ;\n
     `yd=` pour les yards."""
 
     fullname = "meter"
     pluralname = "meters"
-    convert = {'nm': 1e-9, 'm': 1, 'km': 1e3, 'au': AU_M, 'ly': LY_M, 'inch' : IN_M, 'ft' : FT_M, 'yd' : YD_M}
+    convert = {'nm': 1e-9, 'm': 1, 'km': 1e3, 'au': AU_M, 'ly': LY_M,
+               'inch': IN_M, 'ft': FT_M, 'yd': YD_M}
     multiply = {'Distance': 'Area', 'Area': 'Volume', 'Force': 'Energy'}
     divide = {'Time': 'Velocity', 'Velocity': 'Time'}
 
