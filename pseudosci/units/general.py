@@ -295,6 +295,6 @@ class VolumicMass(Unit):
 
     fullname = "kilogram per cubic meter"
     pluralname = "kilograms per cubic meter"
-    convert = {'kgm3': 1, 'gcm3': 0.1}
+    convert = {'kgm3': 1, 'gcm3': 0.001}
     multiply = {'Volume': 'Mass'}
     divide = {}
