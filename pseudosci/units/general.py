@@ -11,11 +11,17 @@ LY_M = 9460730472580800
 IN_M = 25.4e-3
 FT_M = 0.3048
 YD_M = 0.9144
+MI_M = 1.609344e3
 MIN_S = 60
 H_S = MIN_S * 60
 D_S = H_S * 24
 KPH_MPS = 1 / 3.6
+MPH_MPS = MI_M / 3600
 G_MPSS = 9.80665
+LB_KG = 0.45359237  # Définition selon le système Avoirdupois
+OZ_KG = LB_KG / 16
+DR_KG = LB_KG / 256
+GR_KG = LB_KG / 7000
 DYN_N = 1e-5
 KGF_N = 9.80665
 LBF_N = 4.448222
@@ -44,12 +50,13 @@ class Distance(Unit):
     `ly=` pour des années-lumière ;\n
     `inch=` pour des pouces ;\n
     `ft=` pour les pieds ;\n
-    `yd=` pour les yards."""
+    `yd=` pour les yards ;\n
+    `mi=` pour les miles."""
 
     fullname = "meter"
     pluralname = "meters"
     convert = {'nm': 1e-9, 'm': 1, 'km': 1e3, 'au': AU_M, 'ly': LY_M,
-               'inch': IN_M, 'ft': FT_M, 'yd': YD_M}
+               'inch': IN_M, 'ft': FT_M, 'yd': YD_M, 'mi': MI_M}
     multiply = {'Distance': 'Area', 'Area': 'Volume', 'Force': 'Energy'}
     divide = {'Time': 'Velocity', 'Velocity': 'Time'}
 
@@ -76,11 +83,11 @@ class Time(Unit):
 class Velocity(Unit):
     """Décrit une vitesse, ou vélocité. L'unité correspondante du système
     international est le mètre par seconde (m.s^-1).\n
-    Utilisez soit `mps=`, soit `kph=` pour l'initialiser."""
+    Utilisez soit `mps=`, soit `kph=`, soit `mph=` (miles per hour) pour l'initialiser."""
 
     fullname = "meter per second"
     pluralname = "meters per second"
-    convert = {'mps': 1, 'kph': KPH_MPS}
+    convert = {'mps': 1, 'kph': KPH_MPS, 'mph': MPH_MPS}
     multiply = {'Time': 'Distance', 'Mass': 'Momentum'}
     divide = {'Time': 'Acceleration', 'Acceleration': 'Time',
               'Frequency': 'Distance'}
@@ -102,15 +109,20 @@ class Mass(Unit):
     """Décrit une masse. L'unité correspondante du système international est le
     kilogramme (kg).\n
     Utilisez l'un des paramètres suivants pour initialiser la classe :
-    `ug=` pour des microgrammes,
-    `mg=` pour des milligrammes,
-    `g=` pour des grammes,
-    `kg=` pour des kilogrammes,
-    `t=` pour des tonnes."""
+    `ug=` pour des microgrammes ;\n
+    `mg=` pour des milligrammes ;\n
+    `g=` pour des grammes ;\n
+    `kg=` pour des kilogrammes ;\n
+    `t=` pour des tonnes ;\n
+    `lb=` pour des pounds ;\n
+    `oz=` pour des ounces ;\n
+    `dr=` pour les drams ;\n
+    `gr=` pour des grains."""
 
     fullname = "kilogram"
     pluralname = "kilograms"
-    convert = {'t': 1e3, 'kg': 1, 'g': 1e-3, 'mg': 1e-6, 'ug': 1e-9}
+    convert = {'t': 1e3, 'kg': 1, 'g': 1e-3, 'mg': 1e-6, 'ug': 1e-9,
+               'lb': LB_KG, 'oz': OZ_KG, 'dr': DR_KG, 'gr': GR_KG}
     multiply = {'Acceleration': 'Force', 'Velocity': 'Momentum'}
 
 
