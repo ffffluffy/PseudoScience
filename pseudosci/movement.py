@@ -124,19 +124,26 @@ class ComplexMovement(object):
         else:
             return NotImplemented
 
-    def __getattr__(self, name):
-        if name == 'distance':
-            return Distance(m=sum(self.distances))
-        elif name == 'time':
-            return Time(s=sum(self.times))
-        elif name == 'velocity':
-            return 0 if self.time.s == 0 else self.distance / self.time
-        elif name == 'distances':
-            return [m.distance for m in self.movements]
-        elif name == 'times':
-            return [m.time for m in self.movements]
-        elif name == 'velocities':
-            return [m.velocity for m in self.movements]
-        else:
-            raise AttributeError("{0} object has no attribute {1}".format(
-                    self.__class__.__name__, name))
+    @property
+    def distance(self):
+        return Distance(m=sum(self.distances))
+
+    @property
+    def time(self):
+        return Time(s=sum(self.times))
+
+    @property
+    def velocity(self):
+        return 0 if self.time.s == 0 else self.distance / self.time
+
+    @property
+    def distances(self):
+        return [m.distance for m in self.movements]
+
+    @property
+    def times(self):
+        return [m.time for m in self.movements]
+
+    @property
+    def velocities(self):
+        return [m.velocity for m in self.movements]

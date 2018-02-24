@@ -3,7 +3,6 @@
 """Unités de mesure du projet. Toutes les unités sont stockées en interne sous
 l'unité du système international."""
 
-
 from six import with_metaclass
 
 
@@ -39,7 +38,7 @@ class UnitBase(type):
             caractères représentant l'unité souhaitées, présent parmi les clés
             du dictionnaire `convert` de l'instance."""
             if dest.lower() == 'value':
-                return value
+                return self.value
             for (name, conv) in self.convert.items():
                 if dest.lower() == name.lower():
                     if isinstance(conv, (int, float)):
@@ -184,4 +183,4 @@ class UnitBase(type):
 
 class Unit(with_metaclass(UnitBase)):
     """Classe abstraite d'unité de base."""
-    __metaclass__ = UnitBase
+    pass

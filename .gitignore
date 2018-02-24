@@ -98,3 +98,4 @@ Leap_Second.dat
 .vscode
 tags
 *.todo
+*.swp # vim save files

@@ -8,6 +8,9 @@ from . import Unit
 AU_M = 149597870700
 # modifiez surtout celle-ci - elle implique une autre vitesse de la lumière
 LY_M = 9460730472580800
+IN_M = 25.4e-3
+FT_M = 0.3048
+YD_M = 0.9144
 MIN_S = 60
 H_S = MIN_S * 60
 D_S = H_S * 24
@@ -38,11 +41,15 @@ class Distance(Unit):
     `m=` pour des mètres ;\n
     `km=` pour des kilomètres ;\n
     `au=` pour des unités astronomiques ;\n
-    `ly=` pour des années-lumière."""
+    `ly=` pour des années-lumière ;\n
+    `inch=` pour des pouces ;\n
+    `ft=` pour les pieds ;\n
+    `yd=` pour les yards."""
 
     fullname = "meter"
     pluralname = "meters"
-    convert = {'nm': 1e-9, 'm': 1, 'km': 1e3, 'au': AU_M, 'ly': LY_M}
+    convert = {'nm': 1e-9, 'm': 1, 'km': 1e3, 'au': AU_M, 'ly': LY_M,
+               'inch': IN_M, 'ft': FT_M, 'yd': YD_M}
     multiply = {'Distance': 'Area', 'Area': 'Volume', 'Force': 'Energy'}
     divide = {'Time': 'Velocity', 'Velocity': 'Time'}
 

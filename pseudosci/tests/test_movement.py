@@ -17,6 +17,7 @@ class TestMovement:
         assert m.distance.m == 10
         assert m.time.s == 2
         assert m.velocity.mps == 5
+        assert repr(m).startswith('<Movement ')
         with pytest.raises(ValueError):
             Movement()
         with pytest.raises(ValueError):
@@ -115,6 +116,7 @@ class TestComplexMovement:
             Movement(distance=Distance(m=2), time=Time(s=5))
         )
         assert len(c.movements) == 2
+        assert repr(c).startswith('<ComplexMovement ')
 
     def test_attributes(self):
         """Tests des attributs de la classe."""
