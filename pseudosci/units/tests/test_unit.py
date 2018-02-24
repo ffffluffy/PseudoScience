@@ -77,6 +77,12 @@ class TestUnit:
         assert (1 / UnitTwo(value=2)).value == 0.5
         assert (1 // UnitTwo(value=2)).value == 0
         assert int(UnitOne(value=23.4)) == 23
+        u = UnitOne(value=4)
+        u.divide = {'UnitTwo': 'UnitOne'}
+        assert (u // UnitTwo(value=2)).value == 2
+
+    def test_math_errors(self):
+        """Tests des erreurs dans les opérations mathématiques de la classe."""
         with pytest.raises(TypeError):
             UnitTwo(value=4) + UnitOne(value=1)
         with pytest.raises(TypeError):
@@ -88,9 +94,6 @@ class TestUnit:
         with pytest.raises(TypeError):
             UnitTwo(value=4) // UnitOne(value=1)
         assert UnitOne(value=1).__pow__(UnitTwo(value=1)) == NotImplemented
-        u = UnitOne(value=4)
-        u.divide = {'UnitTwo': 'UnitOne'}
-        assert (u // UnitTwo(value=2)).value == 2
 
     def test_compare(self):
         """Tests des opérations de comparaison de la classe."""

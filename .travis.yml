@@ -16,3 +16,10 @@ script:
   - coverage run --source pseudosci -m py.test
 after_success:
   - coveralls
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/e15c1b6de9d180d2eafe
+    on_success: change
+    on_failure: always
+    on_start: never

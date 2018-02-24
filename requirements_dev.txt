@@ -1,0 +1,5 @@
+# PseudoScience development setup packages
+
+pytest
+pytest-cov
+pep8
